@@ -1,0 +1,51 @@
+# =========================
+# Node.js / React
+# =========================
+node_modules/
+dist/
+coverage/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Laravel
+# =========================
+vendor/
+bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+storage/*.key
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+.env
+.env.*
+!.env.example
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Misc
+# =========================
+*.tmp
+*.swp
