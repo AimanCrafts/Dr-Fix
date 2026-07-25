@@ -1,6 +1,6 @@
 # Dr. Fix
 
-**A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians. Built for CSE‑3100 (Web Application Development with DevOps) at Ahsanullah University of Science and Technology.
+**A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians.
 
 > Reliable help, dispatched to your door.
 
