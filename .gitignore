@@ -49,3 +49,11 @@ Thumbs.db
 # =========================
 *.tmp
 *.swp
+# Monorepo additions
+packages/shared/node_modules/
+packages/server/vendor/
+packages/server/.env
+packages/server/storage/
+packages/server/bootstrap/cache/
+packages/server/.env.*.local
+packages/server/.phpunit.result.cache
