@@ -1,0 +1,20 @@
+{
+  "name": "dr-fix-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "dev:backend": "cd packages/backend && php artisan serve || echo 'Backend not started yet'",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "setup": "npm install && npm run setup:frontend && npm run setup:backend",
+    "setup:frontend": "npm install --workspace=packages/frontend",
+    "setup:backend": "cd packages/backend && composer install || echo 'Composer not installed yet'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

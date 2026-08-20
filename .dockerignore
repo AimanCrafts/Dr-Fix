@@ -1,0 +1,13 @@
+.git
+node_modules
+vendor
+storage
+bootstrap/cache
+*.log
+.env
+.env.*
+.DS_Store
+*.md
+!README.md
+.gitignore
+.dockerignore
