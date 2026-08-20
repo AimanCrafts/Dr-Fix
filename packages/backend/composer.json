@@ -1,0 +1,8 @@
+{
+  "name": "dr-fix/server",
+  "description": "Dr. Fix Backend API",
+  "type": "project",
+  "require": {
+    "php": "^8.2"
+  }
+}

@@ -1,0 +1,16 @@
+/vendor
+/node_modules
+.env
+.env.*
+.git
+.gitignore
+*.log
+.DS_Store
+storage
+bootstrap/cache
+public/hot
+public/storage
+tests
+phpunit.xml
+*.md
+!README.md
