@@ -1,6 +1,10 @@
 # Dr. Fix
 
+<<<<<<< HEAD
 **A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians.
+=======
+**A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians. Built for CSE‑3100 (Web Application Development with DevOps) at Ahsanullah University of Science and Technology.
+>>>>>>> origin/develop
 
 > Reliable help, dispatched to your door.
 
@@ -166,4 +170,8 @@ npm run lint        # run ESLint
 
 ## Course Context
 
+<<<<<<< HEAD
 Built for **CSE‑3100 — Web Application Development with DevOps**, AUST, alongside two other project ideas (TrekWise, KrishiBondhu) proposed for the Database Lab course.
+=======
+Built for **CSE‑3100 — Web Application Development with DevOps**, AUST, alongside two other project ideas (TrekWise, KrishiBondhu) proposed for the Database Lab course.
+>>>>>>> origin/develop

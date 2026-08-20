@@ -5,6 +5,7 @@
     "packages/*"
   ],
   "scripts": {
+<<<<<<< HEAD
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "npm run dev --workspace=packages/client",
     "dev:server": "cd packages/server && php artisan serve || echo 'Server not started yet'",
@@ -13,6 +14,16 @@
     "setup": "npm install && npm run setup:client && npm run setup:server",
     "setup:client": "npm install --workspace=packages/client",
     "setup:server": "cd packages/server && composer install || echo 'Composer not installed yet'"
+=======
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "dev:backend": "cd packages/backend && php artisan serve || echo 'Backend not started yet'",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "setup": "npm install && npm run setup:frontend && npm run setup:backend",
+    "setup:frontend": "npm install --workspace=packages/frontend",
+    "setup:backend": "cd packages/backend && composer install || echo 'Composer not installed yet'"
+>>>>>>> origin/develop
   },
   "devDependencies": {
     "concurrently": "^8.2.0"

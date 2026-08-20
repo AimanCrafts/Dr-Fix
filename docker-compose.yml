@@ -14,6 +14,10 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+<<<<<<< HEAD
+=======
+      - ./packages/database/migrations:/docker-entrypoint-initdb.d
+>>>>>>> origin/develop
     networks:
       - dr-fix-network
     healthcheck:
@@ -23,7 +27,11 @@ services:
 
   backend:
     build:
+<<<<<<< HEAD
       context: ./packages/server
+=======
+      context: ./packages/backend
+>>>>>>> origin/develop
       dockerfile: Dockerfile
     container_name: dr-fix-backend
     restart: unless-stopped
@@ -38,7 +46,11 @@ services:
       DB_USERNAME: dr_fix_user
       DB_PASSWORD: password123
     volumes:
+<<<<<<< HEAD
       - ./packages/server:/var/www/html
+=======
+      - ./packages/backend:/var/www/html
+>>>>>>> origin/develop
     depends_on:
       database:
         condition: service_healthy
@@ -49,7 +61,11 @@ services:
 
   frontend:
     build:
+<<<<<<< HEAD
       context: ./client
+=======
+      context: ./packages/frontend
+>>>>>>> origin/develop
       dockerfile: Dockerfile
     container_name: dr-fix-frontend
     restart: unless-stopped
@@ -58,7 +74,11 @@ services:
     ports:
       - "5173:5173"
     volumes:
+<<<<<<< HEAD
       - ./client:/app
+=======
+      - ./packages/frontend:/app
+>>>>>>> origin/develop
       - /app/node_modules
     depends_on:
       - backend
