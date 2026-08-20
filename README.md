@@ -1,12 +1,6 @@
 # Dr. Fix
 
-<<<<<<< HEAD
-**A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians.
-=======
 **A smart home service management platform** — connecting homeowners in Dhaka with verified electricians, plumbers, cleaners, carpenters, painters, and AC technicians. Built for CSE‑3100 (Web Application Development with DevOps) at Ahsanullah University of Science and Technology.
->>>>>>> origin/develop
-
-> Reliable help, dispatched to your door.
 
 ---
 
@@ -22,6 +16,7 @@
 - [Git Workflow](#git-workflow)
 - [Roadmap](#roadmap)
 - [Course Context](#course-context)
+- [Related Documentation](#-related-documentation)
 
 ---
 
@@ -65,43 +60,66 @@ The frontend currently runs entirely on placeholder/mock data — there is no ba
 
 ```
 dr-fix/
-├── assets/                  # logos, icons, mockups
-├── docs/                    # ER diagram, schema, API docs
-├── client/                  # React frontend (this app)
-│   ├── public/
-│   │   ├── favicon.svg
-│   │   └── icons.svg
-│   └── src/
-│       ├── components/
-│       │   ├── Navbar.jsx
-│       │   ├── Footer.jsx
-│       │   ├── ProtectedRoute.jsx
-│       │   ├── ScrollToTop.jsx
-│       │   └── dashboard/
-│       │       ├── DashboardLayout.jsx
-│       │       ├── DashboardSidebar.jsx
-│       │       ├── DashboardTopbar.jsx
-│       │       └── StatusBadge.jsx
-│       ├── pages/
-│       │   ├── Landing.jsx
-│       │   ├── Login.jsx
-│       │   ├── Register.jsx
-│       │   ├── ForgotPassword.jsx
-│       │   ├── Services.jsx
-│       │   ├── BookService.jsx
-│       │   ├── NotFound.jsx
-│       │   └── dashboard/
-│       │       ├── Overview.jsx
-│       │       ├── Bookings.jsx
-│       │       └── ComingSoon.jsx
-│       ├── data/
-│       │   └── placeholder.js   # mock categories, services, bookings, notifications
-│       ├── lib/
-│       │   └── auth.js          # mock localStorage-based auth
-│       ├── App.jsx
-│       ├── main.jsx
-│       └── index.css            # design tokens + shared component classes
-└── server/                  # Laravel backend (not started)
+├── package.json                 # Root workspace configuration
+├── docker-compose.yml           # Docker orchestration
+├── BRANCH_STRATEGY.md           # Team workflow guide
+├── docs/
+│   ├── API-Docs.md              # API endpoints documentation
+│   └── ER-Diagram.md            # Database schema diagram
+├── packages/
+│   ├── frontend/                # React frontend
+│   │   ├── Dockerfile
+│   │   ├── package.json
+│   │   ├── .dockerignore
+│   │   └── src/
+│   │       ├── components/
+│   │       │   ├── Navbar.jsx
+│   │       │   ├── Footer.jsx
+│   │       │   ├── ProtectedRoute.jsx
+│   │       │   ├── ScrollToTop.jsx
+│   │       │   └── dashboard/
+│   │       │       ├── DashboardLayout.jsx
+│   │       │       ├── DashboardSidebar.jsx
+│   │       │       ├── DashboardTopbar.jsx
+│   │       │       └── StatusBadge.jsx
+│   │       ├── pages/
+│   │       │   ├── Landing.jsx
+│   │       │   ├── Login.jsx
+│   │       │   ├── Register.jsx
+│   │       │   ├── ForgotPassword.jsx
+│   │       │   ├── Services.jsx
+│   │       │   ├── BookService.jsx
+│   │       │   ├── NotFound.jsx
+│   │       │   └── dashboard/
+│   │       │       ├── Overview.jsx
+│   │       │       ├── Bookings.jsx
+│   │       │       └── ComingSoon.jsx
+│   │       ├── data/
+│   │       │   └── placeholder.js    # mock categories, services, bookings, notifications
+│   │       ├── lib/
+│   │       │   └── auth.js           # mock localStorage-based auth
+│   │       ├── App.jsx
+│   │       ├── main.jsx
+│   │       └── index.css             # design tokens + shared component classes
+│   ├── backend/                 # Laravel backend
+│   │   ├── Dockerfile
+│   │   ├── composer.json
+│   │   ├── nginx.conf
+│   │   ├── .env.example
+│   │   └── .dockerignore
+│   ├── database/                # Database migrations
+│   │   └── migrations/
+│   │       ├── 2026_08_01_create_users_table.sql
+│   │       ├── 2026_08_01_create_services_table.sql
+│   │       ├── 2026_08_01_create_bookings_table.sql
+│   │       └── 2026_08_01_create_reviews_table.sql
+│   └── shared/                  # Shared types, constants, utilities
+│       ├── package.json
+│       └── src/
+│           ├── types/
+│           ├── constants/
+│           └── utils/
+└── assets/                      # logos, icons, mockups
 ```
 
 ## Features Built So Far
@@ -135,13 +153,51 @@ dr-fix/
 
 ## Getting Started
 
+### Prerequisites
+- Node.js (v20+)
+- Docker & Docker Compose (optional)
+- PHP 8.2+ (for backend development)
+
+### Installation
+
 ```bash
-cd client
-npm install
-npm run dev       # start dev server
-npm run build      # production build
-npm run preview    # preview the production build
-npm run lint        # run ESLint
+# Clone the repository
+git clone https://github.com/AimanCrafts/Dr-Fix.git
+cd Dr-Fix
+
+# Install root dependencies
+npm run setup
+```
+
+### Development
+
+```bash
+# Start frontend only
+npm run dev:frontend
+
+# Start backend (when implemented)
+npm run dev:backend
+
+# Start all services
+npm run dev
+```
+
+### Docker Setup
+
+```bash
+# Start all services with Docker
+docker-compose up -d
+
+# Access services
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8000
+# Database: localhost:3306
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
 ```
 
 ## Design System
@@ -154,24 +210,46 @@ npm run lint        # run ESLint
 
 - Branches: `main` → `develop` → `feature/*`, `bugfix/*`
 - Commit prefixes: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `build:`, `chore:`
-- Work happens from the repository root (`dr-fix/`), not inside `client/` or `server/` individually, so Git, Docker, and docs stay under one workspace
+- Work happens from the repository root (`dr-fix/`), not inside `packages/` individually, so Git, Docker, and docs stay under one workspace
+
+See [BRANCH_STRATEGY.md](./BRANCH_STRATEGY.md) for the detailed workflow.
 
 ## Roadmap
 
 | Phase | Status |
 |---|---|
-| Dev environment & GitHub setup | Done |
-| React frontend (mock data) | Done |
-| Laravel backend | Not started |
-| Database (MySQL, migrations, seeders) | Not started |
-| Real authentication (replacing mock localStorage auth) | Not started |
-| Docker + VPS deployment | Not started |
-| Payments, real-time notifications, provider-side app, admin panel | Not started |
+| Dev environment & GitHub setup | ✅ Done |
+| React frontend (mock data) | ✅ Done |
+| Monorepo structure | ✅ Done |
+| Docker configuration | ✅ Done |
+| Database migrations | ✅ Done |
+| Laravel backend | ⏳ In Progress |
+| Real authentication | ⏳ In Progress |
+| Frontend integration | ⏳ In Progress |
+| VPS deployment | ⏳ Not Started |
+| Payments, real-time notifications, provider-side app, admin panel | ⏳ Not Started |
 
 ## Course Context
 
-<<<<<<< HEAD
 Built for **CSE‑3100 — Web Application Development with DevOps**, AUST, alongside two other project ideas (TrekWise, KrishiBondhu) proposed for the Database Lab course.
-=======
-Built for **CSE‑3100 — Web Application Development with DevOps**, AUST, alongside two other project ideas (TrekWise, KrishiBondhu) proposed for the Database Lab course.
->>>>>>> origin/develop
+
+---
+
+## 📦 Monorepo Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run setup` | Install all dependencies |
+| `npm run dev:frontend` | Start frontend only |
+| `npm run dev:backend` | Start backend only |
+| `npm run dev` | Start all services |
+| `npm run build` | Build all packages |
+| `npm run lint` | Lint all packages |
+
+---
+
+## 📚 Related Documentation
+
+- [API Documentation](./docs/API-Docs.md)
+- [Database ER Diagram](./docs/ER-Diagram.md)
+- [Branch Strategy](./BRANCH_STRATEGY.md)
