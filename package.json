@@ -1,0 +1,20 @@
+{
+  "name": "dr-fix-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
+    "dev:client": "npm run dev --workspace=packages/client",
+    "dev:server": "cd packages/server && php artisan serve || echo 'Server not started yet'",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "setup": "npm install && npm run setup:client && npm run setup:server",
+    "setup:client": "npm install --workspace=packages/client",
+    "setup:server": "cd packages/server && composer install || echo 'Composer not installed yet'"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
