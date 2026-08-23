@@ -1,0 +1,272 @@
+/* ==========================================================================
+   Site header — shared shell for "marketing" and "app" variants
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--df-surface);
+  border-bottom: 1px solid var(--df-border);
+}
+
+.site-header__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ---------------- Logo ---------------- */
+.site-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.logo-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--df-radius-sm);
+  background: var(--df-orange-tint);
+  border: 1.5px dashed var(--df-orange);
+  flex-shrink: 0;
+}
+
+.site-header__wordmark {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--df-heading);
+}
+
+/* ---------------- Marketing nav ---------------- */
+.site-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.site-header__link {
+  font-family: var(--df-font-body);
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--df-body);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header__link:hover {
+  color: var(--df-heading);
+}
+
+/* ---------------- Actions (right side) ---------------- */
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.site-header__login-link {
+  font-family: var(--df-font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--df-heading);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header__login-link:hover {
+  color: var(--df-orange);
+}
+
+.site-header__theme-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--df-border);
+  background: var(--df-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.site-header__theme-toggle:hover {
+  border-color: var(--df-orange);
+}
+
+.site-header__cta {
+  white-space: nowrap;
+}
+
+/* Mobile hamburger — hidden on desktop */
+.site-header__menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.site-header__menu-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--df-heading);
+  border-radius: 2px;
+}
+
+/* ---------------- App variant: pill nav ---------------- */
+.site-header__pill-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--df-bg);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-pill);
+  padding: 4px;
+}
+
+.pill-nav__item {
+  font-family: var(--df-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--df-body);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--df-radius-pill);
+  white-space: nowrap;
+}
+
+.pill-nav__item:hover {
+  color: var(--df-heading);
+}
+
+.pill-nav__item.is-active {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.site-header__bell {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--df-border);
+  background: var(--df-surface);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+/* Base avatar circle (button variant adds color/cursor in the block below) */
+.avatar-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--df-font-heading);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 860px) {
+  .site-header__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--df-surface);
+    border-bottom: 1px solid var(--df-border);
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 24px;
+    display: none;
+  }
+
+  .site-header__nav.is-open {
+    display: flex;
+  }
+
+  .site-header__login-link,
+  .site-header__cta {
+    display: none;
+  }
+
+  .site-header__menu-btn {
+    display: flex;
+  }
+}
+
+.user-menu {
+  position: relative;
+}
+
+.avatar-placeholder--button {
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #fff;
+  background: #e2532e; /* swap for your brand orange variable if you have one */
+}
+
+.user-menu__dropdown {
+  position: absolute;
+  top: calc(100% + 10px); /* sits just below the circle */
+  right: 0;
+  min-width: 180px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 12px;
+  z-index: 50;
+}
+
+.user-menu__name {
+  font-weight: 600;
+  padding: 4px 8px 10px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 6px;
+}
+
+.user-menu__option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px;
+  border: none;
+  background: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+}
+
+.user-menu__option:hover {
+  background: #f5f5f5;
+}
+
+.user-menu__option--danger {
+  color: #e2532e;
+}
