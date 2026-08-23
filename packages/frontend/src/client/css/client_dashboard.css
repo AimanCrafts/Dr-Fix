@@ -1,0 +1,644 @@
+
+.client-dashboard {
+  background: var(--df-bg);
+  color: var(--df-body);
+  font-family: var(--df-font-body);
+  min-height: 100vh;
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.card {
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 24px;
+}
+
+.text-accent {
+  color: var(--df-orange);
+}
+
+/* ---------------- Greeting ---------------- */
+.greeting {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.greeting h1 {
+  font-family: var(--df-font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--df-heading);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.membership-badge {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-heading);
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-pill);
+  padding: 6px 14px;
+}
+
+/* ---------------- Quick actions ---------------- */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.action-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--df-radius-lg);
+  border: 1px solid var(--df-border);
+  background: var(--df-surface);
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.action-card:hover {
+  border-color: var(--df-orange);
+  transform: translateY(-2px);
+}
+
+.action-card.is-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.action-card h3 {
+  font-family: var(--df-font-heading);
+  font-size: 15.5px;
+  color: var(--df-heading);
+  margin: 0 0 4px;
+}
+
+.action-card p {
+  font-size: 13px;
+  margin: 0;
+  color: var(--df-body);
+}
+
+.action-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.action-card--primary {
+  background: var(--df-orange);
+  border-color: var(--df-orange);
+}
+
+.action-card--primary h3,
+.action-card--primary p {
+  color: #fff;
+}
+
+.action-card--primary p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.action-card--primary .action-card__icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.action-card__icon--outline {
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+/* ---------------- Active booking ---------------- */
+.active-booking h2,
+.section-block h2,
+.rate-service h2,
+.membership-progress h2,
+.warranty-tracker h2,
+.addresses h2,
+.referral h2 {
+  font-family: var(--df-font-heading);
+  font-size: 17px;
+  color: var(--df-heading);
+  margin: 0 0 18px;
+}
+
+.active-booking__row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.active-booking__technician {
+  display: flex;
+  gap: 12px;
+}
+
+.avatar-placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--df-orange);
+  background: var(--df-orange-tint);
+  flex-shrink: 0;
+}
+
+.technician-name {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.technician-role,
+.technician-vehicle {
+  font-size: 12.5px;
+  margin: 2px 0;
+}
+
+.technician-eta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-orange);
+  margin: 2px 0;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: flex-start;
+}
+
+.progress-step {
+  position: relative;
+  flex: 1;
+  text-align: center;
+}
+
+.progress-step__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--df-border);
+  margin: 0 auto 8px;
+}
+
+.progress-step--done .progress-step__dot,
+.progress-step--current .progress-step__dot {
+  background: var(--df-orange);
+}
+
+.progress-step__label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.progress-step--current .progress-step__label {
+  color: var(--df-orange);
+}
+
+.progress-step__time {
+  font-size: 11px;
+  color: var(--df-body);
+  margin: 2px 0 0;
+}
+
+.progress-step__line {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--df-border);
+  z-index: -1;
+}
+
+.progress-step--done .progress-step__line {
+  background: var(--df-orange);
+}
+
+/* ---------------- Two-column sections ---------------- */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.empty-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--df-body);
+  font-size: 14px;
+  text-align: center;
+}
+
+.empty-card--large {
+  flex-direction: column;
+  gap: 12px;
+  padding: 40px 24px;
+}
+
+/* Rate service */
+.rate-service__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.rate-service__row p {
+  font-size: 14.5px;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.rate-service__stars {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--df-border);
+  cursor: pointer;
+  line-height: 1;
+}
+
+.star-btn.is-filled {
+  color: var(--df-orange);
+}
+
+.rate-service__stars .btn {
+  margin-left: auto;
+}
+
+/* Membership */
+.membership-progress__meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-border);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: var(--df-orange);
+  border-radius: var(--df-radius-pill);
+}
+
+.tier-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.tier-badge {
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--df-radius-md);
+  border: 1px solid var(--df-border);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-body);
+}
+
+.tier-badge.is-current {
+  border-color: var(--df-orange);
+  color: var(--df-orange);
+}
+
+/* ---------------- Recent services ---------------- */
+.section-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.section-block__header a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  text-decoration: none;
+}
+
+.recent-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.recent-service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.recent-service-card__name {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 4px 0 0;
+}
+
+.recent-service-card__meta {
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--df-radius-pill);
+  margin: 6px 0;
+}
+
+.status-badge--success {
+  background: #e4f7e9;
+  color: #1e8a3d;
+}
+
+.status-badge--muted {
+  background: #f0f0f0;
+  color: #7a7a7a;
+}
+
+.status-badge--warning {
+  background: #fff1e0;
+  color: #c97400;
+}
+
+/* ---------------- Warranty ---------------- */
+.warranty-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--df-border);
+}
+
+.warranty-row:last-of-type {
+  border-bottom: none;
+}
+
+.warranty-row__info {
+  flex: 1;
+}
+
+.warranty-row__name {
+  font-weight: 600;
+  color: var(--df-heading);
+  margin: 0;
+  font-size: 14px;
+}
+
+.warranty-row__meta {
+  font-size: 12px;
+  margin: 2px 0 0;
+}
+
+.warranty-row__days {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  white-space: nowrap;
+}
+
+/* ---------------- Addresses ---------------- */
+.address-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.address-chip__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--df-orange-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.address-chip__label {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0;
+  font-size: 14px;
+}
+
+.address-chip__detail {
+  font-size: 12.5px;
+  margin: 2px 0 0;
+}
+
+.address-chip__more {
+  margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--df-body);
+}
+
+.add-address-btn {
+  width: 100%;
+  border: 1.5px dashed var(--df-border);
+  border-radius: var(--df-radius-md);
+  background: none;
+  padding: 14px;
+  font-family: var(--df-font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  cursor: pointer;
+}
+
+/* ---------------- Referral ---------------- */
+.referral {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--df-orange-tint);
+}
+
+.referral__text {
+  flex: 1;
+}
+
+.referral__text h2 {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.referral__text p {
+  font-size: 13.5px;
+  margin: 0;
+}
+
+.referral__code {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px dashed var(--df-orange);
+  border-radius: var(--df-radius-pill);
+  padding: 6px 6px 6px 18px;
+  background: var(--df-surface);
+}
+
+.referral__code span {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  color: var(--df-heading);
+}
+
+/* ---------------- Shared bits ---------------- */
+.image-placeholder {
+  border: 1.5px dashed var(--df-orange);
+  background: var(--df-orange-tint);
+  border-radius: var(--df-radius-md);
+}
+
+.image-placeholder--sm {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+}
+
+.image-placeholder--xs {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.link-arrow {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  text-decoration: none;
+}
+
+.btn {
+  font-family: var(--df-font-body);
+  font-weight: 600;
+  border-radius: var(--df-radius-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--primary {
+  background: var(--df-orange);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.btn--primary:hover {
+  background: var(--df-orange-hover);
+}
+
+.btn--sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn--outline-sm {
+  border: 1px solid var(--df-orange);
+  color: var(--df-orange);
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn--outline-sm:hover {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+/* ---------------- Floating support button ---------------- */
+.support-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--df-orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--df-radius-pill);
+  padding: 14px 22px;
+  font-family: var(--df-font-body);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(255, 90, 31, 0.35);
+  z-index: 50;
+}
+
+.support-fab:hover {
+  background: var(--df-orange-hover);
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 960px) {
+  .quick-actions,
+  .two-col,
+  .recent-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .active-booking__row {
+    grid-template-columns: 1fr;
+  }
+}
