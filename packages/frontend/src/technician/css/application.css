@@ -1,0 +1,133 @@
+:root {
+  --df-bg: #fafafa;
+  --df-surface: #ffffff;
+  --df-orange: #ff5a1f;
+  --df-orange-hover: #e64e15;
+  --df-orange-tint: #fff1eb;
+  --df-heading: #1a1a1a;
+  --df-body: #4a4a4a;
+  --df-border: #ececec;
+  --df-font-heading:
+    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
+  --df-font-body: "Inter", -apple-system, sans-serif;
+  --df-radius-lg: 20px;
+  --df-radius-pill: 999px;
+}
+
+.review-page {
+  min-height: 100vh;
+  background: var(--df-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: var(--df-font-body);
+}
+
+.review-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--df-surface);
+  border-radius: var(--df-radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  padding: 44px 40px;
+  text-align: center;
+}
+
+.review-icon-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--df-orange);
+  background: var(--df-orange-tint);
+  margin: 0 auto 24px;
+}
+
+.review-card h1 {
+  font-family: var(--df-font-heading);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0 0 14px;
+}
+
+.review-subtext {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--df-body);
+  margin: 0 0 20px;
+}
+
+.review-note {
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 0 0 18px;
+}
+
+.review-note--pending {
+  background: #fff6e5;
+  color: #b67b00;
+}
+
+.review-note--rejected {
+  background: #fdeeee;
+  color: #c62828;
+}
+
+.review-btn {
+  width: 100%;
+  border-radius: var(--df-radius-pill);
+  padding: 14px;
+  font-family: var(--df-font-body);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+}
+
+.review-btn--primary {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.review-btn--primary:hover {
+  background: var(--df-orange-hover);
+}
+
+.review-btn--primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.review-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.review-links a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-body);
+  text-decoration: underline;
+}
+
+.review-links__logout {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-body);
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.review-links a:hover,
+.review-links__logout:hover {
+  color: var(--df-orange);
+}

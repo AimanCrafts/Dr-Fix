@@ -1,0 +1,191 @@
+/* Assumes shared tokens (--df-*) already loaded globally from
+   component/css/header.css. Re-declared minimally so this page also
+   works standalone. */
+:root {
+  --df-bg: #fafafa;
+  --df-surface: #ffffff;
+  --df-orange: #ff5a1f;
+  --df-orange-hover: #e64e15;
+  --df-orange-tint: #fff1eb;
+  --df-heading: #1a1a1a;
+  --df-body: #4a4a4a;
+  --df-border: #ececec;
+  --df-font-heading:
+    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
+  --df-font-body: "Inter", -apple-system, sans-serif;
+  --df-radius-md: 14px;
+  --df-radius-lg: 20px;
+  --df-radius-pill: 999px;
+}
+
+.tech-login-page {
+  min-height: 100vh;
+  background: var(--df-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--df-font-body);
+  padding: 24px;
+}
+
+.tech-login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--df-surface);
+  border-radius: var(--df-radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+  padding: 44px 40px;
+}
+
+.tech-login-card__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.logo-placeholder {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1.5px dashed var(--df-orange);
+  background: var(--df-orange-tint);
+}
+
+.tech-login-card__logo span {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--df-heading);
+}
+
+.tech-login-card h1 {
+  font-family: var(--df-font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0 0 8px;
+}
+
+.tech-login-card__subtext {
+  font-size: 14.5px;
+  color: var(--df-body);
+  margin: 0 0 28px;
+}
+
+.tech-login-card__error {
+  background: #fdeeee;
+  color: #c62828;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--df-radius-md);
+  padding: 10px 14px;
+  margin: 0 0 20px;
+}
+
+.tech-login-card label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-heading);
+  margin-bottom: 8px;
+}
+
+.tech-login-card input {
+  width: 100%;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  padding: 13px 16px;
+  font-family: var(--df-font-body);
+  font-size: 14.5px;
+  color: var(--df-heading);
+  outline: none;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.tech-login-card input:focus {
+  border-color: var(--df-orange);
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-field input {
+  padding-right: 44px;
+}
+
+.password-field__toggle {
+  position: absolute;
+  right: 12px;
+  top: 13px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.tech-login-card__forgot {
+  display: block;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-orange);
+  text-decoration: none;
+  margin: -10px 0 20px;
+}
+
+.tech-login-card__submit {
+  width: 100%;
+  background: var(--df-orange);
+  color: #fff;
+  border: none;
+  border-radius: var(--df-radius-pill);
+  padding: 14px;
+  font-family: var(--df-font-body);
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.tech-login-card__submit:hover {
+  background: var(--df-orange-hover);
+}
+
+.tech-login-card__submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.tech-login-card__signup-hint {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--df-body);
+  margin: 20px 0 0;
+}
+
+.tech-login-card__signup-hint a {
+  color: var(--df-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tech-login-card__divider {
+  height: 1px;
+  background: var(--df-border);
+  margin: 22px 0 16px;
+}
+
+.tech-login-card__crosslink {
+  text-align: center;
+  font-size: 12.5px;
+  color: #9a9a9a;
+  margin: 0;
+}
+
+.tech-login-card__crosslink a {
+  color: var(--df-body);
+  font-weight: 600;
+  text-decoration: underline;
+}

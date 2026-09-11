@@ -1,0 +1,234 @@
+.approvals-header {
+  margin-bottom: 20px;
+}
+
+.approvals-header h1 {
+  font-family: var(--df-font-heading);
+  font-size: 24px;
+  margin: 0 0 4px;
+}
+
+.approvals-header p {
+  color: var(--df-body);
+  font-size: 14px;
+  margin: 0;
+}
+
+.approvals-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.approvals-tab {
+  border: 1px solid var(--df-border);
+  background: var(--df-surface);
+  border-radius: var(--df-radius-pill);
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-body);
+  cursor: pointer;
+}
+
+.approvals-tab.is-active {
+  background: var(--df-orange);
+  border-color: var(--df-orange);
+  color: #fff;
+}
+
+.approvals-error {
+  color: #c0392b;
+  background: #fdecea;
+  border-radius: var(--df-radius-md);
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.approvals-empty {
+  text-align: center;
+  color: var(--df-body);
+  padding: 24px 0;
+}
+
+.approvals-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.approval-row {
+  display: grid;
+  grid-template-columns: 2fr 1.6fr 0.8fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--df-border);
+}
+
+.approval-row:last-child {
+  border-bottom: none;
+}
+
+.approval-row__main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.approval-row__name {
+  font-weight: 600;
+  margin: 0;
+  font-size: 14px;
+}
+
+.approval-row__meta {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--df-body);
+}
+
+.approval-row__details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--df-body);
+}
+
+.approval-row__nid a {
+  color: var(--df-orange);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.approval-row__no-nid {
+  color: #999;
+  font-size: 13px;
+}
+
+.status-pill {
+  padding: 4px 12px;
+  border-radius: var(--df-radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  justify-self: start;
+}
+
+.status-pill--pending {
+  background: #fff4e5;
+  color: #b96e00;
+}
+
+.status-pill--approved {
+  background: #e7f7ec;
+  color: #1e8a3d;
+}
+
+.status-pill--rejected {
+  background: #fdecea;
+  color: #c0392b;
+}
+
+.approval-row__actions {
+  display: flex;
+  gap: 8px;
+  justify-self: end;
+}
+
+.btn-approve,
+.btn-reject {
+  border-radius: var(--df-radius-pill);
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn-approve {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.btn-reject {
+  background: transparent;
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.approval-row__done {
+  font-size: 13px;
+  color: var(--df-body);
+  justify-self: end;
+}
+
+/* ---- Reject reason modal ---- */
+.reject-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.reject-modal {
+  background: #fff;
+  border-radius: var(--df-radius-lg);
+  padding: 24px;
+  width: 360px;
+  max-width: 90vw;
+}
+
+.reject-modal h2 {
+  margin: 0 0 6px;
+  font-size: 18px;
+}
+
+.reject-modal p {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--df-body);
+}
+
+.reject-modal textarea {
+  width: 100%;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.reject-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.reject-modal__actions button {
+  border-radius: var(--df-radius-pill);
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--df-border);
+  background: transparent;
+}
+
+@media (max-width: 720px) {
+  .approval-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .approval-row__actions {
+    justify-self: start;
+  }
+}
