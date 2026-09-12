@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
+import { createBooking } from "../api/bookings";
+import { listAddresses, createAddress } from "../api/addresses";
 import "../css/checkout.css";
 
 const PRICE_MAP = {
@@ -21,19 +23,6 @@ const PRICE_MAP = {
   "Custom Shelf Installation": 1000,
   "Wood Polishing": 700,
 };
-
-const MOCK_ADDRESSES = [
-  {
-    id: "home",
-    label: "Home",
-    detail: "House 45, Road 12, Dhanmondi, Dhaka 1209",
-  },
-  {
-    id: "office",
-    label: "Office",
-    detail: "Level 5, House 12, Banani, Dhaka 1213",
-  },
-];
 
 const DATE_OPTIONS = ["Today", "Tomorrow", "Pick a Date"];
 const TIME_SLOTS = [
@@ -61,22 +50,87 @@ function Checkout() {
   const navigate = useNavigate();
 
   const serviceName = searchParams.get("service") || "AC Gas Refill";
+  const serviceCategory = searchParams.get("category") || "electric";
   const price = PRICE_MAP[serviceName] || 1000;
 
-  const [selectedAddress, setSelectedAddress] = useState(MOCK_ADDRESSES[0].id);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newAddress, setNewAddress] = useState({ label: "", detail: "" });
+  const [addingAddress, setAddingAddress] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Today");
   const [selectedSlot, setSelectedSlot] = useState(TIME_SLOTS[2]);
   const [instructions, setInstructions] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("cash");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleConfirm = () => {
-    // TODO: replace with a real POST /bookings call once backend exists.
-    const fakeBookingId = `DFX${Math.floor(10000 + Math.random() * 89999)}`;
-    navigate(
-      `/booking-confirmed?bookingId=${fakeBookingId}&service=${encodeURIComponent(
-        serviceName,
-      )}&date=${encodeURIComponent(selectedDate)}&slot=${encodeURIComponent(selectedSlot)}`,
-    );
+  useEffect(() => {
+    listAddresses()
+      .then(({ data }) => {
+        setAddresses(data);
+        const defaultAddr = data.find((a) => a.is_default) || data[0];
+        if (defaultAddr) setSelectedAddress(defaultAddr.id);
+      })
+      .catch(() => setAddresses([]));
+  }, []);
+
+  const handleAddAddress = async (e) => {
+    e.preventDefault();
+    if (!newAddress.label.trim() || !newAddress.detail.trim()) return;
+
+    setAddingAddress(true);
+    try {
+      const { data } = await createAddress(newAddress);
+      setAddresses((prev) => [data, ...prev]);
+      setSelectedAddress(data.id);
+      setNewAddress({ label: "", detail: "" });
+      setShowAddForm(false);
+    } catch {
+      /* keep the form open so the user can retry */
+    } finally {
+      setAddingAddress(false);
+    }
+  };
+
+  const handleConfirm = async () => {
+    setError("");
+
+    const addressDetail = addresses.find(
+      (a) => a.id === selectedAddress,
+    )?.detail;
+
+    if (!addressDetail) {
+      setError("Please select or add an address first.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { data: booking } = await createBooking({
+        service_category: serviceCategory,
+        service_name: serviceName,
+        price,
+        address: addressDetail,
+        date_label: selectedDate,
+        time_slot: selectedSlot,
+        instructions: instructions || null,
+        payment_method: selectedPayment,
+      });
+
+      navigate(
+        `/booking-confirmed?bookingId=${booking.id}&service=${encodeURIComponent(
+          serviceName,
+        )}&date=${encodeURIComponent(selectedDate)}&slot=${encodeURIComponent(selectedSlot)}`,
+      );
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Couldn't create the booking. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -105,7 +159,7 @@ function Checkout() {
           <section className="checkout-section">
             <h3>1. Select Address</h3>
             <div className="address-options">
-              {MOCK_ADDRESSES.map((addr) => (
+              {addresses.map((addr) => (
                 <button
                   key={addr.id}
                   type="button"
@@ -120,14 +174,55 @@ function Checkout() {
                   <p className="address-option__detail">{addr.detail}</p>
                 </button>
               ))}
-              <button
-                type="button"
-                className="address-option address-option--add"
-              >
-                <span className="address-option__icon">+</span>
-                <p>Add New Address</p>
-              </button>
+
+              {!showAddForm && (
+                <button
+                  type="button"
+                  className="address-option address-option--add"
+                  onClick={() => setShowAddForm(true)}
+                >
+                  <span className="address-option__icon">+</span>
+                  <p>Add New Address</p>
+                </button>
+              )}
             </div>
+
+            {showAddForm && (
+              <form className="add-address-form" onSubmit={handleAddAddress}>
+                <input
+                  type="text"
+                  placeholder="Label (e.g. Home, Office)"
+                  value={newAddress.label}
+                  onChange={(e) =>
+                    setNewAddress((prev) => ({ ...prev, label: e.target.value }))
+                  }
+                />
+                <input
+                  type="text"
+                  placeholder="Full address"
+                  value={newAddress.detail}
+                  onChange={(e) =>
+                    setNewAddress((prev) => ({ ...prev, detail: e.target.value }))
+                  }
+                />
+                <div className="add-address-form__actions">
+                  <button
+                    type="submit"
+                    className="btn btn--primary btn--sm"
+                    disabled={addingAddress}
+                  >
+                    {addingAddress ? "Saving..." : "Save Address"}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn--outline btn--sm"
+                    onClick={() => setShowAddForm(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
           </section>
 
           {/* Date & Time */}
@@ -218,9 +313,11 @@ function Checkout() {
               type="button"
               className="btn btn--primary btn--full"
               onClick={handleConfirm}
+              disabled={submitting}
             >
-              Confirm Booking
+              {submitting ? "Booking..." : "Confirm Booking"}
             </button>
+            {error && <p className="checkout-error">{error}</p>}
             <p className="order-summary__note">
               🔒 Secure booking. Your details are protected.
             </p>
