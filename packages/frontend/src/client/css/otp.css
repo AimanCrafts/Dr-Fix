@@ -1,0 +1,161 @@
+/* ==========================================================================
+   OTP / Verify Email page
+   Uses the shared --df-* design tokens already defined globally
+   (see component/css/header.css). No tokens are redefined here.
+   ========================================================================== */
+
+.otp-page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-bg);
+  font-family: var(--df-font-body);
+  padding: 24px;
+}
+
+.otp-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+.otp-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.otp-heading {
+  font-family: var(--df-font-heading);
+  color: var(--df-heading);
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.otp-subtext {
+  color: var(--df-body);
+  font-size: 14.5px;
+  margin: 0 0 32px;
+}
+
+.otp-subtext strong {
+  color: var(--df-heading);
+}
+
+/* ==========================================================================
+   Digit boxes
+   ========================================================================== */
+.otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.otp-box {
+  width: 48px;
+  height: 56px;
+  text-align: center;
+  font-family: var(--df-font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--df-heading);
+  border: 1.5px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  background: var(--df-bg);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.otp-box:focus {
+  border-color: var(--df-orange);
+}
+
+/* ==========================================================================
+   Resend
+   ========================================================================== */
+.otp-resend {
+  font-size: 14px;
+  color: var(--df-body);
+  margin: 0 0 24px;
+}
+
+.otp-resend__timer strong {
+  color: var(--df-heading);
+}
+
+.otp-resend__link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--df-orange);
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.otp-resend__link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Submit
+   ========================================================================== */
+.otp-submit {
+  width: 100%;
+  border: none;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-orange);
+  color: #fff;
+  font-family: var(--df-font-body);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 0;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.otp-submit:hover {
+  background: var(--df-orange-hover);
+}
+
+.otp-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.otp-change-email {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--df-body);
+  text-decoration: none;
+}
+
+.otp-change-email:hover {
+  color: var(--df-orange);
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 480px) {
+  .otp-card {
+    padding: 36px 20px;
+  }
+
+  .otp-box {
+    width: 42px;
+    height: 50px;
+    font-size: 20px;
+  }
+}

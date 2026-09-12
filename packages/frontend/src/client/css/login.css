@@ -1,0 +1,192 @@
+/* ==========================================================================
+   Login page
+   Uses the shared --df-* design tokens already defined globally
+   (see component/css/header.css). No tokens are redefined here.
+   ========================================================================== */
+
+.login-page {
+  display: flex;
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   Left side — form
+   ========================================================================== */
+.login-page__left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: #ffffff;
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-heading {
+  font-family: var(--df-font-heading);
+  color: var(--df-heading);
+  font-size: 40px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.login-subtext {
+  color: var(--df-body);
+  font-size: 15px;
+  margin: 0 0 32px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-field__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--df-heading);
+}
+
+.login-field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  background: var(--df-surface);
+  padding: 13px 16px;
+  font-family: var(--df-font-body);
+  font-size: 15px;
+  color: var(--df-heading);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.login-field input::placeholder {
+  color: #9a9a9a;
+}
+
+.login-field input:focus {
+  border-color: var(--df-orange);
+}
+
+.login-field__password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-field__password input {
+  padding-right: 44px;
+}
+
+.login-field__toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px;
+}
+
+.login-forgot {
+  align-self: flex-end;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  text-decoration: none;
+  margin-top: -8px;
+}
+
+.login-forgot:hover {
+  text-decoration: underline;
+}
+
+.login-submit {
+  margin-top: 4px;
+  width: 100%;
+  border: none;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-orange);
+  color: #fff;
+  font-family: var(--df-font-body);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.login-submit:hover {
+  background: var(--df-orange-hover);
+}
+
+.login-signup-hint {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--df-body);
+}
+
+.login-signup-hint a {
+  color: var(--df-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-signup-hint a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Right side — empty visual panel
+   ========================================================================== */
+.login-page__right {
+  flex: 1;
+  background-color: var(--df-orange, #ff5a1f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+}
+
+.login-hero-img {
+  max-width: 85%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 860px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page__right {
+    display: none;
+  }
+
+  .login-page__left {
+    padding: 40px 20px;
+  }
+}

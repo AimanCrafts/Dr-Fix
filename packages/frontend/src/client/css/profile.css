@@ -1,0 +1,15 @@
+.profile-page {
+  min-height: 100vh;
+  background: var(--df-bg);
+}
+
+.profile-wrap {
+  padding-top: 48px;
+}
+
+.profile-success {
+  color: #1f9d55;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}

@@ -1,0 +1,138 @@
+.admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--df-surface, #fff);
+  border-right: 1px solid var(--df-border, #ececec);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  font-family: var(--df-font-body, "Inter", sans-serif);
+}
+
+.admin-sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 20px;
+}
+
+.logo-placeholder {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1.5px dashed var(--df-orange, #ff5a1f);
+  background: var(--df-orange-tint, #fff1eb);
+}
+
+.admin-sidebar__logo span {
+  font-family: var(--df-font-heading, "Space Grotesk", sans-serif);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--df-heading, #1a1a1a);
+}
+
+.admin-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.admin-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--df-body, #4a4a4a);
+  font-size: 14.5px;
+  font-weight: 500;
+  position: relative;
+}
+
+.admin-sidebar__item:hover {
+  background: var(--df-orange-tint, #fff1eb);
+}
+
+.admin-sidebar__item.is-active {
+  background: var(--df-orange, #ff5a1f);
+  color: #fff;
+  font-weight: 600;
+}
+
+.admin-sidebar__icon {
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+}
+
+.admin-sidebar__label {
+  flex: 1;
+}
+
+.admin-sidebar__badge {
+  background: #fff;
+  color: var(--df-orange, #ff5a1f);
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.admin-sidebar__item.is-active .admin-sidebar__badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.admin-sidebar__profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid var(--df-border, #ececec);
+  padding: 16px 10px 6px;
+}
+
+.avatar-placeholder {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--df-orange, #ff5a1f);
+  background: var(--df-orange-tint, #fff1eb);
+  flex-shrink: 0;
+}
+
+.admin-sidebar__profile-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--df-heading, #1a1a1a);
+  margin: 0;
+}
+
+.admin-sidebar__profile-role {
+  font-size: 12px;
+  color: var(--df-body, #4a4a4a);
+  margin: 1px 0 0;
+}
+
+.admin-sidebar__logout {
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--df-body, #4a4a4a);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.admin-sidebar__logout:hover {
+  color: var(--df-orange, #ff5a1f);
+}
+
+.admin-sidebar__logout:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
