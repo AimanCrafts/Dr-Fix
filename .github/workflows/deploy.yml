@@ -2,11 +2,11 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [main]   # branch master হলে এখানে master লিখুন
+    branches: [master]
   workflow_dispatch:
 
 env:
-  DEPLOY_USER: s<roll>        # <-- এখানে নিজের username দিন, যেমন s20230402045
+  DEPLOY_USER: s20230204105
   DEPLOY_HOST: 187.52.122.100
 
 jobs:
