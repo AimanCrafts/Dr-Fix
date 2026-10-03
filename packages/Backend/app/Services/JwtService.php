@@ -28,7 +28,7 @@ class JwtService
 
     public function __construct()
     {
-        $secret = env('JWT_SECRET');
+                $secret = config('services.jwt.secret');
 
         if (! $secret) {
             throw new \RuntimeException('JWT_SECRET is not set in .env');
