@@ -224,7 +224,7 @@ function ClientDashboard() {
 
   return (
     <div className="client-dashboard">
-      <Header variant="app" />
+      <Header variant="clent" />
 
       <main className="dashboard-container">
         <section className="greeting">
