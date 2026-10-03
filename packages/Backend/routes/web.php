@@ -7,12 +7,11 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
+| Serve the built React app (Frontend -> Backend/public/app) for every
+| non-API path. React Router handles the routing in the browser.
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{any?}', fn () =>
+    response()->file(public_path('app/index.html')))
+    ->where('any', '(?!api/|up$).*');
