@@ -1,0 +1,11 @@
+{
+  "name": "dr-fix-root",
+  "private": true,
+  "workspaces": [
+    "packages/frontend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=packages/frontend",
+    "dev:backend": "cd packages/backend && php artisan serve"
+  }
+}

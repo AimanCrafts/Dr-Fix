@@ -1,0 +1,162 @@
+/* ==========================================================================
+   Assumes shared design tokens from header.css are loaded globally.
+   ========================================================================== */
+
+.confirmed-page {
+  background: var(--df-bg);
+  min-height: 100vh;
+  font-family: var(--df-font-body);
+}
+
+.confirmed-container {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 64px 24px 80px;
+  text-align: center;
+}
+
+.success-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--df-orange);
+  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.confirmed-container h1 {
+  font-family: var(--df-font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0 0 12px;
+}
+
+.confirmed-subtext {
+  font-size: 15px;
+  color: var(--df-body);
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+
+.card {
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 24px;
+}
+
+.summary-card {
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.summary-row--id p {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.text-accent {
+  color: var(--df-orange);
+}
+
+.summary-row__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--df-orange-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.summary-row__label {
+  font-size: 13.5px;
+  color: var(--df-body);
+  min-width: 100px;
+}
+
+.summary-row__value {
+  font-weight: 600;
+  font-size: 13.5px;
+  color: var(--df-heading);
+  margin-left: auto;
+  text-align: right;
+}
+
+.summary-divider {
+  height: 1px;
+  background: var(--df-border);
+  margin: 4px 0;
+}
+
+.confirmed-actions {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.btn {
+  flex: 1;
+  font-family: var(--df-font-body);
+  font-weight: 600;
+  font-size: 14.5px;
+  border-radius: var(--df-radius-pill);
+  padding: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--df-orange-hover);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--df-orange);
+  color: var(--df-orange);
+}
+
+.confirmed-support {
+  font-size: 13.5px;
+  color: var(--df-body);
+  margin: 0;
+}
+
+.confirmed-support a {
+  color: var(--df-orange);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .confirmed-actions {
+    flex-direction: column;
+  }
+}

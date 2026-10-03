@@ -1,0 +1,228 @@
+.addresses-page {
+  min-height: 100vh;
+  background: var(--df-background, #fafafa);
+}
+
+.addresses-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+.addresses-heading {
+  margin-bottom: 32px;
+}
+
+.addresses-eyebrow {
+  margin: 0 0 8px;
+  color: var(--df-orange, #e2532e);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.addresses-heading h1 {
+  margin: 0 0 8px;
+  color: var(--df-heading, #222);
+  font-size: 34px;
+}
+
+.addresses-heading p {
+  margin: 0;
+  color: var(--df-body, #666);
+}
+
+.addresses-error {
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #fff1ed;
+  color: #c74324;
+  font-size: 14px;
+}
+
+.addresses-card,
+.addresses-list {
+  background: var(--df-surface, #fff);
+  border: 1px solid var(--df-border, #e8e8e8);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.addresses-card h2,
+.addresses-list h2 {
+  margin: 0 0 20px;
+  color: var(--df-heading, #222);
+  font-size: 20px;
+}
+
+.addresses-form {
+  display: grid;
+  gap: 18px;
+}
+
+.addresses-form__field {
+  display: grid;
+  gap: 8px;
+}
+
+.addresses-form__field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--df-heading, #222);
+}
+
+.addresses-form__field input,
+.addresses-form__field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid var(--df-border, #ddd);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--df-heading, #222);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.addresses-form__field input:focus,
+.addresses-form__field textarea:focus {
+  border-color: var(--df-orange, #e2532e);
+}
+
+.addresses-form__field textarea {
+  resize: vertical;
+}
+
+.addresses-submit {
+  width: fit-content;
+  padding: 11px 20px;
+  border: none;
+  border-radius: 9px;
+  background: var(--df-orange, #e2532e);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addresses-submit:hover {
+  opacity: 0.92;
+}
+
+.addresses-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.addresses-list__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addresses-empty {
+  padding: 28px 0;
+  color: var(--df-body, #777);
+  text-align: center;
+}
+
+.address-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px 0;
+  border-top: 1px solid var(--df-border, #eee);
+}
+
+.address-item:first-of-type {
+  border-top: none;
+}
+
+.address-item--default {
+  border-left: 3px solid var(--df-orange, #e2532e);
+  padding-left: 16px;
+}
+
+.address-item__content {
+  min-width: 0;
+}
+
+.address-item__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+}
+
+.address-item__top h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--df-heading, #222);
+}
+
+.address-item__content p {
+  margin: 0;
+  color: var(--df-body, #666);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.address-default {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #fff0eb;
+  color: var(--df-orange, #e2532e);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.address-item__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.address-item__actions button {
+  border: 1px solid var(--df-border, #ddd);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  color: var(--df-heading, #333);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.address-item__actions button:hover {
+  border-color: var(--df-orange, #e2532e);
+  color: var(--df-orange, #e2532e);
+}
+
+.address-item__actions .address-delete {
+  color: #d64a2c;
+}
+
+@media (max-width: 700px) {
+  .addresses-main {
+    padding: 32px 16px 60px;
+  }
+
+  .addresses-heading h1 {
+    font-size: 28px;
+  }
+
+  .address-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .address-item__actions {
+    width: 100%;
+  }
+}

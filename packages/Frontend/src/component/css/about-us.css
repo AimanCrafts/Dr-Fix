@@ -1,0 +1,126 @@
+.df-info-page {
+  background: var(--df-bg);
+  color: var(--df-body);
+  font-family: var(--df-font-body);
+}
+
+.df-info-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 82px 24px 54px;
+  text-align: center;
+}
+
+.df-info-eyebrow {
+  margin: 0 0 10px;
+  color: var(--df-orange);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.df-info-hero h1 {
+  margin: 0 0 12px;
+  color: var(--df-heading);
+  font-family: var(--df-font-heading);
+  font-size: clamp(40px, 5vw, 58px);
+  line-height: 1.08;
+}
+
+.df-info-hero > p:last-child {
+  margin: 0;
+  font-size: 16px;
+}
+
+.df-team-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px 70px;
+}
+
+.df-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 34px;
+}
+
+.df-team-card {
+  text-align: center;
+  padding: 28px 20px 30px;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  background: var(--df-surface);
+}
+
+.df-team-photo {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 7px solid var(--df-orange-tint);
+  background: #f7f7f7;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.df-team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.df-team-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.df-team-card h2 {
+  margin: 0 0 7px;
+  color: var(--df-heading);
+  font-family: var(--df-font-heading);
+  font-size: 20px;
+}
+
+.df-team-card p {
+  margin: 0;
+  color: var(--df-body);
+  font-size: 14px;
+}
+
+.df-project-note {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  padding: 34px 24px;
+  text-align: center;
+  border-top: 1px solid var(--df-border);
+}
+
+.df-project-note p {
+  margin: 0 0 8px;
+  color: var(--df-body);
+  font-size: 15px;
+}
+
+.df-project-note p:last-child {
+  margin-bottom: 0;
+  color: var(--df-heading);
+  font-weight: 700;
+}
+
+@media (max-width: 800px) {
+  .df-team-grid {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+}

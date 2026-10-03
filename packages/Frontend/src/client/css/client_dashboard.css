@@ -1,0 +1,844 @@
+.client-dashboard {
+  min-height: 100vh;
+  background: var(--df-bg);
+  color: var(--df-body);
+  font-family: var(--df-font-body);
+}
+
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.card {
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 24px;
+}
+
+.greeting h1 {
+  font-family: var(--df-font-heading);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--df-heading);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.action-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--df-radius-lg);
+  border: 1px solid var(--df-border);
+  background: var(--df-surface);
+  color: var(--df-body);
+  text-decoration: none;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.action-card:hover {
+  border-color: var(--df-orange);
+  transform: translateY(-2px);
+}
+
+.action-card.is-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.action-card h3 {
+  font-family: var(--df-font-heading);
+  font-size: 15.5px;
+  color: var(--df-heading);
+  margin: 0 0 4px;
+}
+
+.action-card p {
+  font-size: 13px;
+  margin: 0;
+  color: var(--df-body);
+}
+
+.action-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.action-card--primary {
+  background: var(--df-orange);
+  border-color: var(--df-orange);
+}
+
+.action-card--primary h3,
+.action-card--primary p {
+  color: #fff;
+}
+
+.action-card--primary p {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.action-card--primary .action-card__icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.action-card__icon--outline {
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+.active-booking h2,
+.section-block h2,
+.rate-service h2,
+.address-summary h2,
+.addresses h2 {
+  font-family: var(--df-font-heading);
+  font-size: 18px;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.active-booking__row {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+.active-booking__technician {
+  display: flex;
+  gap: 12px;
+}
+
+.technician-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+  font-weight: 700;
+}
+
+.technician-name {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.technician-role,
+.technician-vehicle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  margin: 2px 0;
+}
+
+.technician-eta {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--df-orange);
+  margin: 5px 0;
+}
+
+.progress-steps {
+  display: flex;
+  align-items: flex-start;
+}
+
+.progress-step {
+  position: relative;
+  flex: 1;
+  text-align: center;
+}
+
+.progress-step__dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--df-border);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-step--done .progress-step__dot,
+.progress-step--current .progress-step__dot {
+  background: var(--df-orange);
+}
+
+.progress-step__label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--df-heading);
+  margin: 0;
+}
+
+.progress-step--current .progress-step__label {
+  color: var(--df-orange);
+}
+
+.progress-step__line {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 100%;
+  height: 2px;
+  background: var(--df-border);
+  z-index: 0;
+}
+
+.progress-step--done .progress-step__line {
+  background: var(--df-orange);
+}
+
+.dashboard-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.card-heading-row,
+.section-block__header,
+.rating-modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.eyebrow {
+  color: var(--df-orange);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin: 0 0 5px;
+}
+
+.heading-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+  flex-shrink: 0;
+}
+
+.rate-service__service-name {
+  color: var(--df-heading);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 22px 0 4px;
+}
+
+.rate-service__technician {
+  font-size: 13px;
+  margin: 0;
+}
+
+.rate-service__open {
+  margin-top: 20px;
+}
+
+.feature-empty-state {
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+}
+
+.feature-empty-state p {
+  margin: 20px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.address-summary .feature-empty-state p {
+  margin-top: 20px;
+}
+
+.default-address-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 22px 0 16px;
+}
+
+.default-address-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+.default-address-content strong {
+  color: var(--df-heading);
+  font-size: 14px;
+}
+
+.default-address-content p {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--df-orange);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.section-block__header {
+  align-items: flex-end;
+  margin-bottom: 2px;
+}
+
+.section-block__header > a {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  text-decoration: none;
+}
+
+.recent-services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.recent-service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.recent-service-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.service-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4f7e9;
+  color: #1e8a3d;
+}
+
+.recent-service-card__name {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 8px 0 0;
+}
+
+.recent-service-card__meta {
+  font-size: 12.5px;
+  margin: 0;
+}
+
+.status-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--df-radius-pill);
+}
+
+.status-badge--success {
+  background: #e4f7e9;
+  color: #1e8a3d;
+}
+
+.empty-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--df-body);
+  font-size: 14px;
+  text-align: center;
+}
+
+.empty-card--large {
+  flex-direction: column;
+  gap: 10px;
+  padding: 44px 24px;
+}
+
+.empty-card h3 {
+  color: var(--df-heading);
+  font-size: 16px;
+  margin: 0;
+}
+
+.empty-card p {
+  max-width: 460px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.empty-state-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+.addresses {
+  scroll-margin-top: 100px;
+}
+
+.address-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.address-chip__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.address-chip__content {
+  min-width: 0;
+  flex: 1;
+}
+
+.address-chip__label {
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0;
+  font-size: 14px;
+}
+
+.address-chip__default {
+  margin-left: 8px;
+  font-weight: 600;
+  color: var(--df-orange);
+  font-size: 11px;
+}
+
+.address-chip__detail {
+  font-size: 12.5px;
+  margin: 3px 0 0;
+  line-height: 1.4;
+}
+
+.address-chip__action,
+.address-chip__delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--df-body);
+  white-space: nowrap;
+}
+
+.address-chip__action {
+  font-size: 12px;
+}
+
+.address-chip__action:hover,
+.address-chip__delete:hover {
+  color: var(--df-orange);
+}
+
+.address-chip__delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.add-address-btn {
+  width: 100%;
+  border: 1.5px dashed var(--df-border);
+  border-radius: var(--df-radius-md);
+  background: none;
+  padding: 14px;
+  margin-top: 14px;
+  font-family: var(--df-font-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--df-orange);
+  cursor: pointer;
+}
+
+.add-address-btn:hover {
+  border-color: var(--df-orange);
+  background: var(--df-orange-tint);
+}
+
+.add-address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  padding: 14px;
+  margin-top: 14px;
+}
+
+.add-address-form input {
+  border: 1px solid var(--df-border);
+  border-radius: 8px;
+  padding: 11px 12px;
+  font-family: var(--df-font-body);
+  font-size: 13.5px;
+  background: var(--df-surface);
+  color: var(--df-heading);
+}
+
+.add-address-form__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.empty-text {
+  color: var(--df-body, #666);
+  font-size: 13px;
+  text-align: center;
+  padding: 18px 0;
+}
+
+.btn {
+  font-family: var(--df-font-body);
+  font-weight: 600;
+  border-radius: var(--df-radius-pill);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn--primary {
+  background: var(--df-orange);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 14px;
+}
+
+.btn--primary:hover {
+  background: var(--df-orange-hover);
+}
+
+.btn--primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--sm {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn--outline {
+  border: 1px solid var(--df-border);
+  color: var(--df-heading);
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.btn--outline-sm {
+  border: 1px solid var(--df-orange);
+  color: var(--df-orange);
+  background: transparent;
+  padding: 8px 16px;
+  font-size: 13px;
+  margin-top: 7px;
+}
+
+.btn--outline-sm:hover {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.rating-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(20, 24, 25, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.rating-modal {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: 16px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+  padding: 28px;
+}
+
+.rating-modal__header h2 {
+  font-family: var(--df-font-heading);
+  color: var(--df-heading);
+  font-size: 22px;
+  margin: 0;
+}
+
+.rating-modal__close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--df-border);
+  border-radius: 9px;
+  background: var(--df-surface);
+  color: var(--df-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.rating-modal__close:hover {
+  color: var(--df-orange);
+  border-color: var(--df-orange);
+}
+
+.rating-modal__service {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  margin-top: 22px;
+  border: 1px solid var(--df-border);
+  border-radius: 12px;
+  background: var(--df-bg);
+}
+
+.rating-modal__service-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+.rating-modal__service strong {
+  display: block;
+  color: var(--df-heading);
+  font-size: 14px;
+}
+
+.rating-modal__service p {
+  margin: 3px 0 0;
+  font-size: 12.5px;
+}
+
+.rating-control {
+  text-align: center;
+  padding: 24px 0 20px;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rating-stars button {
+  border: none;
+  background: none;
+  padding: 4px;
+  color: var(--df-border);
+  cursor: pointer;
+  transition:
+    color 0.12s ease,
+    transform 0.12s ease;
+}
+
+.rating-stars button:hover,
+.rating-stars button:focus-visible,
+.rating-stars button.is-active {
+  color: var(--df-orange);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.rating-label {
+  min-height: 20px;
+  margin: 8px 0 0;
+  color: var(--df-heading);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.review-field {
+  display: block;
+}
+
+.review-field > span {
+  display: block;
+  color: var(--df-heading);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.review-field textarea {
+  width: 100%;
+  min-height: 125px;
+  box-sizing: border-box;
+  resize: vertical;
+  border: 1px solid var(--df-border);
+  border-radius: 10px;
+  padding: 12px 13px;
+  background: var(--df-surface);
+  color: var(--df-heading);
+  font-family: var(--df-font-body);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.review-field textarea:focus {
+  outline: none;
+  border-color: var(--df-orange);
+  box-shadow: 0 0 0 3px var(--df-orange-tint);
+}
+
+.review-field small {
+  display: block;
+  text-align: right;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--df-body);
+}
+
+.rating-form-error,
+.rating-form-success {
+  font-size: 12.5px;
+  margin: 10px 0 0;
+}
+
+.rating-form-error {
+  color: #b42318;
+}
+
+.rating-form-success {
+  color: #1e8a3d;
+}
+
+.rating-modal__footer {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 18px;
+}
+
+@media (max-width: 960px) {
+  .quick-actions,
+  .dashboard-feature-grid,
+  .recent-services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .active-booking__row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-container {
+    padding: 28px 16px 60px;
+    gap: 20px;
+  }
+
+  .greeting h1 {
+    font-size: 27px;
+  }
+
+  .card,
+  .action-card {
+    padding: 18px;
+  }
+
+  .progress-steps {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .progress-step {
+    min-width: 92px;
+  }
+
+  .address-chip__action {
+    display: none;
+  }
+
+  .rating-modal {
+    padding: 20px;
+  }
+
+  .rating-stars {
+    gap: 2px;
+  }
+}

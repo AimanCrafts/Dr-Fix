@@ -1,0 +1,81 @@
+.earnings-intro {
+  color: var(--df-body);
+  font-size: 14px;
+  margin: 8px 0 28px;
+}
+.earnings-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--df-border);
+  border: 1px solid var(--df-border);
+  margin: 28px 0 42px;
+}
+.earnings-stats div {
+  background: #fff;
+  padding: 24px;
+}
+.earnings-stats span {
+  display: block;
+  color: var(--df-body);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.earnings-stats strong {
+  font-family: var(--df-font-heading);
+  font-size: 25px;
+  color: var(--df-orange);
+}
+.earnings-table-wrap {
+  border-top: 1px solid var(--df-border);
+  padding-top: 26px;
+}
+.earnings-table-wrap h2 {
+  font-family: var(--df-font-heading);
+  font-size: 20px;
+  margin: 0 0 18px;
+}
+.earnings-table {
+  border-top: 1px solid var(--df-border);
+}
+.earnings-row {
+  display: grid;
+  grid-template-columns: 1fr 150px 120px;
+  gap: 20px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--df-border);
+  font-size: 13px;
+}
+.earnings-row div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.earnings-row div span {
+  color: var(--df-body);
+}
+.earnings-row > span {
+  color: var(--df-body);
+}
+.earnings-row > strong {
+  color: var(--df-orange);
+  text-align: right;
+}
+.earnings-empty {
+  color: var(--df-body);
+  font-size: 14px;
+}
+@media (max-width: 760px) {
+  .earnings-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .earnings-row {
+    grid-template-columns: 1fr 100px;
+  }
+  .earnings-row > strong {
+    grid-column: 2;
+    grid-row: 1;
+    text-align: right;
+  }
+}

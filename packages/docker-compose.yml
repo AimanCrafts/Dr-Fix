@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./Backend
+    container_name: drfix_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./Backend:/var/www
+    depends_on:
+      - database
+
+  frontend:
+    build: ./Frontend
+    container_name: drfix_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  database:
+    image: mysql:8.0
+    container_name: drfix_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:

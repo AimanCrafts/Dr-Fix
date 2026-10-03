@@ -1,0 +1,306 @@
+/* ==========================================================================
+   Signup page
+   Uses the shared --df-* design tokens already defined globally
+   (see component/css/header.css). No tokens are redefined here.
+   ========================================================================== */
+
+.signup-page {
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  background: var(--df-bg);
+  font-family: var(--df-font-body);
+  padding: 56px 20px;
+}
+
+.signup-wrap {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+}
+
+.signup-heading {
+  font-family: var(--df-font-heading);
+  color: var(--df-heading);
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.signup-subtext {
+  color: var(--df-body);
+  font-size: 15px;
+  margin: 0 0 28px;
+}
+
+/* ==========================================================================
+   Role selection cards
+   ========================================================================== */
+.signup-roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.role-card {
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: var(--df-surface);
+  border: 1.5px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 22px;
+  cursor: pointer;
+  font-family: var(--df-font-body);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.role-card:hover {
+  border-color: var(--df-orange);
+}
+
+.role-card.is-selected {
+  border-color: var(--df-orange);
+  box-shadow: 0 0 0 1px var(--df-orange);
+}
+
+.role-card__check {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--df-orange);
+  color: #fff;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.role-card__icon {
+  font-size: 26px;
+}
+
+.role-card__title {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--df-heading);
+}
+
+.role-card__desc {
+  font-size: 13.5px;
+  color: var(--df-body);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Form
+   ========================================================================== */
+.signup-form {
+  text-align: left;
+  background: var(--df-surface);
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.signup-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.signup-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signup-field__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--df-heading);
+}
+
+.signup-field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-md);
+  background: var(--df-bg);
+  padding: 13px 16px;
+  font-family: var(--df-font-body);
+  font-size: 15px;
+  color: var(--df-heading);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.signup-field input::placeholder {
+  color: #9a9a9a;
+}
+
+.signup-field input:focus {
+  border-color: var(--df-orange);
+}
+
+.signup-field__password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.signup-field__password input {
+  padding-right: 44px;
+}
+
+.signup-field__toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 4px;
+}
+
+.signup-terms {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--df-body);
+}
+
+.signup-terms input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--df-orange);
+}
+
+.signup-terms a {
+  color: var(--df-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-terms a:hover {
+  text-decoration: underline;
+}
+
+.signup-submit {
+  width: 100%;
+  border: none;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-orange);
+  color: #fff;
+  font-family: var(--df-font-body);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 0;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.signup-submit:hover {
+  background: var(--df-orange-hover);
+}
+
+.signup-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.signup-login-hint {
+  margin: 20px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--df-body);
+}
+
+.signup-login-hint a {
+  color: var(--df-orange);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-login-hint a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 640px) {
+  .signup-roles,
+  .signup-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .signup-form {
+    padding: 24px;
+  }
+}
+
+/* ---------------- Provider-only fields (signup) ---------------- */
+.signup-form__provider-fields {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--df-border, #ececec);
+}
+
+.signup-form__section-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--df-orange, #ff5a1f);
+  margin: 0 0 14px;
+}
+
+.signup-form__provider-fields select {
+  width: 100%;
+  border: 1px solid var(--df-border, #ececec);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--df-heading, #1a1a1a);
+  background: #fff;
+  outline: none;
+}
+
+.signup-form__provider-fields select:focus {
+  border-color: var(--df-orange, #ff5a1f);
+}
+
+.signup-form__provider-fields input[type="file"] {
+  width: 100%;
+  border: 1px solid var(--df-border, #ececec);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--df-body, #4a4a4a);
+  background: #fff;
+}
+
+.signup-form__note {
+  font-size: 12.5px;
+  color: var(--df-body, #4a4a4a);
+  margin: 4px 0 0;
+}

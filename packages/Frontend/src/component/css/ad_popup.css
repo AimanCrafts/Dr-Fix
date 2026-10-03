@@ -1,0 +1,119 @@
+/* Assumes shared tokens (--df-*) already loaded globally from the client
+   header.css. Re-declared minimally here so this component also works
+   standalone if imported on a page that hasn't loaded those tokens yet. */
+:root {
+  --df-orange: #ff5a1f;
+  --df-orange-hover: #e64e15;
+  --df-orange-tint: #fff1eb;
+  --df-heading: #1a1a1a;
+  --df-body: #4a4a4a;
+  --df-font-heading:
+    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
+  --df-font-body: "Inter", -apple-system, sans-serif;
+  --df-radius-lg: 20px;
+  --df-radius-pill: 999px;
+}
+
+.ad-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 24px;
+  animation: ad-popup-fade-in 0.2s ease;
+}
+
+@keyframes ad-popup-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.ad-popup-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: var(--df-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  font-family: var(--df-font-body);
+}
+
+.ad-popup-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.ad-popup-close:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.ad-popup-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.image-placeholder {
+  border: 1.5px dashed var(--df-orange);
+  background: var(--df-orange-tint);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--df-orange);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ad-popup-content {
+  padding: 20px 22px 24px;
+  text-align: center;
+}
+
+.ad-popup-content h3 {
+  font-family: var(--df-font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--df-heading);
+  margin: 0 0 14px;
+}
+
+.ad-popup-cta {
+  display: inline-block;
+  background: var(--df-orange);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  border-radius: var(--df-radius-pill);
+  padding: 11px 28px;
+}
+
+.ad-popup-cta:hover {
+  background: var(--df-orange-hover);
+}
+
+@media (max-width: 480px) {
+  .ad-popup-card {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,115 @@
+.profile-intro {
+  color: var(--df-body);
+  font-size: 14px;
+  margin: 8px 0 25px;
+}
+.profile-success {
+  padding: 12px 15px;
+  background: #eaf8ed;
+  color: #24733a;
+  border-radius: 10px;
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+.profile-card {
+  max-width: 900px;
+  background: #fff;
+  border: 1px solid var(--df-border);
+  border-radius: 18px;
+  padding: 28px;
+  margin-top: 26px;
+}
+.profile-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--df-orange);
+  color: #fff;
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 25px;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 22px;
+}
+.profile-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--df-heading);
+}
+.profile-grid input {
+  border: 1px solid var(--df-border);
+  border-radius: 9px;
+  padding: 12px 13px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  outline: none;
+}
+.profile-grid input:focus {
+  border-color: var(--df-orange);
+}
+.profile-grid input[readonly] {
+  background: #f6f6f6;
+  color: #888;
+}
+.profile-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid var(--df-border);
+  border-bottom: 1px solid var(--df-border);
+  margin: 25px 0;
+  padding: 18px 0;
+}
+.profile-bottom strong {
+  font-size: 14px;
+}
+.profile-bottom p {
+  margin: 4px 0 0;
+  color: var(--df-body);
+  font-size: 12px;
+}
+.profile-toggle {
+  border: 1px solid var(--df-border);
+  background: #fff;
+  border-radius: 999px;
+  padding: 9px 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.profile-toggle.is-on {
+  border-color: #2e9e4f;
+  color: #24733a;
+}
+.profile-save {
+  border: 0;
+  border-radius: 999px;
+  background: var(--df-orange);
+  color: #fff;
+  padding: 12px 21px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.profile-save:disabled {
+  opacity: 0.6;
+}
+@media (max-width: 650px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+  .profile-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

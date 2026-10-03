@@ -1,0 +1,113 @@
+.my-bookings-page {
+  min-height: 100vh;
+  background: #fafafa;
+  color: var(--df-heading);
+  font-family: var(--df-font-body);
+}
+.my-bookings-main {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 42px 24px 80px;
+}
+.my-bookings-eyebrow {
+  margin: 0 0 7px;
+  color: var(--df-orange);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.my-bookings-main h1 {
+  margin: 0;
+  font-family: var(--df-font-heading);
+  font-size: 32px;
+}
+.my-bookings-intro {
+  color: var(--df-body);
+  font-size: 14px;
+  margin: 8px 0 34px;
+}
+.my-bookings-main section {
+  margin-top: 35px;
+}
+.my-bookings-main section > h2 {
+  font-family: var(--df-font-heading);
+  font-size: 19px;
+  margin: 0 0 14px;
+}
+.my-booking-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--df-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.booking-status {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f1f1f1;
+  color: #555;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.booking-status--accepted,
+.booking-status--on_the_way,
+.booking-status--arrived,
+.booking-status--in_progress {
+  background: #fff1eb;
+  color: var(--df-orange);
+}
+.my-booking-card h2 {
+  margin: 9px 0 5px;
+  font-family: var(--df-font-heading);
+  font-size: 18px;
+}
+.my-booking-card p {
+  margin: 3px 0;
+  color: var(--df-body);
+  font-size: 13px;
+}
+.my-booking-card__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 9px;
+}
+.my-booking-card__side strong {
+  font-family: var(--df-font-heading);
+  color: var(--df-orange);
+  font-size: 20px;
+}
+.my-booking-card__side a {
+  color: var(--df-orange);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.my-bookings-empty,
+.my-bookings-error {
+  padding: 22px;
+  background: #fff;
+  border: 1px solid var(--df-border);
+  border-radius: 12px;
+  color: var(--df-body);
+  font-size: 13px;
+}
+.my-bookings-error {
+  background: #fff4e5;
+  color: #9a6100;
+}
+@media (max-width: 600px) {
+  .my-booking-card {
+    grid-template-columns: 1fr;
+  }
+  .my-booking-card__side {
+    align-items: flex-start;
+  }
+}
