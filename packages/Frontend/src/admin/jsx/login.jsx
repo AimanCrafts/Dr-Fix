@@ -16,7 +16,7 @@ import "../css/login.css";
  * import.meta.env.VITE_API_URL) instead of hardcoding localhost here.
  */
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 function AdminLogin() {
   const navigate = useNavigate();

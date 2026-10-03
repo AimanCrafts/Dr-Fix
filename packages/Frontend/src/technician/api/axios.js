@@ -12,7 +12,7 @@ import axios from "axios";
  * not fixed here since it's outside this task, but worth knowing about.
  */
 
-const BASE_URL = "http://localhost:8000/api";
+const BASE_URL = "/api";
 
 const technicianApi = axios.create({
   baseURL: BASE_URL,

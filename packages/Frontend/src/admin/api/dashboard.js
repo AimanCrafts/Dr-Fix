@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 async function handle(response) {
   const data = await response.json().catch(() => ({}));

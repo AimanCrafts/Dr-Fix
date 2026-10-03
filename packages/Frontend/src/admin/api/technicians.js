@@ -6,7 +6,7 @@
  * pattern as admin/jsx/login.jsx and AdminProtectedRoute.jsx.
  */
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 async function handle(res) {
   const data = await res.json().catch(() => ({}));
