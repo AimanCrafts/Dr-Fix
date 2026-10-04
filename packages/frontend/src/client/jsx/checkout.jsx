@@ -41,8 +41,6 @@ const PAYMENT_METHODS = [
     sub: "Pay when the job is done",
     icon: "💵",
   },
-  { id: "bkash", label: "bKash", sub: "Pay securely via bKash", icon: "📱" },
-  { id: "nagad", label: "Nagad", sub: "Pay securely via Nagad", icon: "📱" },
 ];
 
 function Checkout() {
@@ -141,10 +139,6 @@ function Checkout() {
         <div className="checkout-main">
           {/* Selected service summary */}
           <div className="card selected-service">
-            <div
-              className="image-placeholder image-placeholder--sm"
-              aria-hidden="true"
-            />
             <div className="selected-service__text">
               <h2>{serviceName}</h2>
               <p>Fixed price, no hidden charges</p>
@@ -194,7 +188,10 @@ function Checkout() {
                   placeholder="Label (e.g. Home, Office)"
                   value={newAddress.label}
                   onChange={(e) =>
-                    setNewAddress((prev) => ({ ...prev, label: e.target.value }))
+                    setNewAddress((prev) => ({
+                      ...prev,
+                      label: e.target.value,
+                    }))
                   }
                 />
                 <input
@@ -202,7 +199,10 @@ function Checkout() {
                   placeholder="Full address"
                   value={newAddress.detail}
                   onChange={(e) =>
-                    setNewAddress((prev) => ({ ...prev, detail: e.target.value }))
+                    setNewAddress((prev) => ({
+                      ...prev,
+                      detail: e.target.value,
+                    }))
                   }
                 />
                 <div className="add-address-form__actions">
@@ -270,7 +270,7 @@ function Checkout() {
           {/* Payment method */}
           <section className="checkout-section">
             <h3>4. Payment Method</h3>
-            <div className="payment-options">
+            <div className="payment-options payment-options--single">
               {PAYMENT_METHODS.map((method) => (
                 <button
                   key={method.id}

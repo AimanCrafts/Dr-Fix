@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
+import { Check, Mail, Phone, UserRound } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
 import { getCurrentUser, updateProfile } from "../api/auth";
-import "../css/signup.css";
 import "../css/profile.css";
 
-/**
- * Profile (client/jsx/profile.jsx)
- * ---------------------------------
- * Shows the same fields collected at signup (Full Name, Email, Phone)
- * so the customer can review/update them later. Loads the current user
- * via GET /me, saves via PUT /profile (see AuthController::updateProfile).
- *
- * Password change is intentionally not included here — that needs a
- * separate "current password" check and is a distinct feature.
- */
 function Profile() {
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(true);
@@ -34,14 +24,17 @@ function Profile() {
       .finally(() => setLoading(false));
   }, []);
 
-  const updateField = (field) => (e) =>
-    setForm((prev) => ({ ...prev, [field]: e.target.value }));
+  const updateField = (field) => (event) => {
+    setSaved(false);
+    setForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setError("");
     setSaved(false);
     setSaving(true);
+
     try {
       await updateProfile(form);
       setSaved(true);
@@ -56,61 +49,114 @@ function Profile() {
     }
   };
 
+  const initial = form.name?.trim()?.charAt(0)?.toUpperCase() || "U";
+
   return (
     <div className="profile-page">
       <Header variant="app" />
 
-      <div className="signup-wrap profile-wrap">
-        <h1 className="signup-heading">My Profile</h1>
-        <p className="signup-subtext">
-          Keep your contact details up to date.
-        </p>
+      <main className="profile-container">
+        <section className="profile-hero">
+          <div className="profile-avatar" aria-hidden="true">
+            {initial}
+          </div>
+          <div>
+            <p className="profile-eyebrow">ACCOUNT</p>
+            <h1>My Profile</h1>
+            <p>Manage your personal information and contact details.</p>
+          </div>
+        </section>
 
-        {error && <p className="signup-error">{error}</p>}
-        {saved && <p className="profile-success">Profile updated.</p>}
+        {error && (
+          <div className="profile-message profile-message--error">{error}</div>
+        )}
+        {saved && (
+          <div className="profile-message profile-message--success">
+            <Check size={17} />
+            Profile updated successfully.
+          </div>
+        )}
 
         {loading ? (
-          <p className="empty-text">Loading...</p>
+          <div className="profile-card profile-loading">
+            Loading your profile...
+          </div>
         ) : (
-          <form className="signup-form" onSubmit={handleSubmit}>
-            <div className="signup-form__grid">
-              <label className="signup-field">
-                <span className="signup-field__label">Full Name</span>
-                <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={form.name}
-                  onChange={updateField("name")}
-                />
-              </label>
+          <div className="profile-layout">
+            <aside className="profile-card profile-summary">
+              <p className="profile-card__eyebrow">YOUR DETAILS</p>
+              <h2>{form.name || "Your Name"}</h2>
+              <div className="profile-summary__item">
+                <Mail size={16} />
+                <span>{form.email || "No email added"}</span>
+              </div>
+              <div className="profile-summary__item">
+                <Phone size={16} />
+                <span>{form.phone || "No phone added"}</span>
+              </div>
+            </aside>
 
-              <label className="signup-field">
-                <span className="signup-field__label">Email Address</span>
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={form.email}
-                  onChange={updateField("email")}
-                />
-              </label>
+            <section className="profile-card">
+              <div className="profile-card__header">
+                <div>
+                  <p className="profile-card__eyebrow">PERSONAL INFORMATION</p>
+                  <h2>Edit Profile</h2>
+                </div>
+                <UserRound size={20} />
+              </div>
 
-              <label className="signup-field">
-                <span className="signup-field__label">Phone Number</span>
-                <input
-                  type="tel"
-                  placeholder="Enter your phone number"
-                  value={form.phone}
-                  onChange={updateField("phone")}
-                />
-              </label>
-            </div>
+              <form className="profile-form" onSubmit={handleSubmit}>
+                <label className="profile-field">
+                  <span>Full Name</span>
+                  <input
+                    type="text"
+                    value={form.name}
+                    onChange={updateField("name")}
+                    placeholder="Enter your full name"
+                    autoComplete="name"
+                  />
+                </label>
 
-            <button type="submit" className="signup-submit" disabled={saving}>
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-          </form>
+                <label className="profile-field">
+                  <span>Email Address</span>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={updateField("email")}
+                    placeholder="Enter your email address"
+                    autoComplete="email"
+                  />
+                </label>
+
+                <label className="profile-field">
+                  <span>Phone Number</span>
+                  <input
+                    type="tel"
+                    value={form.phone}
+                    onChange={updateField("phone")}
+                    placeholder="Enter your phone number"
+                    autoComplete="tel"
+                  />
+                </label>
+
+                <div className="profile-form__footer">
+                  <p>
+                    Your email and phone number are used for booking
+                    communication.
+                  </p>
+                  <button
+                    type="submit"
+                    className="profile-save-btn"
+                    disabled={saving}
+                  >
+                    {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }

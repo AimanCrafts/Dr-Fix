@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { resendOtp, verifyOtp } from "../api/auth";
 import "../css/otp.css";
 
-
 const CODE_LENGTH = 6;
 const RESEND_SECONDS = 28;
 
@@ -11,6 +10,7 @@ function Otp() {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email || "your email";
+  const role = location.state?.role || "customer";
 
   const [digits, setDigits] = useState(Array(CODE_LENGTH).fill(""));
   const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
@@ -105,7 +105,11 @@ function Otp() {
           <button
             type="button"
             className="otp-submit"
-            onClick={() => navigate("/login", { replace: true })}
+            onClick={() =>
+              navigate(role === "provider" ? "/technician/login" : "/login", {
+                replace: true,
+              })
+            }
           >
             Continue
           </button>

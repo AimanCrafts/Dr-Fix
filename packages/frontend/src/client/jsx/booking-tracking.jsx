@@ -12,9 +12,9 @@ import "../css/booking-tracking.css";
  * Active Service" card and confirmation.jsx's "Track Booking" button —
  * no route/page existed for it at all.
  *
- * Shows the full technician-reported progress:
- *   Booked -> Accepted -> On The Way -> Arrived -> Work Started -> Completed
- * (each stage set by the matching endpoint in TechnicianBookingController).
+ * Shows the simplified progress:
+ *   Booked -> Assigned -> Service In Progress -> Completed
+ * Technician actions are only Accept -> Start -> Complete.
  * Polls GET /api/bookings/{id} every few seconds so it updates live as
  * the technician moves through the job on their end.
  *
@@ -24,10 +24,8 @@ import "../css/booking-tracking.css";
  */
 const STAGES = [
   { key: "pending", label: "Booked" },
-  { key: "accepted", label: "Accepted" },
-  { key: "on_the_way", label: "On The Way" },
-  { key: "arrived", label: "Arrived" },
-  { key: "in_progress", label: "Work Started" },
+  { key: "accepted", label: "Assigned" },
+  { key: "in_progress", label: "Service In Progress" },
   { key: "completed", label: "Completed" },
 ];
 
@@ -161,8 +159,7 @@ function BookingTracking() {
               <div className="summary-row summary-row--id">
                 <span className="summary-row__icon">📅</span>
                 <p>
-                  Booking ID{" "}
-                  <span className="text-accent">#{booking.id}</span>
+                  Booking ID <span className="text-accent">#{booking.id}</span>
                 </p>
               </div>
               <div className="summary-divider" />

@@ -1,199 +1,339 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Building2,
+  CalendarCheck2,
+  Check,
+  ChevronRight,
+  Home as HomeIcon,
+  MapPin,
+  RotateCcw,
+  Star,
+  Trash2,
+  X,
+} from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
+import { listMyBookings } from "../api/bookings";
+import { getCurrentUser } from "../api/auth";
+import { createReview } from "../api/reviews";
+import {
+  listAddresses,
+  createAddress,
+  deleteAddress,
+  makeAddressDefault,
+} from "../api/addresses";
 import "../css/client_dashboard.css";
 
-
-const MOCK_USER = {
-  name: "Rahim",
-  membershipTier: "Silver",
+const RATING_LABELS = {
+  1: "Bad",
+  2: "Below Average",
+  3: "Average",
+  4: "Good",
+  5: "Great",
 };
 
-
-const MOCK_ACTIVE_BOOKING = {
-  technicianName: "Arif M.",
-  technicianRole: "AC Specialist",
-  eta: "Arriving in 15 minutes",
-  vehicleNo: "DL 12 AB 1234",
-  steps: [
-    { label: "Booked", time: "10:30 AM", status: "done" },
-    { label: "Assigned", time: "10:32 AM", status: "done" },
-    { label: "On the way", time: "10:40 AM", status: "current" },
-    { label: "Completed", time: "", status: "upcoming" },
-  ],
-};
-
-
-const MOCK_PENDING_REVIEW = {
-  serviceName: "AC repair",
-  technicianName: "Arif M.",
-};
-
-const MOCK_MEMBERSHIP = {
-  completed: 8,
-  target: 10,
-  tiers: ["Bronze", "Silver", "Gold"],
-  currentTier: "Silver",
-};
-
-// Empty array -> "no bookings yet" empty state.
-const MOCK_RECENT_SERVICES = [
-  {
-    id: 1,
-    name: "AC Repair",
-    date: "12 May 2025",
-    technician: "Arif M.",
-    status: "Completed",
-  },
-  {
-    id: 2,
-    name: "Plumbing Fix",
-    date: "02 May 2025",
-    technician: "Imran K.",
-    status: "Completed",
-  },
-  {
-    id: 3,
-    name: "Electrical Repair",
-    date: "22 Apr 2025",
-    technician: "Sajjad H.",
-    status: "Cancelled",
-  },
-];
-
-// Empty array -> warranty section hidden entirely.
-const MOCK_WARRANTIES = [
-  {
-    id: 1,
-    name: "AC Repair",
-    invoice: "#DFX1248",
-    daysLeft: 23,
-    status: "Active",
-  },
-  {
-    id: 2,
-    name: "Plumbing Fix",
-    invoice: "#DFX1198",
-    daysLeft: 15,
-    status: "Active",
-  },
-  {
-    id: 3,
-    name: "Electrical Repair",
-    invoice: "#DFX1130",
-    daysLeft: 5,
-    status: "Expiring Soon",
-  },
-];
-
-const MOCK_ADDRESSES = [
-  { id: 1, label: "Home", detail: "House 45, Road 12, Dhanmondi, Dhaka 1209" },
-  { id: 2, label: "Office", detail: "Level 5, House 12, Banani, Dhaka 1213" },
-];
-
-const REFERRAL_CODE = "RAHIM100";
-
-/* ---------------------------------------------------------------------- */
+const STAGE_ORDER = ["pending", "accepted", "in_progress", "completed"];
 
 function ClientDashboard() {
-  const [rating, setRating] = useState(0);
+  const [bookings, setBookings] = useState([]);
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [user, setUser] = useState(null);
+  const [addresses, setAddresses] = useState([]);
+  const [newAddress, setNewAddress] = useState({ label: "", detail: "" });
+  const [addingAddress, setAddingAddress] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
 
-  const hasActiveBooking = Boolean(MOCK_ACTIVE_BOOKING);
-  const hasPendingReview = Boolean(MOCK_PENDING_REVIEW);
-  const hasRecentServices = MOCK_RECENT_SERVICES.length > 0;
-  const hasWarranties = MOCK_WARRANTIES.length > 0;
+  const [isRatingOpen, setIsRatingOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [reviewText, setReviewText] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+  const [reviewSuccess, setReviewSuccess] = useState("");
+
+  useEffect(() => {
+    Promise.allSettled([
+      listMyBookings(),
+      getCurrentUser(),
+      listAddresses(),
+    ]).then(([bookingResult, userResult, addressResult]) => {
+      if (bookingResult.status === "fulfilled") {
+        setBookings(bookingResult.value.data);
+      } else {
+        setBookings([]);
+      }
+
+      if (userResult.status === "fulfilled") {
+        setUser(userResult.value.data);
+      } else {
+        setUser(null);
+      }
+
+      if (addressResult.status === "fulfilled") {
+        setAddresses(addressResult.value.data);
+      } else {
+        setAddresses([]);
+      }
+
+      setLoadingBookings(false);
+    });
+  }, []);
+
+  const activeBooking = useMemo(
+    () =>
+      bookings.find(
+        (booking) =>
+          booking.status !== "completed" && booking.status !== "cancelled",
+      ),
+    [bookings],
+  );
+
+  const recentServices = useMemo(
+    () => bookings.filter((booking) => booking.status === "completed"),
+    [bookings],
+  );
+
+  const lastCompletedService = recentServices[0] || null;
+  const pendingReview =
+    lastCompletedService && !lastCompletedService.review
+      ? lastCompletedService
+      : null;
+
+  const hasActiveBooking = Boolean(activeBooking);
+  const hasRecentServices = recentServices.length > 0;
+  const defaultAddress = addresses.find((address) => address.is_default);
+
+  const activeStageIndex = activeBooking
+    ? STAGE_ORDER.indexOf(activeBooking.status)
+    : -1;
+
+  const activeBookingSteps = activeBooking
+    ? [
+        { label: "Booked" },
+        { label: "Assigned" },
+        { label: "Service In Progress" },
+        { label: "Completed" },
+      ].map((step, index) => ({
+        ...step,
+        status:
+          index < activeStageIndex
+            ? "done"
+            : index === activeStageIndex
+              ? "current"
+              : "upcoming",
+      }))
+    : [];
+
+  const openRatingDialog = () => {
+    if (!pendingReview) return;
+    setRating(0);
+    setHoveredRating(0);
+    setReviewText("");
+    setReviewError("");
+    setReviewSuccess("");
+    setIsRatingOpen(true);
+  };
+
+  const closeRatingDialog = () => {
+    if (submittingReview) return;
+    setIsRatingOpen(false);
+  };
+
+  const handleSubmitReview = async (event) => {
+    event.preventDefault();
+    if (!pendingReview || rating < 1) return;
+
+    setSubmittingReview(true);
+    setReviewError("");
+
+    try {
+      // ১. rating কে Number() বা Number.parseInt() দিয়ে integer করা হলো
+      // ২. ৩টি আলাদা প্যারামিটার হিসেবে পাঠানো হলো
+
+      const parsedRating = Number.parseInt(rating, 10);
+
+      const response = await createReview(
+        pendingReview.id,
+        parsedRating,
+
+        reviewText.trim() || null,
+      );
+
+      // reviews.js যদি সরাসরি response.data রিটার্ন করে, তবে response-ই ডাটা
+      const data = response.data || response;
+
+      setBookings((current) =>
+        current.map((booking) =>
+          booking.id === pendingReview.id
+            ? { ...booking, review: data }
+            : booking,
+        ),
+      );
+      setReviewSuccess("Review submitted successfully.");
+      setTimeout(() => {
+        setIsRatingOpen(false);
+        setReviewSuccess("");
+      }, 900);
+    } catch (error) {
+      setReviewError(
+        error.response?.data?.message ||
+          "We could not submit your review. Please try again.",
+      );
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
+  const handleAddAddress = async (event) => {
+    event.preventDefault();
+    if (!newAddress.label.trim() || !newAddress.detail.trim()) return;
+
+    setAddingAddress(true);
+    try {
+      const { data } = await createAddress(newAddress);
+      setAddresses((current) => [data, ...current]);
+      setNewAddress({ label: "", detail: "" });
+      setShowAddForm(false);
+    } catch {
+      // Keep the form open so the user can retry.
+    } finally {
+      setAddingAddress(false);
+    }
+  };
+
+  const handleDeleteAddress = async (id) => {
+    setAddresses((current) => current.filter((address) => address.id !== id));
+    try {
+      await deleteAddress(id);
+    } catch {
+      listAddresses()
+        .then(({ data }) => setAddresses(data))
+        .catch(() => {});
+    }
+  };
+
+  const handleMakeDefault = async (id) => {
+    try {
+      await makeAddressDefault(id);
+      const { data } = await listAddresses();
+      setAddresses(data);
+    } catch {
+      // The current state remains unchanged if the request fails.
+    }
+  };
 
   return (
     <div className="client-dashboard">
-      <Header variant="app" />
+      <Header variant="client" />
 
-      <div className="dashboard-container">
-        {/* ---------------- Greeting ---------------- */}
+      <main className="dashboard-container">
         <section className="greeting">
           <h1>
-            Hi {MOCK_USER.name},<br />
+            Hi {user?.name || "there"},<br />
             how can we help your home today?
           </h1>
-          <span className="membership-badge">
-            🏅 {MOCK_USER.membershipTier} Member
-          </span>
         </section>
 
-        {/* ---------------- Quick actions ---------------- */}
         <section className="quick-actions">
           <Link to="/services" className="action-card action-card--primary">
-            <span className="action-card__icon">+</span>
+            <span className="action-card__icon">
+              <CalendarCheck2 size={20} strokeWidth={2} />
+            </span>
             <div>
               <h3>Book a New Fix</h3>
               <p>Find experts and book instantly</p>
             </div>
           </Link>
 
-          <Link
-            to="/booking-tracking"
-            className={`action-card ${!hasActiveBooking ? "is-disabled" : ""}`}
-            aria-disabled={!hasActiveBooking}
-          >
-            <span className="action-card__icon action-card__icon--outline">
-              📍
-            </span>
-            <div>
-              <h3>Track Active Service</h3>
-              <p>See technician location and live status</p>
+          {hasActiveBooking ? (
+            <Link
+              to={`/booking-tracking?bookingId=${activeBooking.id}`}
+              className="action-card"
+            >
+              <span className="action-card__icon action-card__icon--outline">
+                <MapPin size={20} strokeWidth={2} />
+              </span>
+              <div>
+                <h3>Track Active Service</h3>
+                <p>See your technician and live status</p>
+              </div>
+            </Link>
+          ) : (
+            <div className="action-card is-disabled" aria-disabled="true">
+              <span className="action-card__icon action-card__icon--outline">
+                <MapPin size={20} strokeWidth={2} />
+              </span>
+              <div>
+                <h3>Track Active Service</h3>
+                <p>No active booking right now</p>
+              </div>
             </div>
-          </Link>
+          )}
 
           <Link
             to={
               hasRecentServices
-                ? `/checkout?rebook=${MOCK_RECENT_SERVICES[0].id}`
+                ? `/checkout?rebook=${recentServices[0].id}`
                 : "/services"
             }
             className="action-card"
           >
             <span className="action-card__icon action-card__icon--outline">
-              🔄
+              <RotateCcw size={20} strokeWidth={2} />
             </span>
             <div>
               <h3>Rebook Last Service</h3>
-              <p>Book the same service again in one tap</p>
+              <p>
+                {hasRecentServices
+                  ? "Book your last completed service again"
+                  : "Choose a service to get started"}
+              </p>
             </div>
           </Link>
         </section>
 
-        {/* ---------------- Active booking (conditional) ---------------- */}
         {hasActiveBooking && (
           <section className="card active-booking">
             <h2>Your Active Booking</h2>
             <div className="active-booking__row">
               <div className="active-booking__technician">
-                <div className="avatar-placeholder" aria-hidden="true" />
+                <div className="technician-avatar" aria-hidden="true">
+                  {activeBooking.technician?.name?.charAt(0)?.toUpperCase() ||
+                    "T"}
+                </div>
                 <div>
                   <p className="technician-name">
-                    {MOCK_ACTIVE_BOOKING.technicianName}
+                    {activeBooking.technician?.name ||
+                      "Finding a technician..."}
                   </p>
                   <p className="technician-role">
-                    {MOCK_ACTIVE_BOOKING.technicianRole}
+                    {activeBooking.service_name}
                   </p>
-                  <p className="technician-eta">{MOCK_ACTIVE_BOOKING.eta}</p>
+                  <p className="technician-eta">
+                    {activeBooking.status === "pending" &&
+                      "Waiting for a technician to accept"}
+                    {activeBooking.status === "accepted" &&
+                      "Technician assigned — service is scheduled"}
+                    {activeBooking.status === "in_progress" &&
+                      "Work in progress"}
+                  </p>
                   <p className="technician-vehicle">
-                    🚗 {MOCK_ACTIVE_BOOKING.vehicleNo}
+                    <MapPin size={13} /> {activeBooking.address}
                   </p>
                 </div>
               </div>
 
               <div className="progress-steps">
-                {MOCK_ACTIVE_BOOKING.steps.map((step, idx) => (
+                {activeBookingSteps.map((step, index) => (
                   <div
                     key={step.label}
                     className={`progress-step progress-step--${step.status}`}
                   >
-                    <div className="progress-step__dot" />
+                    <div className="progress-step__dot">
+                      {step.status === "done" && <Check size={9} />}
+                    </div>
                     <p className="progress-step__label">{step.label}</p>
-                    {step.time && (
-                      <p className="progress-step__time">{step.time}</p>
-                    )}
-                    {idx < MOCK_ACTIVE_BOOKING.steps.length - 1 && (
+                    {index < activeBookingSteps.length - 1 && (
                       <div className="progress-step__line" />
                     )}
                   </div>
@@ -203,113 +343,124 @@ function ClientDashboard() {
           </section>
         )}
 
-        {/* ---------------- Rate last service + Membership ---------------- */}
-        <section className="two-col">
-          {hasPendingReview ? (
-            <div className="card rate-service">
-              <h2>Rate Your Last Service</h2>
-              <div className="rate-service__row">
-                <div
-                  className="image-placeholder image-placeholder--sm"
-                  aria-hidden="true"
-                />
+        <section className="dashboard-feature-grid">
+          <div className="card rate-service">
+            <div className="card-heading-row">
+              <div>
+                <p className="eyebrow">FEEDBACK</p>
+                <h2>Rate Your Last Service</h2>
+              </div>
+              <div className="heading-icon" aria-hidden="true">
+                <Star size={19} />
+              </div>
+            </div>
+
+            {pendingReview ? (
+              <>
+                <p className="rate-service__service-name">
+                  {pendingReview.service_name}
+                </p>
+                <p className="rate-service__technician">
+                  Technician: {pendingReview.technician?.name || "Technician"}
+                </p>
+                <button
+                  type="button"
+                  className="btn btn--primary btn--sm rate-service__open"
+                  onClick={openRatingDialog}
+                >
+                  Rate Service
+                </button>
+              </>
+            ) : (
+              <div className="feature-empty-state">
                 <p>
-                  How was your {MOCK_PENDING_REVIEW.serviceName} with{" "}
-                  {MOCK_PENDING_REVIEW.technicianName}?
+                  {lastCompletedService
+                    ? "Your latest completed service has already been reviewed."
+                    : "No completed service yet. Your completed service will appear here for rating."}
                 </p>
               </div>
-              <div className="rate-service__stars">
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <button
-                    key={n}
-                    type="button"
-                    className={`star-btn ${n <= rating ? "is-filled" : ""}`}
-                    onClick={() => setRating(n)}
-                    aria-label={`${n} star`}
-                  >
-                    ★
-                  </button>
-                ))}
-                <button type="button" className="btn btn--primary btn--sm">
-                  Submit
-                </button>
+            )}
+          </div>
+
+          <div className="card address-summary" id="addresses">
+            <div className="card-heading-row">
+              <div>
+                <p className="eyebrow">LOCATION</p>
+                <h2>Default Address</h2>
+              </div>
+              <div className="heading-icon" aria-hidden="true">
+                <HomeIcon size={19} />
               </div>
             </div>
-          ) : (
-            <div className="card empty-card">
-              <p>No pending reviews right now.</p>
-            </div>
-          )}
 
-          <div className="card membership-progress">
-            <div className="membership-progress__header">
-              <h2>
-                {MOCK_MEMBERSHIP.target - MOCK_MEMBERSHIP.completed > 0
-                  ? `You're ${MOCK_MEMBERSHIP.target - MOCK_MEMBERSHIP.completed} services away from Gold Member`
-                  : "You've reached Gold Member!"}
-              </h2>
-            </div>
-            <div className="membership-progress__meta">
-              <span>
-                {MOCK_MEMBERSHIP.completed} of {MOCK_MEMBERSHIP.target} services
-                completed
-              </span>
-              <span>
-                {Math.round(
-                  (MOCK_MEMBERSHIP.completed / MOCK_MEMBERSHIP.target) * 100,
-                )}
-                %
-              </span>
-            </div>
-            <div className="progress-bar">
-              <div
-                className="progress-bar__fill"
-                style={{
-                  width: `${Math.round((MOCK_MEMBERSHIP.completed / MOCK_MEMBERSHIP.target) * 100)}%`,
-                }}
-              />
-            </div>
-            <div className="tier-row">
-              {MOCK_MEMBERSHIP.tiers.map((tier) => (
-                <div
-                  key={tier}
-                  className={`tier-badge ${tier === MOCK_MEMBERSHIP.currentTier ? "is-current" : ""}`}
-                >
-                  {tier}
+            {defaultAddress ? (
+              <div className="default-address-content">
+                <div className="default-address-icon">
+                  {defaultAddress.label === "Home" ? (
+                    <HomeIcon size={19} />
+                  ) : (
+                    <Building2 size={19} />
+                  )}
                 </div>
-              ))}
-            </div>
+                <div>
+                  <strong>{defaultAddress.label}</strong>
+                  <p>{defaultAddress.detail}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="feature-empty-state">
+                <p>No default address saved yet.</p>
+              </div>
+            )}
+
+            <a href="#addresses-list" className="inline-link">
+              Manage saved addresses <ChevronRight size={14} />
+            </a>
           </div>
         </section>
 
-        {/* ---------------- Recent services ---------------- */}
-        <section className="section-block">
+        <section className="section-block" id="recent-services">
           <div className="section-block__header">
-            <h2>Recent Services</h2>
-            {hasRecentServices && <Link to="/bookings">View All</Link>}
+            <div>
+              <p className="eyebrow">HISTORY</p>
+              <h2>Recent Services</h2>
+            </div>
+            {hasRecentServices && <Link to="/my-bookings">View All</Link>}
           </div>
 
-          {hasRecentServices ? (
+          {loadingBookings ? (
+            <div className="card empty-card empty-card--large">
+              <p>Loading your services...</p>
+            </div>
+          ) : hasRecentServices ? (
             <div className="recent-services-grid">
-              {MOCK_RECENT_SERVICES.map((service) => (
+              {recentServices.slice(0, 3).map((service) => (
                 <div key={service.id} className="card recent-service-card">
-                  <div
-                    className="image-placeholder image-placeholder--sm"
-                    aria-hidden="true"
-                  />
-                  <p className="recent-service-card__name">{service.name}</p>
-                  <p className="recent-service-card__meta">{service.date}</p>
-                  <p className="recent-service-card__meta">
-                    {service.technician}
+                  <div className="recent-service-card__top">
+                    <div className="service-icon">
+                      <Check size={18} />
+                    </div>
+                    <span className="status-badge status-badge--success">
+                      Completed
+                    </span>
+                  </div>
+                  <p className="recent-service-card__name">
+                    {service.service_name}
                   </p>
-                  <span
-                    className={`status-badge status-badge--${
-                      service.status === "Completed" ? "success" : "muted"
-                    }`}
+                  <p className="recent-service-card__meta">
+                    {service.technician?.name || "Technician"}
+                  </p>
+                  <p className="recent-service-card__meta">
+                    {new Date(
+                      service.completed_at ||
+                        service.updated_at ||
+                        service.created_at,
+                    ).toLocaleDateString()}
+                  </p>
+                  <Link
+                    to={`/checkout?rebook=${service.id}`}
+                    className="btn btn--outline-sm"
                   >
-                    {service.status}
-                  </span>
-                  <Link to="/services" className="btn btn--outline-sm">
                     Book Again
                   </Link>
                 </div>
@@ -317,114 +468,222 @@ function ClientDashboard() {
             </div>
           ) : (
             <div className="card empty-card empty-card--large">
-              <div
-                className="image-placeholder image-placeholder--sm"
-                aria-hidden="true"
-              />
+              <div className="empty-state-icon">
+                <CalendarCheck2 size={24} />
+              </div>
+              <h3>No completed services yet</h3>
               <p>
-                No bookings yet. Book your first service and it&apos;ll show up
-                here.
+                Once you complete a service, it will appear here in your recent
+                services.
               </p>
               <Link to="/services" className="btn btn--primary btn--sm">
-                Book Now
+                Browse Services
               </Link>
             </div>
           )}
         </section>
 
-        {/* ---------------- Warranty + Addresses ---------------- */}
-        <section className="two-col">
-          {hasWarranties && (
-            <div className="card warranty-tracker">
-              <h2>Warranty Tracker</h2>
-              {MOCK_WARRANTIES.map((w) => (
-                <div key={w.id} className="warranty-row">
-                  <div
-                    className="image-placeholder image-placeholder--xs"
-                    aria-hidden="true"
-                  />
-                  <div className="warranty-row__info">
-                    <p className="warranty-row__name">{w.name}</p>
-                    <p className="warranty-row__meta">
-                      {w.date} · Invoice {w.invoice}
-                    </p>
-                  </div>
-                  <span className="warranty-row__days">
-                    {w.daysLeft} days left
-                  </span>
-                  <span
-                    className={`status-badge status-badge--${
-                      w.status === "Active" ? "success" : "warning"
-                    }`}
-                  >
-                    {w.status}
-                  </span>
-                </div>
-              ))}
-              <Link to="/warranties" className="link-arrow">
-                View All Warranties
-              </Link>
+        <section className="card addresses" id="addresses-list">
+          <div className="section-block__header">
+            <div>
+              <p className="eyebrow">SAVED LOCATIONS</p>
+              <h2>Saved Addresses</h2>
             </div>
+          </div>
+
+          {addresses.length === 0 && !showAddForm && (
+            <p className="empty-text">No saved addresses yet.</p>
           )}
 
-          <div className="card addresses">
-            <h2>Saved Addresses</h2>
-            {MOCK_ADDRESSES.map((addr) => (
-              <div key={addr.id} className="address-chip">
-                <span className="address-chip__icon">
-                  {addr.label === "Home" ? "🏠" : "🏢"}
-                </span>
-                <div>
-                  <p className="address-chip__label">{addr.label}</p>
-                  <p className="address-chip__detail">{addr.detail}</p>
-                </div>
+          {addresses.map((address) => (
+            <div key={address.id} className="address-chip">
+              <span className="address-chip__icon">
+                {address.label === "Home" ? (
+                  <HomeIcon size={17} />
+                ) : (
+                  <Building2 size={17} />
+                )}
+              </span>
+              <div className="address-chip__content">
+                <p className="address-chip__label">
+                  {address.label}
+                  {address.is_default && (
+                    <span className="address-chip__default">Default</span>
+                  )}
+                </p>
+                <p className="address-chip__detail">{address.detail}</p>
+              </div>
+              {!address.is_default && (
                 <button
                   type="button"
-                  className="address-chip__more"
-                  aria-label="More options"
+                  className="address-chip__action"
+                  onClick={() => handleMakeDefault(address.id)}
                 >
-                  ⋯
+                  Set default
+                </button>
+              )}
+              <button
+                type="button"
+                className="address-chip__delete"
+                aria-label="Delete address"
+                onClick={() => handleDeleteAddress(address.id)}
+              >
+                <Trash2 size={16} />
+              </button>
+            </div>
+          ))}
+
+          {showAddForm ? (
+            <form className="add-address-form" onSubmit={handleAddAddress}>
+              <input
+                type="text"
+                placeholder="Label (e.g. Home, Office)"
+                value={newAddress.label}
+                onChange={(event) =>
+                  setNewAddress((current) => ({
+                    ...current,
+                    label: event.target.value,
+                  }))
+                }
+              />
+              <input
+                type="text"
+                placeholder="Full address"
+                value={newAddress.detail}
+                onChange={(event) =>
+                  setNewAddress((current) => ({
+                    ...current,
+                    detail: event.target.value,
+                  }))
+                }
+              />
+              <div className="add-address-form__actions">
+                <button
+                  type="submit"
+                  className="btn btn--primary btn--sm"
+                  disabled={addingAddress}
+                >
+                  {addingAddress ? "Saving..." : "Save Address"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn--outline btn--sm"
+                  onClick={() => setShowAddForm(false)}
+                >
+                  Cancel
                 </button>
               </div>
-            ))}
-            <button type="button" className="add-address-btn">
-              + Add New Address
-            </button>
-          </div>
-        </section>
-
-        {/* ---------------- Referral ---------------- */}
-        <section className="card referral">
-          <div
-            className="image-placeholder image-placeholder--sm"
-            aria-hidden="true"
-          />
-          <div className="referral__text">
-            <h2>
-              Invite a friend, both get{" "}
-              <span className="text-accent">৳100 off</span>
-            </h2>
-            <p>Share your referral code and save on your next service.</p>
-          </div>
-          <div className="referral__code">
-            <span>{REFERRAL_CODE}</span>
+            </form>
+          ) : (
             <button
               type="button"
-              className="btn btn--primary btn--sm"
-              onClick={() => navigator.clipboard?.writeText(REFERRAL_CODE)}
+              className="add-address-btn"
+              onClick={() => setShowAddForm(true)}
             >
-              Copy
+              + Add New Address
             </button>
-          </div>
+          )}
         </section>
-      </div>
+      </main>
 
-     
-      <button type="button" className="support-fab">
-        💬 Need Help?
-      </button>
+      {isRatingOpen && pendingReview && (
+        <div className="rating-modal-backdrop" onMouseDown={closeRatingDialog}>
+          <div
+            className="rating-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="rating-modal-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="rating-modal__header">
+              <div>
+                <p className="eyebrow">SERVICE FEEDBACK</p>
+                <h2 id="rating-modal-title">Rate Your Service</h2>
+              </div>
+              <button
+                type="button"
+                className="rating-modal__close"
+                aria-label="Close rating dialog"
+                onClick={closeRatingDialog}
+              >
+                <X size={19} />
+              </button>
+            </div>
 
-     
+            <div className="rating-modal__service">
+              <div className="rating-modal__service-icon">
+                <CalendarCheck2 size={20} />
+              </div>
+              <div>
+                <strong>{pendingReview.service_name}</strong>
+                <p>
+                  Technician: {pendingReview.technician?.name || "Technician"}
+                </p>
+              </div>
+            </div>
+
+            <div className="rating-control">
+              <div
+                className="rating-stars"
+                onMouseLeave={() => setHoveredRating(0)}
+                aria-label="Choose a rating from one to five stars"
+              >
+                {[1, 2, 3, 4, 5].map((value) => {
+                  const activeValue = hoveredRating || rating;
+                  return (
+                    <button
+                      key={value}
+                      type="button"
+                      className={value <= activeValue ? "is-active" : ""}
+                      onMouseEnter={() => setHoveredRating(value)}
+                      onFocus={() => setHoveredRating(value)}
+                      onClick={() => setRating(value)}
+                      aria-label={`${value} star${value > 1 ? "s" : ""}`}
+                    >
+                      <Star
+                        size={32}
+                        fill={value <= activeValue ? "currentColor" : "none"}
+                        strokeWidth={1.8}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="rating-label">
+                {RATING_LABELS[hoveredRating || rating] || "Select a rating"}
+              </p>
+            </div>
+
+            <label className="review-field">
+              <span>Your Review</span>
+              <textarea
+                value={reviewText}
+                onChange={(event) => setReviewText(event.target.value)}
+                placeholder="Tell us about your experience..."
+                maxLength={1000}
+                rows={5}
+              />
+              <small>{reviewText.length}/1000</small>
+            </label>
+
+            {reviewError && <p className="rating-form-error">{reviewError}</p>}
+            {reviewSuccess && (
+              <p className="rating-form-success">{reviewSuccess}</p>
+            )}
+
+            <div className="rating-modal__footer">
+              <button
+                type="button"
+                className="btn btn--primary"
+                disabled={rating === 0 || submittingReview}
+                onClick={handleSubmitReview}
+              >
+                {submittingReview ? "Submitting..." : "Submit Review"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
