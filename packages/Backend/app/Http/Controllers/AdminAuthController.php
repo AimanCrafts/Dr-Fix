@@ -31,9 +31,9 @@ class AdminAuthController extends Controller
             ], 422);
         }
 
-        $adminEmail = env('ADMIN_EMAIL');
-        $adminPassword = env('ADMIN_PASSWORD');
-
+               $adminEmail = config('services.admin.email');
+        $adminPassword = config('services.admin.password');
+        
         if ($request->email !== $adminEmail || $request->password !== $adminPassword) {
             return response()->json([
                 'message' => 'Invalid email or password.',
