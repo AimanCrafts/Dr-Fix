@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import Footer from "../../component/jsx/footer.jsx";
 import "../css/home.css";
-import AddPopup from "../../component/jsx/ad_popup.jsx";
+import api from "../api/axios";
 
 import heroImg from "../../assets/hero-image.png";
 import electricImg from "../../assets/electricImg.png";
+import plumbing from "../../assets/plumbing.jpg";
+import ac from "../../assets/ac.jpg";
+import carpenting from "../../assets/carpenting.jpg";
+import painting from "../../assets/painting.jpg";
+import cleaning from "../../assets/cleaning.jpg";
+import pestcontrol from "../../assets/pestcontrol.jpg";
+import repair from "../../assets/repair.jpg";
+import gardening from "../../assets/gardening.jpg";
+import cctv from "../../assets/cctv.jpg";
 
 import {
   Calendar,
@@ -38,16 +48,86 @@ const STATS = [
 ];
 
 const SERVICE_CATEGORIES = [
-  { icon: Zap, name: "Electric" },
-  { icon: Droplet, name: "Plumbing" },
-  { icon: Snowflake, name: "AC Repair" },
-  { icon: Hammer, name: "Carpentry" },
-  { icon: Paintbrush, name: "Painting" },
-  { icon: Sparkles, name: "Cleaning" },
-  { icon: Bug, name: "Pest Control" },
-  { icon: Wrench, name: "Appliance Repair" },
-  { icon: Sprout, name: "Gardening" },
-  { icon: Camera, name: "CCTV" },
+  {
+    icon: Zap,
+    name: "Electric",
+    slug: "electric",
+    image: electricImg,
+    description:
+      "From fixing faulty wiring to installing new fixtures, our certified electricians ensure your home is safe and powered.",
+  },
+  {
+    icon: Droplet,
+    name: "Plumbing",
+    slug: "plumbing",
+    image: plumbing,
+    description:
+      "Leaky taps, blocked drains, or a full pipe fitting — our plumbers handle it all quickly and cleanly.",
+  },
+  {
+    icon: Snowflake,
+    name: "AC Repair",
+    slug: "ac-repair",
+    image: ac,
+    description:
+      "General service, gas refill, or a fresh installation — keep your AC running cool all year round.",
+  },
+  {
+    icon: Hammer,
+    name: "Carpentry",
+    slug: "carpentry",
+    image: carpenting,
+    description:
+      "Doors, wardrobes, shelves, and furniture repair — skilled carpenters for every wood-work need.",
+  },
+  {
+    icon: Paintbrush,
+    name: "Painting",
+    slug: "painting",
+    image: painting,
+    description:
+      "Single wall touch-ups to full home repainting, done neatly with premium, damp-resistant paint.",
+  },
+  {
+    icon: Sparkles,
+    name: "Cleaning",
+    slug: "cleaning",
+    image: cleaning,
+    description:
+      "Deep home cleaning, sofa and carpet care, or a spotless kitchen — book a professional cleaning crew.",
+  },
+  {
+    icon: Bug,
+    name: "Pest Control",
+    slug: "pest-control",
+    image: pestcontrol,
+    description:
+      "Safe, effective treatment against cockroaches, termites, and other household pests.",
+  },
+  {
+    icon: Wrench,
+    name: "Appliance Repair",
+    slug: "appliance-repair",
+    image: repair,
+    description:
+      "Fridge, washing machine, microwave — trained technicians to diagnose and fix your appliances.",
+  },
+  {
+    icon: Sprout,
+    name: "Gardening",
+    slug: "gardening",
+    image: gardening,
+    description:
+      "Lawn care, plant maintenance, and garden clean-ups to keep your outdoor space looking its best.",
+  },
+  {
+    icon: Camera,
+    name: "CCTV",
+    slug: "cctv",
+    image: cctv,
+    description:
+      "Professional CCTV installation and setup to keep your home or shop secure around the clock.",
+  },
 ];
 
 const PROCESS_STEPS = [
@@ -73,55 +153,6 @@ const PROCESS_STEPS = [
   },
 ];
 
-const CASE_STUDIES = [
-  {
-    title: "Kitchen Sink Leak",
-    problem: "Constant leakage from the pipe joint.",
-    fix: "Replaced the old pipe and tightened connections.",
-    result: "No more leaks and a happy customer.",
-    rating: 5,
-    customer: "Rafiq H., Dhanmondi",
-  },
-  {
-    title: "AC Not Cooling",
-    problem: "AC was running but not cooling.",
-    fix: "Gas refilled and filter cleaned.",
-    result: "Cooling restored like new.",
-    rating: 5,
-    customer: "Nusrat J., Uttara",
-  },
-  {
-    title: "Wall Paint Peeling",
-    problem: "Damp walls and peeling paint.",
-    fix: "Damp treatment and premium repaint.",
-    result: "Fresh and clean walls.",
-    rating: 5,
-    customer: "Sabbir A., Mirpur",
-  },
-];
-
-const TECHNICIANS = [
-  { name: "Imran K.", role: "Plumber", years: "7+ Years Exp.", rating: "4.9" },
-  {
-    name: "Arif M.",
-    role: "Electrician",
-    years: "7+ Years Exp.",
-    rating: "4.8",
-  },
-  {
-    name: "Rashed H.",
-    role: "AC Specialist",
-    years: "5+ Years Exp.",
-    rating: "4.9",
-  },
-  {
-    name: "Sajjad H.",
-    role: "Carpenter",
-    years: "8+ Years Exp.",
-    rating: "4.9",
-  },
-];
-
 const TRUST_BADGES = [
   {
     icon: ShieldCheck,
@@ -144,8 +175,44 @@ const TRUST_BADGES = [
 /* ---------------------------------------------------------------------- */
 
 function Home() {
+  const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    SERVICE_CATEGORIES[0],
+  );
+  const [reviews, setReviews] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
+  const [homeDataLoading, setHomeDataLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all([api.get("/public/reviews"), api.get("/public/technicians")])
+      .then(([reviewsResponse, techniciansResponse]) => {
+        if (cancelled) return;
+        setReviews(
+          Array.isArray(reviewsResponse.data) ? reviewsResponse.data : [],
+        );
+        setTechnicians(
+          Array.isArray(techniciansResponse.data)
+            ? techniciansResponse.data
+            : [],
+        );
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setReviews([]);
+        setTechnicians([]);
+      })
+      .finally(() => {
+        if (!cancelled) setHomeDataLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const toggleDarkMode = () => {
     setIsDarkMode((prev) => {
@@ -180,7 +247,13 @@ function Home() {
 
             <form
               className="hero__search"
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={(e) => {
+                e.preventDefault();
+                const q = searchValue.trim();
+                navigate(
+                  q ? `/services?search=${encodeURIComponent(q)}` : "/services",
+                );
+              }}
               role="search"
             >
               <input
@@ -229,9 +302,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Ad popup section*/}
-      <AddPopup />
-
       {/* ================= SERVICE CATEGORIES ================= */}
       <section className="categories" id="categories">
         <div className="section-inner">
@@ -241,11 +311,15 @@ function Home() {
             {SERVICE_CATEGORIES.map((cat) => {
               const Icon = cat.icon;
 
+              const isActive = selectedCategory.slug === cat.slug;
+
               return (
                 <button
                   key={cat.name}
-                  className="category-circle"
+                  className={`category-circle ${isActive ? "is-active" : ""}`}
                   type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setSelectedCategory(cat)}
                 >
                   <span className="category-circle__icon">
                     <Icon />
@@ -259,19 +333,19 @@ function Home() {
 
           <div className="category-preview">
             <div className="category-preview__text">
-              <h3>Electric Services</h3>
-              <p>
-                From fixing faulty wiring to installing new fixtures, our
-                certified electricians ensure your home is safe and powered.
-              </p>
-              <a href="/services/electric" className="link-arrow">
-                Explore Electric Services →
+              <h3>{selectedCategory.name} Services</h3>
+              <p>{selectedCategory.description}</p>
+              <a
+                href={`/services/${selectedCategory.slug}`}
+                className="link-arrow"
+              >
+                Explore {selectedCategory.name} Services →
               </a>
             </div>
             <div className="category-preview__image">
               <img
-                src={electricImg}
-                alt="Electrician fixing electrical panel"
+                src={selectedCategory.image}
+                alt={`${selectedCategory.name} service illustration`}
                 className="category-preview__img"
               />
             </div>
@@ -303,73 +377,96 @@ function Home() {
         </div>
       </section>
 
-      {/* ================= CASE STUDIES ================= */}
+      {/* ================= REVIEWS & RATINGS ================= */}
       <section className="case-studies">
         <div className="section-inner">
-          <h2 className="section-heading">Recent Fixes, Real Results</h2>
+          <h2 className="section-heading">Reviews &amp; Ratings</h2>
 
-          <div className="case-studies__grid">
-            {CASE_STUDIES.map((c) => (
-              <article key={c.title} className="case-card">
-                <div className="case-card__image">
-                  {/* PHOTO: before/after service photo — to be added later */}
-                  <div className="image-placeholder" aria-hidden="true">
-                    <span>Before / After photo</span>
+          {homeDataLoading ? (
+            <div className="home-data-empty">Loading recent reviews...</div>
+          ) : reviews.length === 0 ? (
+            <div className="home-data-empty">
+              No customer reviews are available yet.
+            </div>
+          ) : (
+            <div className="case-studies__grid">
+              {reviews.map((review) => (
+                <article key={review.id} className="case-card review-card">
+                  <p className="review-card__text">
+                    {review.review?.trim() ||
+                      "The customer rated this service without a written comment."}
+                  </p>
+                  <div className="case-card__footer">
+                    <span
+                      className="stars"
+                      aria-label={`${review.rating} out of 5 stars`}
+                    >
+                      {"★".repeat(Number(review.rating || 0))}
+                      {"☆".repeat(5 - Number(review.rating || 0))}
+                    </span>
+                    <strong>{review.rating}/5</strong>
                   </div>
-                </div>
-                <h4>{c.title}</h4>
-                <p>
-                  <strong>The Problem:</strong> {c.problem}
-                </p>
-                <p>
-                  <strong>The Fix:</strong> {c.fix}
-                </p>
-                <p>
-                  <strong>The Result:</strong> {c.result}
-                </p>
-                <div className="case-card__footer">
-                  <span
-                    className="stars"
-                    aria-label={`${c.rating} out of 5 stars`}
-                  >
-                    {"★".repeat(c.rating)}
-                  </span>
-                  <span className="case-card__customer">{c.customer}</span>
-                </div>
-              </article>
-            ))}
-          </div>
+                  <p className="review-card__technician">
+                    {review.technician?.name || "Verified technician"}
+                  </p>
+                  <p className="review-card__address">
+                    {review.booking?.address || "Address not provided"}
+                  </p>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* ================= TECHNICIANS ================= */}
+      {/* ================= VERIFIED TECHNICIANS ================= */}
       <section className="technicians">
         <div className="section-inner">
           <h2 className="section-heading section-heading--center">
             Our Verified Technicians
           </h2>
 
-          <div className="technicians__grid">
-            {TECHNICIANS.map((t) => (
-              <div key={t.name} className="technician-card">
-                <div className="technician-card__photo">
-                  {/* PHOTO: technician headshot — to be added later */}
-                  <div
-                    className="image-placeholder image-placeholder--round"
-                    aria-hidden="true"
-                  />
-                  <span className="technician-card__badge" title="Verified">
-                    ✓
+          {homeDataLoading ? (
+            <div className="home-data-empty">
+              Loading verified technicians...
+            </div>
+          ) : technicians.length === 0 ? (
+            <div className="home-data-empty">
+              No approved technicians are available yet.
+            </div>
+          ) : (
+            <div className="technicians__grid">
+              {technicians.map((technician) => (
+                <div key={technician.id} className="technician-card">
+                  <div className="technician-card__photo">
+                    <div className="technician-card__avatar" aria-hidden="true">
+                      {(technician.name || "T").charAt(0).toUpperCase()}
+                    </div>
+                    <span className="technician-card__badge" title="Verified">
+                      ✓
+                    </span>
+                  </div>
+                  <p className="technician-card__name">{technician.name}</p>
+                  <span className="technician-card__role">
+                    {technician.service_category || "Home Service Technician"}
                   </span>
+                  <p className="technician-card__meta">
+                    {technician.years_of_experience != null
+                      ? `${technician.years_of_experience}+ Years Exp.`
+                      : "Experienced professional"}
+                    {technician.rating != null
+                      ? ` · ★ ${technician.rating}`
+                      : ""}
+                  </p>
+                  {technician.work_area && (
+                    <p className="technician-card__area">
+                      {technician.work_area}
+                    </p>
+                  )}
                 </div>
-                <p className="technician-card__name">{t.name}</p>
-                <span className="technician-card__role">{t.role}</span>
-                <p className="technician-card__meta">
-                  {t.years} · ⭐ {t.rating}
-                </p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -396,18 +493,9 @@ function Home() {
         </div>
       </section>
 
-     
+      {/* ================= BECOME A PROVIDER ================= */}
       <section className="provider-cta">
         <div className="section-inner provider-cta__inner">
-          <div className="provider-cta__image">
-            {/* ILLUSTRATION: technician/provider graphic — to be added later */}
-            <div
-              className="image-placeholder image-placeholder--dark"
-              aria-hidden="true"
-            >
-              <span>Provider illustration</span>
-            </div>
-          </div>
           <div className="provider-cta__text">
             <p className="eyebrow">Are You a Skilled Professional?</p>
             <h3>Get Steady Work with Dr.-Fix</h3>
@@ -416,16 +504,24 @@ function Home() {
               transparent payments, and dedicated support.
             </p>
           </div>
-          <a
-            href="/signup?type=provider"
-            className="btn btn--primary provider-cta__btn"
-          >
-            Register as Provider
-          </a>
+          <div className="provider-cta__actions">
+            <a
+              href="/signup?type=provider"
+              className="btn btn--primary provider-cta__btn"
+            >
+              Register as Provider
+            </a>
+            <Link
+              to="/technician/login"
+              className="btn provider-cta__btn provider-cta__btn--outline"
+            >
+              Already a provider? Login
+            </Link>
+          </div>
         </div>
       </section>
 
-      
+      {/* ================= FINAL CTA BANNER ================= */}
       <section className="cta-banner">
         <div className="section-inner cta-banner__inner">
           <div>
