@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import { loginTechnician } from "../api/auth";
 import "../css/login.css";
+
+import loginImg from "../../assets/login1.png";
 
 /**
  * Technician Login (technician/jsx/login.jsx)
  * ----------------------------------------------
- * Deliberately simple, centered single-card layout — no split-screen /
- * orange illustration panel like the customer login page (client/jsx/login.jsx).
+ * Now mirrors the customer login page's 50/50 split-screen layout
+ * (client/jsx/login.jsx + client/css/login.css) instead of the old
+ * centered single-card style — left half is the form, right half is a
+ * solid orange panel with a headline + illustration (src/assets/login1.png).
  *
  * Wired to POST /api/technician/login, which issues a JWT (not a Sanctum
  * token, not a session — see TechnicianAuthController::login on the
@@ -57,74 +62,90 @@ function TechnicianLogin() {
   };
 
   return (
-    <div className="tech-login-page">
-      <div className="tech-login-card">
-        <div className="tech-login-card__logo">
-          {/* LOGO ICON: to be added later */}
-          <div className="logo-placeholder" aria-hidden="true" />
-          <span>Dr.-Fix</span>
-        </div>
+    <div className="login-page">
+      {/* Left Side: Form */}
+      <div className="login-page__left">
+        <div className="login-form-wrap">
+          <h1 className="login-heading">Welcome Back, Pro</h1>
+          <p className="login-subtext">
+            Login to manage your jobs and earnings
+          </p>
 
-        <h1>Welcome Back, Pro</h1>
-        <p className="tech-login-card__subtext">
-          Login to manage your jobs and earnings
-        </p>
+          {error && <p className="login-error">{error}</p>}
 
-        {error && <p className="tech-login-card__error">{error}</p>}
+          <form className="login-form" onSubmit={handleSubmit}>
+            <label className="login-field">
+              <span className="login-field__label">Email or Phone</span>
+              <input
+                type="text"
+                placeholder="Enter your email or phone number"
+                value={form.identifier}
+                onChange={handleChange("identifier")}
+                required
+              />
+            </label>
 
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="identifier">Email or Phone</label>
-          <input
-            id="identifier"
-            type="text"
-            placeholder="Enter your email or phone number"
-            value={form.identifier}
-            onChange={handleChange("identifier")}
-            required
-          />
+            <label className="login-field">
+              <span className="login-field__label">Password</span>
+              <div className="login-field__password">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={form.password}
+                  onChange={handleChange("password")}
+                  required
+                />
+                <button
+                  type="button"
+                  className="login-field__toggle"
+                  onClick={() => setShowPassword((v) => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <Eye size={20} color="#000000" /> : <EyeOff size={20} color="#000000" />}
+                </button>
+              </div>
+            </label>
 
-          <label htmlFor="password">Password</label>
-          <div className="password-field">
-            <input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={form.password}
-              onChange={handleChange("password")}
-              required
-            />
+            <a href="/forgot-password" className="login-forgot">
+              Forgot Password?
+            </a>
+
             <button
-              type="button"
-              className="password-field__toggle"
-              onClick={() => setShowPassword((v) => !v)}
-              aria-label="Toggle password visibility"
+              type="submit"
+              className="login-submit"
+              disabled={submitting}
             >
-              {showPassword ? "🙈" : "👁️"}
+              {submitting ? "Logging in..." : "Login"}
             </button>
-          </div>
+          </form>
 
-          <a href="/forgot-password" className="tech-login-card__forgot">
-            Forgot Password?
-          </a>
+          <p className="login-signup-hint">
+            New here?{" "}
+            <Link to="/signup?role=provider">Register as Provider</Link>
+          </p>
 
-          <button
-            type="submit"
-            className="tech-login-card__submit"
-            disabled={submitting}
-          >
-            {submitting ? "Logging in..." : "Login"}
-          </button>
-        </form>
+          <div className="login-divider" />
 
-        <p className="tech-login-card__signup-hint">
-          New here? <Link to="/signup?role=provider">Register as Provider</Link>
-        </p>
+          <p className="login-crosslink">
+            Looking to book a service instead?{" "}
+            <Link to="/login">Customer Login</Link>
+          </p>
+        </div>
+      </div>
 
-        <div className="tech-login-card__divider" />
-
-        <p className="tech-login-card__crosslink">
-          Looking to book a service instead?{" "}
-          <Link to="/login">Customer Login</Link>
+      {/* Right Side: Orange Background + Illustration + Headline */}
+      <div className="login-page__right">
+        <img
+          src={loginImg}
+          alt="Technician illustration"
+          className="login-hero-img"
+        />
+        <p className="login-page__right-tagline">
+          Steady Work,
+          <br />
+          Fair Pay,
+          <br />
+          Every Day.
         </p>
       </div>
     </div>
