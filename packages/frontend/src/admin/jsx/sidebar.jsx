@@ -1,68 +1,72 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ClipboardCheck, Home, LogOut } from "lucide-react";
 import { listTechnicians } from "../api/technicians";
 import "../css/sidebar.css";
 
-/**
- * Admin Sidebar (admin/jsx/sidebar.jsx)
- * ----------------------------------------
- * Logout now actually clears the backend session (POST /api/admin/logout)
- * before navigating away. Just navigating to /admin/login without this
- * call would leave the session cookie valid — anyone could then type
- * /admin/dashboard back into the address bar and get straight back in,
- * because AdminProtectedRoute would still find an active session.
- *
- * The "Provider Approvals" badge used to be a hardcoded 3 — now it's the
- * real pending count from GET /api/admin/technicians?status=pending.
- */
-
-const BASE_MENU_ITEMS = [
-  { label: "Overview", icon: "🏠", path: "/admin/dashboard" },
-  { label: "Bookings", icon: "📅", path: "/admin/bookings" },
-  { label: "Technicians", icon: "🧑‍🔧", path: "/admin/technicians" },
-  { label: "Customers", icon: "👤", path: "/admin/customers" },
-  { label: "Provider Approvals", icon: "➕", path: "/admin/approvals" },
-  { label: "Reports", icon: "📊", path: "/admin/reports" },
-  { label: "Settings", icon: "⚙️", path: "/admin/settings" },
+const MENU_ITEMS = [
+  {
+    label: "Overview",
+    icon: Home,
+    path: "/admin/dashboard",
+  },
+  {
+    label: "Provider Approvals",
+    icon: ClipboardCheck,
+    path: "/admin/approvals",
+  },
 ];
 
-const MOCK_ADMIN = { name: "Admin User", role: "Super Admin" };
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [admin, setAdmin] = useState(null);
   const [pendingCount, setPendingCount] = useState(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
+    fetch(`${API_BASE}/admin/me`, {
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return response.json();
+      })
+      .then((data) => setAdmin(data?.admin || null))
+      .catch(() => setAdmin(null));
+
     listTechnicians("pending")
       .then((data) => setPendingCount(data.length))
       .catch(() => setPendingCount(null));
   }, []);
 
-  const menuItems = BASE_MENU_ITEMS.map((item) =>
-    item.path === "/admin/approvals" && pendingCount
-      ? { ...item, badge: pendingCount }
-      : item,
-  );
-
   const handleLogout = async () => {
+    if (isLoggingOut) return;
+
     setIsLoggingOut(true);
+
     try {
-      await fetch(`${API_BASE}/admin/logout`, {
+      const response = await fetch(`${API_BASE}/admin/logout`, {
         method: "POST",
-        credentials: "include", // required so the session cookie is sent
+        credentials: "include",
       });
-    } catch (err) {
-      // Even if the request fails (e.g. server down), still send the
-      // admin to the login screen — AdminProtectedRoute will re-check
-      // the session on the next visit regardless.
+
+      if (!response.ok) {
+        throw new Error("Logout request failed");
+      }
+    } catch {
+      // We still redirect. The protected route will verify the backend session
+      // before allowing the admin back into the dashboard.
+    } finally {
+      navigate("/admin/login", { replace: true });
+      setIsLoggingOut(false);
     }
-    // `replace: true` so the dashboard isn't left in browser history —
-    // pressing "back" after logout won't flash the old dashboard.
-    navigate("/admin/login", { replace: true });
   };
+
+  const adminEmail = admin?.email || "Admin";
+  const adminInitial = adminEmail.charAt(0).toUpperCase();
 
   return (
     <aside className="admin-sidebar">
@@ -71,41 +75,54 @@ function Sidebar() {
         <span>Dr.-Fix</span>
       </div>
 
-      <nav className="admin-sidebar__nav">
-        {menuItems.map((item) => (
-          <Link
-            key={item.label}
-            to={item.path}
-            className={`admin-sidebar__item ${
-              location.pathname === item.path ? "is-active" : ""
-            }`}
-          >
-            <span className="admin-sidebar__icon">{item.icon}</span>
-            <span className="admin-sidebar__label">{item.label}</span>
-            {item.badge && (
-              <span className="admin-sidebar__badge">{item.badge}</span>
-            )}
-          </Link>
-        ))}
+      <nav className="admin-sidebar__nav" aria-label="Admin navigation">
+        {MENU_ITEMS.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`admin-sidebar__item ${
+                isActive ? "is-active" : ""
+              }`}
+            >
+              <span className="admin-sidebar__icon" aria-hidden="true">
+                <Icon size={17} />
+              </span>
+              <span className="admin-sidebar__label">{item.label}</span>
+
+              {item.path === "/admin/approvals" && pendingCount > 0 && (
+                <span className="admin-sidebar__badge">
+                  {pendingCount}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </nav>
 
       <div className="admin-sidebar__profile">
-        <div className="avatar-placeholder" aria-hidden="true" />
-        <div>
-          <p className="admin-sidebar__profile-name">{MOCK_ADMIN.name}</p>
-          <p className="admin-sidebar__profile-role">{MOCK_ADMIN.role}</p>
+        <div className="avatar-placeholder" aria-hidden="true">
+          {adminInitial}
         </div>
-        <button
-          type="button"
-          className="admin-sidebar__logout"
-          onClick={handleLogout}
-          disabled={isLoggingOut}
-          aria-label="Logout"
-          title="Logout"
-        >
-          ⏻
-        </button>
+
+        <div className="admin-sidebar__profile-info">
+          <p className="admin-sidebar__profile-name">{adminEmail}</p>
+          <p className="admin-sidebar__profile-role">Administrator</p>
+        </div>
       </div>
+
+      <button
+        type="button"
+        className="admin-sidebar__logout-button"
+        onClick={handleLogout}
+        disabled={isLoggingOut}
+      >
+        <LogOut size={17} />
+        <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
+      </button>
     </aside>
   );
 }
