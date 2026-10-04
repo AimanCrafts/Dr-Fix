@@ -1,169 +1,202 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { CalendarDays, CheckCircle2, Clock3, Users } from "lucide-react";
 import Sidebar from "./sidebar";
+import { getAdminDashboardSummary } from "../api/dashboard";
 import "../css/dashboard.css";
 
-/**
- * Admin Dashboard (admin/jsx/dashboard.jsx)
- * --------------------------------------------
- * Simplified per project decision: no "Recent Bookings" table and no
- * "Category Performance" chart — just KPIs, a bookings trend chart, and
- * the pending provider approvals list.
- *
- * No backend / no charting library dependency — the trend chart is a
- * small hand-drawn inline SVG polyline using mock data, so this file has
- * zero extra npm packages to install. Swap MOCK_CHART_POINTS for real
- * data later; the SVG path math will still work the same way.
- */
+function formatMoney(value) {
+  return `৳${Number(value || 0).toLocaleString()}`;
+}
 
-const KPIS = [
-  { label: "Total Bookings", value: "1,248", change: "+12%", icon: "📅" },
-  { label: "Total Revenue", value: "৳4,82,000", change: "+8%", icon: "৳" },
-  { label: "Active Technicians", value: "56", change: "+5%", icon: "👥" },
-];
+function formatDate(value) {
+  if (!value) return "—";
 
-const PENDING_APPROVAL = { label: "Pending Approvals", value: "3", icon: "➕" };
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
 
-const PENDING_PROVIDERS = [
-  { name: "Rashed H.", category: "Plumbing", submitted: "May 18, 2025" },
-  { name: "Mehedi Hasan", category: "AC Repair", submitted: "May 18, 2025" },
-  { name: "Shakil Ahmed", category: "Electric", submitted: "May 17, 2025" },
-];
-
-// Mock trend data (0-100 scale) purely for the inline SVG chart below.
-const MOCK_CHART_POINTS = [40, 55, 35, 60, 50, 70, 65, 90, 60, 55, 70, 85, 95];
-
-function buildPolylinePoints(values, width, height) {
-  const max = Math.max(...values);
-  const min = Math.min(...values);
-  const range = max - min || 1;
-  const stepX = width / (values.length - 1);
-
-  return values
-    .map((v, i) => {
-      const x = i * stepX;
-      const y = height - ((v - min) / range) * height;
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(" ");
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 function AdminDashboard() {
-  const chartWidth = 640;
-  const chartHeight = 160;
-  const points = buildPolylinePoints(
-    MOCK_CHART_POINTS,
-    chartWidth,
-    chartHeight,
-  );
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadDashboard = async () => {
+    setLoading(true);
+    setError("");
+
+    try {
+      const { data } = await getAdminDashboardSummary();
+      setSummary(data);
+    } catch (err) {
+      setError(
+        err.message || "Could not load the admin dashboard.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const stats = summary
+    ? [
+        {
+          label: "Total Bookings",
+          value: summary.total_bookings,
+          icon: CalendarDays,
+        },
+        {
+          label: "Completed Revenue",
+          value: formatMoney(summary.completed_revenue),
+          icon: CheckCircle2,
+        },
+        {
+          label: "Approved Technicians",
+          value: summary.approved_technicians,
+          icon: Users,
+        },
+        {
+          label: "Pending Approvals",
+          value: summary.pending_approvals,
+          icon: Clock3,
+          alert: summary.pending_approvals > 0,
+        },
+      ]
+    : [];
 
   return (
     <div className="admin-dashboard">
       <Sidebar />
 
       <main className="admin-main">
-        {/* Top bar */}
-        <div className="admin-topbar">
-          <div className="admin-search">
-            <span>🔍</span>
-            <input
-              type="text"
-              placeholder="Search bookings, technicians, customers..."
-            />
+        <div className="admin-page-header">
+          <div>
+            <p className="admin-page-eyebrow">ADMINISTRATION</p>
+            <h1>Dashboard</h1>
+            <p>Live overview of bookings, technicians, revenue, and approvals.</p>
           </div>
-          <div className="admin-topbar__actions">
-            <button
-              type="button"
-              className="admin-bell"
-              aria-label="Notifications"
-            >
-              🔔
-            </button>
-            <select className="admin-range">
-              <option>Last 30 Days</option>
-              <option>Last 7 Days</option>
-              <option>This Month</option>
-            </select>
-          </div>
-        </div>
 
-        {/* KPI cards */}
-        <div className="kpi-row">
-          {KPIS.map((kpi) => (
-            <div key={kpi.label} className="card kpi-card">
-              <span className="kpi-card__icon">{kpi.icon}</span>
-              <p className="kpi-card__label">{kpi.label}</p>
-              <p className="kpi-card__value">{kpi.value}</p>
-              <p className="kpi-card__change">
-                <span className="text-success">↑ {kpi.change}</span> vs previous
-                period
-              </p>
-            </div>
-          ))}
-
-          <div className="card kpi-card kpi-card--alert">
-            <span className="kpi-card__icon">{PENDING_APPROVAL.icon}</span>
-            <p className="kpi-card__label">{PENDING_APPROVAL.label}</p>
-            <p className="kpi-card__value">{PENDING_APPROVAL.value}</p>
-            <p className="kpi-card__change text-accent">
-              Requires your attention
-            </p>
-          </div>
-        </div>
-
-        {/* Chart */}
-        <div className="card chart-card">
-          <div className="chart-card__header">
-            <h2>Bookings Overview (Last 30 Days)</h2>
-            <span className="chart-legend">
-              <span className="chart-legend__dot" /> Bookings
-            </span>
-          </div>
-          <svg
-            viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-            className="trend-chart"
-            preserveAspectRatio="none"
+          <button
+            type="button"
+            className="admin-refresh-button"
+            onClick={loadDashboard}
+            disabled={loading}
           >
-            <polyline
-              points={points}
-              fill="none"
-              stroke="#FF5A1F"
-              strokeWidth="2.5"
-            />
-          </svg>
+            {loading ? "Refreshing..." : "Refresh"}
+          </button>
         </div>
 
-        {/* Pending provider approvals */}
-        <div className="card approvals-card">
-          <div className="approvals-card__header">
-            <h2>Pending Provider Approvals</h2>
-            <a href="/admin/approvals">View All</a>
+        {error && (
+          <div className="admin-dashboard-error" role="alert">
+            <span>{error}</span>
+            <button type="button" onClick={loadDashboard}>
+              Try again
+            </button>
           </div>
+        )}
 
-          <div className="approvals-table">
-            <div className="approvals-table__head">
-              <span>Applicant</span>
-              <span>Service Category</span>
-              <span>Submitted On</span>
-              <span></span>
+        {loading && !summary ? (
+          <div className="card admin-dashboard-loading">
+            Loading dashboard data...
+          </div>
+        ) : (
+          <>
+            <div className="kpi-row">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+
+                return (
+                  <div
+                    key={stat.label}
+                    className={`card kpi-card ${
+                      stat.alert ? "kpi-card--alert" : ""
+                    }`}
+                  >
+                    <span className="kpi-card__icon" aria-hidden="true">
+                      <Icon size={18} />
+                    </span>
+                    <p className="kpi-card__label">{stat.label}</p>
+                    <p className="kpi-card__value">{stat.value}</p>
+                    <p className="kpi-card__change">
+                      {stat.alert
+                        ? "Requires your attention"
+                        : "Live backend data"}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
 
-            {PENDING_PROVIDERS.map((p) => (
-              <div key={p.name} className="approvals-table__row">
-                <span className="applicant">
-                  <span
-                    className="avatar-placeholder avatar-placeholder--sm"
-                    aria-hidden="true"
-                  />
-                  {p.name}
-                </span>
-                <span>{p.category}</span>
-                <span>{p.submitted}</span>
-                <button type="button" className="btn-review">
-                  Review
-                </button>
+            <section className="card approvals-card">
+              <div className="approvals-card__header">
+                <div>
+                  <p className="admin-section-eyebrow">TECHNICIAN MANAGEMENT</p>
+                  <h2>Pending Provider Approvals</h2>
+                </div>
+                <Link to="/admin/approvals">View All</Link>
               </div>
-            ))}
-          </div>
-        </div>
+
+              {summary?.pending_providers?.length ? (
+                <div className="approvals-table">
+                  <div className="approvals-table__head">
+                    <span>Applicant</span>
+                    <span>Service Category</span>
+                    <span>Submitted On</span>
+                    <span />
+                  </div>
+
+                  {summary.pending_providers.map((provider) => (
+                    <div
+                      key={provider.id}
+                      className="approvals-table__row"
+                    >
+                      <span className="applicant">
+                        <span
+                          className="avatar-placeholder avatar-placeholder--sm"
+                          aria-hidden="true"
+                        />
+                        {provider.name}
+                      </span>
+                      <span>{provider.service_category || "—"}</span>
+                      <span>{formatDate(provider.created_at)}</span>
+                      <Link
+                        to="/admin/approvals"
+                        className="btn-review"
+                      >
+                        Review
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="admin-empty-state">
+                  <CheckCircle2 size={22} />
+                  <div>
+                    <strong>No pending approvals</strong>
+                    <p>All current provider applications have been reviewed.</p>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            <section className="admin-dashboard-note">
+              <strong>Dashboard data is live.</strong>
+              <span>
+                Booking totals and revenue come from the bookings table, while
+                technician counts and approval status come from provider accounts.
+              </span>
+            </section>
+          </>
+        )}
       </main>
     </div>
   );

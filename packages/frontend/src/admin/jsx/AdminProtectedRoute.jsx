@@ -17,7 +17,7 @@ import { Navigate } from "react-router-dom";
  *   } />
  */
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 function AdminProtectedRoute({ children }) {
   const [status, setStatus] = useState("checking"); // "checking" | "authed" | "guest"

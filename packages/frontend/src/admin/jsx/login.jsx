@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import logo from "../../assets/logo.png";
 import "../css/login.css";
 
 /**
@@ -14,7 +16,7 @@ import "../css/login.css";
  * import.meta.env.VITE_API_URL) instead of hardcoding localhost here.
  */
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "/api";
 
 function AdminLogin() {
   const navigate = useNavigate();
@@ -62,7 +64,7 @@ function AdminLogin() {
     <div className="admin-login-page">
       <div className="admin-login-card">
         <div className="admin-login-card__logo">
-          <div className="logo-placeholder" aria-hidden="true" />
+          <img src={logo} alt="Dr.-Fix logo" className="admin-login-card__logo-image" />
           <span>Dr.-Fix</span>
         </div>
 
@@ -99,9 +101,9 @@ function AdminLogin() {
               type="button"
               className="password-field__toggle"
               onClick={() => setShowPassword((v) => !v)}
-              aria-label="Toggle password visibility"
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? <Eye size={20} color="#000000" /> : <EyeOff size={20} color="#000000" />}
             </button>
           </div>
 
