@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminTechnicianController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\TechnicianAuthController;
 use App\Http\Controllers\TechnicianBookingController;
+use App\Http\Controllers\TechnicianDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,14 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::get('/bookings/{id}', [BookingController::class, 'show']);
     Route::post('/bookings/{bookingId}/review', [ReviewController::class, 'store']);
 });
+
+/*
+|--------------------------------------------------------------------------
+| Public (no login) - home page data
+|--------------------------------------------------------------------------
+*/
+Route::get('/public/reviews', [ReviewController::class, 'recent']);
+Route::get('/public/technicians', [AdminTechnicianController::class, 'publicIndex']);
 
 /* Dummy CRUD operations for items using UsersController */
 Route::get('/items', [UsersController::class, 'index']);
@@ -78,12 +87,17 @@ Route::post('/technician/login', [TechnicianAuthController::class, 'login']);
 Route::middleware('jwt.auth:provider')->group(function () {
     Route::get('/technician/me', [TechnicianAuthController::class, 'me']);
     Route::post('/technician/logout', [TechnicianAuthController::class, 'logout']);
+    Route::put('/technician/profile', [TechnicianAuthController::class, 'updateProfile']);
+    Route::post('/technician/availability', [TechnicianAuthController::class, 'availability']);
+
+    Route::get('/technician/dashboard-summary', [TechnicianDashboardController::class, 'summary']);
+    Route::get('/technician/earnings', [TechnicianDashboardController::class, 'earnings']);
+    Route::get('/technician/schedule', [TechnicianDashboardController::class, 'schedule']);
 
     Route::get('/technician/bookings/available', [TechnicianBookingController::class, 'available']);
     Route::get('/technician/bookings/mine', [TechnicianBookingController::class, 'mine']);
     Route::post('/technician/bookings/{id}/accept', [TechnicianBookingController::class, 'accept']);
-    Route::post('/technician/bookings/{id}/on-the-way', [TechnicianBookingController::class, 'onTheWay']);
-    Route::post('/technician/bookings/{id}/arrived', [TechnicianBookingController::class, 'arrived']);
+    Route::post('/technician/bookings/{id}/reject', [TechnicianBookingController::class, 'reject']);
     Route::post('/technician/bookings/{id}/start', [TechnicianBookingController::class, 'start']);
     Route::post('/technician/bookings/{id}/complete', [TechnicianBookingController::class, 'complete']);
 });

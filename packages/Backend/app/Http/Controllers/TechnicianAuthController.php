@@ -55,6 +55,7 @@ class TechnicianAuthController extends Controller
         $user = User::create([
             'name'                 => $request->fullName,
             'email'                => $request->email,
+            'phone'                => $request->phone,
             'password'             => Hash::make($request->password),
             'role'                 => 'provider',
             'service_category'     => $request->serviceCategory,
@@ -79,8 +80,14 @@ class TechnicianAuthController extends Controller
             'password'   => 'required|string',
         ]);
 
-        $user = User::where('email', $request->identifier)
-            ->where('role', 'provider')
+        // The login form says "Email or Phone", so accept both.
+        $identifier = trim($request->identifier);
+
+        $user = User::where('role', 'provider')
+            ->where(function ($q) use ($identifier) {
+                $q->where('email', $identifier)
+                  ->orWhere('phone', $identifier);
+            })
             ->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {

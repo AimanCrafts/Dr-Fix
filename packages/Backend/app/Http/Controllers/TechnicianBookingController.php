@@ -31,6 +31,13 @@ class TechnicianBookingController extends Controller
 
         $jobs = Booking::where('status', 'pending')
             ->where('service_category', $technician->service_category)
+            // hide jobs this technician already rejected
+            ->whereNotExists(function ($q) use ($technician) {
+                $q->select(DB::raw(1))
+                    ->from('technician_booking_rejections')
+                    ->whereColumn('technician_booking_rejections.booking_id', 'bookings.id')
+                    ->where('technician_booking_rejections.technician_id', $technician->id);
+            })
             ->with('customer:id,name,phone')
             ->latest()
             ->get();
@@ -78,6 +85,34 @@ class TechnicianBookingController extends Controller
         }
 
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
+    }
+
+    /** POST /api/technician/bookings/{id}/reject */
+    public function reject(Request $request, int $id)
+    {
+        $technician = $request->attributes->get('technician');
+
+        if ($technician->approval_status !== 'approved') {
+            return response()->json(['message' => 'Your account is not approved yet.'], 403);
+        }
+
+        $exists = DB::table('bookings')
+            ->where('id', $id)
+            ->where('status', 'pending')
+            ->exists();
+
+        if (! $exists) {
+            return response()->json([
+                'message' => 'This job is no longer available.',
+            ], 404);
+        }
+
+        DB::table('technician_booking_rejections')->updateOrInsert(
+            ['technician_id' => $technician->id, 'booking_id' => $id],
+            ['created_at' => now(), 'updated_at' => now()]
+        );
+
+        return response()->json(['message' => 'Job rejected.']);
     }
 
     /** POST /api/technician/bookings/{id}/start */
