@@ -1,0 +1,276 @@
+/*
+ * notification-bell.css
+ * The bell is a plain icon: NO box, border or background around it.
+ * All classes start with "nb" so they can't clash with header.css.
+ */
+
+.nb {
+  position: relative;
+}
+
+.nb *,
+.nb *::before,
+.nb *::after {
+  box-sizing: border-box;
+}
+
+.nb__button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--color-text, #1f2430);
+  cursor: pointer;
+  transition: color 120ms ease, transform 120ms ease;
+}
+
+.nb__button:hover,
+.nb__button[aria-expanded="true"] {
+  background: none;
+  color: var(--color-primary, #ff5a1f);
+}
+
+.nb__button:active {
+  transform: scale(0.94);
+}
+
+/* keyboard users still get a visible focus ring; mouse users see no box */
+.nb__button:focus {
+  outline: none;
+}
+
+.nb__button:focus-visible {
+  outline: 2px solid var(--color-primary, #ff5a1f);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.nb__badge {
+  position: absolute;
+  top: 3px;
+  right: 1px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #e5321f;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 0 0 2px var(--color-surface, #ffffff);
+}
+
+/* ---- panel ---- */
+.nb__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -8px;
+  z-index: 1000;
+  width: 380px;
+  max-width: calc(100vw - 24px);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #1f2430);
+  border: 1px solid var(--color-border, #e6e8ee);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(20, 24, 40, 0.14);
+  overflow: hidden;
+  transform-origin: top right;
+  animation: nb-open 140ms ease-out;
+}
+
+@keyframes nb-open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nb__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border, #e6e8ee);
+}
+
+.nb__markall {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  color: var(--color-primary, #ff5a1f);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.nb__markall:disabled {
+  color: var(--color-text-muted, #9aa0ad);
+  cursor: default;
+}
+
+.nb__list {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.nb__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border, #f0f1f5);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nb__item:last-child {
+  border-bottom: 0;
+}
+
+.nb__item:hover,
+.nb__item:focus-visible {
+  background: var(--color-hover, #f6f7fa);
+  outline: none;
+}
+
+.nb__item.is-unread {
+  background: rgba(255, 90, 31, 0.06);
+}
+
+.nb__item.is-unread:hover {
+  background: rgba(255, 90, 31, 0.1);
+}
+
+.nb__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.nb__item.is-unread .nb__dot {
+  background: var(--color-primary, #ff5a1f);
+}
+
+.nb__content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.nb__title {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.nb__item:not(.is-unread) .nb__title {
+  font-weight: 500;
+}
+
+.nb__body {
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: var(--color-text-muted, #5d6472);
+}
+
+.nb__time {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #8a909c);
+}
+
+.nb__state {
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.nb__state--error {
+  color: #b42318;
+}
+
+.nb__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 36px 16px;
+  text-align: center;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.nb__empty p {
+  margin: 8px 0 0;
+  font-weight: 600;
+  color: var(--color-text, #1f2430);
+}
+
+.nb__empty span {
+  font-size: 0.85rem;
+}
+
+/* ---- dark mode ---- */
+html[data-theme="dark"] .nb__button {
+  color: var(--color-text, #eef0f6);
+}
+
+html[data-theme="dark"] .nb__badge {
+  box-shadow: 0 0 0 2px var(--color-surface, #1c2030);
+}
+
+html[data-theme="dark"] .nb__panel {
+  background: var(--color-surface, #1c2030);
+  color: var(--color-text, #eef0f6);
+  border-color: var(--color-border, #2d3348);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .nb__head,
+html[data-theme="dark"] .nb__item {
+  border-color: var(--color-border, #2d3348);
+}
+
+html[data-theme="dark"] .nb__item:hover,
+html[data-theme="dark"] .nb__item:focus-visible {
+  background: var(--color-hover, #262b40);
+}
+
+html[data-theme="dark"] .nb__empty p {
+  color: var(--color-text, #eef0f6);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb__panel {
+    animation: none;
+  }
+
+  .nb__button {
+    transition: none;
+  }
+}

@@ -13,6 +13,7 @@ use App\Http\Controllers\TechnicianAuthController;
 use App\Http\Controllers\TechnicianBookingController;
 use App\Http\Controllers\TechnicianDashboardController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,11 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::put('/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
     Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications']);
     Route::post('/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead']);
 
     Route::get('/addresses', [AddressController::class, 'index']);
     Route::post('/addresses', [AddressController::class, 'store']);
@@ -98,6 +104,11 @@ Route::middleware('jwt.auth:provider')->group(function () {
     Route::get('/technician/settings', [SettingsController::class, 'show']);
     Route::put('/technician/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
     Route::post('/technician/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
+
+    Route::get('/technician/notifications', [NotificationController::class, 'index']);
+    Route::get('/technician/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('/technician/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::post('/technician/notifications/{id}/read', [NotificationController::class, 'markRead']);
     Route::post('/technician/availability', [TechnicianAuthController::class, 'availability']);
 
     Route::get('/technician/dashboard-summary', [TechnicianDashboardController::class, 'summary']);

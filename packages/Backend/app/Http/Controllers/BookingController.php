@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -53,6 +54,9 @@ class BookingController extends Controller
             'payment_method'    => $request->payment_method,
             'status'            => 'pending',
         ]);
+
+        // Tell matching, available technicians there is a new job.
+        NotificationService::newJob($booking);
 
         return response()->json($booking, 201);
     }

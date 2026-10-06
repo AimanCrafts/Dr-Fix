@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Services\BookingNotifier;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -86,6 +87,7 @@ class TechnicianBookingController extends Controller
         }
 
         BookingNotifier::customer($id, 'accepted');
+        NotificationService::bookingEvent($id, 'accepted');
 
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
     }
@@ -139,6 +141,8 @@ class TechnicianBookingController extends Controller
             ], 422);
         }
 
+        NotificationService::bookingEvent($id, 'started');
+
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
     }
 
@@ -164,6 +168,7 @@ class TechnicianBookingController extends Controller
         }
 
         BookingNotifier::customer($id, 'completed');
+        NotificationService::bookingEvent($id, 'completed');
 
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
     }

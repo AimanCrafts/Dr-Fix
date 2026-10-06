@@ -1,7 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import {
-  Bell,
   Briefcase,
   CalendarCheck,
   CalendarDays,
@@ -12,6 +11,9 @@ import {
   Wallet,
 } from "lucide-react";
 import UserMenu from "./user-menu.jsx";
+import NotificationBell from "./notification-bell.jsx";
+import { notificationApi as clientNotificationApi } from "../../client/api/notifications";
+import { notificationApi as technicianNotificationApi } from "../../technician/api/notifications-api";
 import { useAuth } from "../../client/context/AuthContext.jsx";
 import "../css/header.css";
 import logo from "../../assets/logo.png";
@@ -250,14 +252,7 @@ function Header({ variant = "marketing" }) {
             </nav>
 
             <div className="site-header__actions">
-              <button
-                type="button"
-                className="site-header__icon-button"
-                aria-label="Notifications"
-                title="Notifications"
-              >
-                <Bell size={18} />
-              </button>
+              <NotificationBell api={clientNotificationApi} />
 
               <UserMenu
                 initial={initial}
@@ -344,6 +339,8 @@ function Header({ variant = "marketing" }) {
             </nav>
 
             <div className="site-header__actions">
+              <NotificationBell api={technicianNotificationApi} />
+
               <UserMenu
                 initial={technicianInitial}
                 name={technicianUser?.name || "Technician"}
