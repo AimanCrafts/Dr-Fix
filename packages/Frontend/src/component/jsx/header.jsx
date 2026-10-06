@@ -1,9 +1,28 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import React, { useState, useRef, useEffect } from "react";
-import { Bell, Moon, Sun } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Bell,
+  Briefcase,
+  CalendarCheck,
+  CalendarDays,
+  LayoutDashboard,
+  MapPin,
+  Moon,
+  Settings,
+  Sun,
+  UserRound,
+  Wallet,
+} from "lucide-react";
+import UserMenu from "./user-menu.jsx";
 import { useAuth } from "../../client/context/AuthContext.jsx";
 import "../css/header.css";
 import logo from "../../assets/logo.png";
+
+/*
+ * Flip to true once the /settings and /technician/settings pages exist.
+ * Until then the "Settings" item stays hidden so nobody lands on a blank page.
+ */
+const SETTINGS_ENABLED = false;
 
 function Header({
   variant = "marketing",
@@ -11,13 +30,21 @@ function Header({
   onToggleDarkMode = () => {},
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  const userMenuRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { user, logout } = useAuth();
+  const { user, logout, isLoggedIn } = useAuth();
+
+  /*
+   * Several pages (services, profile, checkout, booking-tracking,
+   * confirmation) pass variant="app". Header never had an "app" layout,
+   * so it rendered only the logo - no nav, no avatar. "app" now means
+   * "pick the right header for whoever is looking": the client header
+   * when logged in, the marketing header when not.
+   */
+  const resolvedVariant =
+    variant === "app" ? (isLoggedIn ? "client" : "marketing") : variant;
 
   const navLinks = [
     { label: "Home", href: "/" },
@@ -26,24 +53,9 @@ function Header({
     { label: "About Us", href: "/about" },
   ];
 
-  useEffect(() => {
-    if (!isUserMenuOpen) return undefined;
-
-    const handleClickOutside = (event) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setIsUserMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isUserMenuOpen]);
-
   const initial = user?.name ? user.name.charAt(0).toUpperCase() : "?";
 
   const handleLogout = () => {
-    setIsUserMenuOpen(false);
     logout();
     navigate("/login");
   };
@@ -61,13 +73,34 @@ function Header({
     : "?";
 
   const handleTechnicianLogout = () => {
-    setIsUserMenuOpen(false);
 
     localStorage.removeItem("technician_token");
     localStorage.removeItem("technician_user");
 
     navigate("/technician/login");
   };
+
+  const clientMenuItems = [
+    { label: "Overview", to: "/client_dashboard", icon: LayoutDashboard },
+    { label: "My Bookings", to: "/my-bookings", icon: CalendarCheck },
+    { label: "Saved Addresses", to: "/addresses", icon: MapPin },
+    { label: "Profile", to: "/profile", icon: UserRound },
+    ...(SETTINGS_ENABLED
+      ? [{ label: "Settings", to: "/settings", icon: Settings }]
+      : []),
+  ];
+
+  const technicianMenuItems = [
+    { label: "Overview", to: "/technician/dashboard", icon: LayoutDashboard },
+    { label: "Job Requests", to: "/technician/job-requests", icon: Briefcase },
+    { label: "My Bookings", to: "/technician/my-bookings", icon: CalendarCheck },
+    { label: "Schedule", to: "/technician/schedule", icon: CalendarDays },
+    { label: "Earnings", to: "/technician/earnings", icon: Wallet },
+    { label: "Profile", to: "/technician/profile", icon: UserRound },
+    ...(SETTINGS_ENABLED
+      ? [{ label: "Settings", to: "/technician/settings", icon: Settings }]
+      : []),
+  ];
 
   /*
    * CLIENT ACTIVE LINK
@@ -107,7 +140,7 @@ function Header({
   };
 
   return (
-    <header className={`site-header site-header--${variant}`}>
+    <header className={`site-header site-header--${resolvedVariant}`}>
       <div className="site-header__inner">
         {/* LOGO */}
         <Link to="/" className="site-header__logo" aria-label="Dr.-Fix home">
@@ -123,7 +156,7 @@ function Header({
         {/* =====================================================
             MARKETING HEADER
         ====================================================== */}
-        {variant === "marketing" && (
+        {resolvedVariant === "marketing" && (
           <>
             <nav
               className={`site-header__nav ${isMenuOpen ? "is-open" : ""}`}
@@ -173,7 +206,7 @@ function Header({
         {/* =====================================================
             CLIENT HEADER
         ====================================================== */}
-        {variant === "client" && (
+        {resolvedVariant === "client" && (
           <>
             <nav className="site-header__app-nav" aria-label="Client dashboard">
               <Link
@@ -244,41 +277,15 @@ function Header({
                 <Bell size={18} />
               </button>
 
-              <div className="user-menu" ref={userMenuRef}>
-                <button
-                  type="button"
-                  className="avatar-placeholder avatar-placeholder--button"
-                  aria-label="Account menu"
-                  aria-expanded={isUserMenuOpen}
-                  onClick={() => setIsUserMenuOpen((open) => !open)}
-                >
-                  {initial}
-                </button>
-
-                {isUserMenuOpen && (
-                  <div className="user-menu__dropdown" role="menu">
-                    <p className="user-menu__name">{user?.name || "Guest"}</p>
-
-                    <Link
-                      to="/profile"
-                      className="user-menu__option"
-                      role="menuitem"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Profile
-                    </Link>
-
-                    <button
-                      type="button"
-                      className="user-menu__option user-menu__option--danger"
-                      role="menuitem"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
+              <UserMenu
+                initial={initial}
+                name={user?.name || "Guest"}
+                subtitle={user?.email || "Customer account"}
+                items={clientMenuItems}
+                currentPath={location.pathname}
+                onLogout={handleLogout}
+                ariaLabel="Account menu"
+              />
             </div>
           </>
         )}
@@ -286,7 +293,7 @@ function Header({
         {/* =====================================================
             TECHNICIAN HEADER
         ====================================================== */}
-        {variant === "technician" && (
+        {resolvedVariant === "technician" && (
           <>
             <nav className="site-header__pill-nav" aria-label="Technician">
               <Link
@@ -355,43 +362,15 @@ function Header({
             </nav>
 
             <div className="site-header__actions">
-              <div className="user-menu" ref={userMenuRef}>
-                <button
-                  type="button"
-                  className="avatar-placeholder avatar-placeholder--button"
-                  aria-label="Technician account menu"
-                  aria-expanded={isUserMenuOpen}
-                  onClick={() => setIsUserMenuOpen((open) => !open)}
-                >
-                  {technicianInitial}
-                </button>
-
-                {isUserMenuOpen && (
-                  <div className="user-menu__dropdown" role="menu">
-                    <p className="user-menu__name">
-                      {technicianUser?.name || "Technician"}
-                    </p>
-
-                    <Link
-                      to="/technician/profile"
-                      className="user-menu__option"
-                      role="menuitem"
-                      onClick={() => setIsUserMenuOpen(false)}
-                    >
-                      Profile
-                    </Link>
-
-                    <button
-                      type="button"
-                      className="user-menu__option user-menu__option--danger"
-                      role="menuitem"
-                      onClick={handleTechnicianLogout}
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
+              <UserMenu
+                initial={technicianInitial}
+                name={technicianUser?.name || "Technician"}
+                subtitle={technicianUser?.service_category || "Technician account"}
+                items={technicianMenuItems}
+                currentPath={location.pathname}
+                onLogout={handleTechnicianLogout}
+                ariaLabel="Technician account menu"
+              />
             </div>
           </>
         )}

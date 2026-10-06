@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 
 const AuthContext = createContext(null);
@@ -6,29 +6,38 @@ const AuthContext = createContext(null);
 const STORAGE_USER_KEY = "auth_user";
 const STORAGE_TOKEN_KEY = "auth_token";
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-
-  useEffect(() => {
+/*
+ * Read the saved session SYNCHRONOUSLY, before the first render.
+ *
+ * Previously user/token started as null and were filled in by a useEffect,
+ * so for the first render isLoggedIn was false even for a logged-in
+ * person. Any page that reads isLoggedIn (services.jsx, header.jsx) then
+ * briefly drew the logged-out layout. Reading localStorage up front means
+ * the very first render is already correct.
+ */
+function readStoredSession() {
+  try {
     const storedUser = localStorage.getItem(STORAGE_USER_KEY);
     const storedToken = localStorage.getItem(STORAGE_TOKEN_KEY);
     if (storedUser && storedToken) {
-      try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
-      } catch {
-        // Corrupted value — clear it so we don't crash on every load.
-        localStorage.removeItem(STORAGE_USER_KEY);
-        localStorage.removeItem(STORAGE_TOKEN_KEY);
-      }
+      return { user: JSON.parse(storedUser), token: storedToken };
     }
-    setIsLoading(false);
-  }, []);
+  } catch {
+    // Corrupted value - clear it so we don't crash on every load.
+    localStorage.removeItem(STORAGE_USER_KEY);
+    localStorage.removeItem(STORAGE_TOKEN_KEY);
+  }
+  return { user: null, token: null };
+}
 
-  
+export function AuthProvider({ children }) {
+  const [session] = useState(readStoredSession);
+  const [user, setUser] = useState(session.user);
+  const [token, setToken] = useState(session.token);
+  // Kept so existing code (ProtectedRoute) that reads isLoading still works.
+  // The session is now known immediately, so this is always false.
+  const isLoading = false;
+
   const login = (userData, authToken) => {
     setUser(userData);
     setToken(authToken);
@@ -47,7 +56,7 @@ export function AuthProvider({ children }) {
     user,
     token,
     isLoggedIn: Boolean(user && token),
-    isLoading, // true only during the initial localStorage check on app load
+    isLoading,
     login,
     logout,
   };
