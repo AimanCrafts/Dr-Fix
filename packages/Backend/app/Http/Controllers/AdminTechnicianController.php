@@ -52,6 +52,7 @@ class AdminTechnicianController extends Controller
     {
         $providers = User::where('role', 'provider')
             ->where('approval_status', 'approved')
+            ->whereNull('deactivated_at')
             ->latest()
             ->limit(8)
             ->get([

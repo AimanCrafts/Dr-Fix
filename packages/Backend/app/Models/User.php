@@ -30,6 +30,8 @@ class User extends Authenticatable
         'nid_path',
         'approval_status',
         'is_available',
+        'email_notifications',
+        'deactivated_at',
     ];
 
     /**
@@ -40,6 +42,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_available' => 'boolean',
+        'email_notifications' => 'boolean',
+        'deactivated_at' => 'datetime',
     ];
 
     /**

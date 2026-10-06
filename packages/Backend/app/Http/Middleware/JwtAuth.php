@@ -53,6 +53,11 @@ class JwtAuth
             return response()->json(['message' => 'Unauthorized.'], 401);
         }
 
+        // A deactivated account's old tokens must stop working immediately.
+        if ($user->deactivated_at) {
+            return response()->json(['message' => 'This account has been deactivated.'], 401);
+        }
+
         $request->attributes->set('jwt_user', $user);
 
         // Backwards-compatible aliases for existing controller code.

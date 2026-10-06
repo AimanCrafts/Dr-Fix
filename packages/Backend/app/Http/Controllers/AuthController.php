@@ -114,6 +114,10 @@ class AuthController extends Controller
             return response()->json(['message' => 'Please verify your email before logging in.'], 403);
         }
 
+        if ($user->deactivated_at) {
+            return response()->json(['message' => 'This account has been deactivated.'], 403);
+        }
+
 
         $token = (new JwtService())->issueToken($user->id, 'customer');
 

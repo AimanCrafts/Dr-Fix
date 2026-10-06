@@ -11,12 +11,50 @@
   position: relative;
 }
 
+/* every box inside the menu includes its padding in its width, otherwise
+   full-width rows spill past the panel edge */
+.um *,
+.um *::before,
+.um *::after {
+  box-sizing: border-box;
+}
+
+/* Avatar button. Styled here (instead of reusing the old
+   .avatar-placeholder classes) so the letter is always clearly visible. */
+.um__trigger {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: var(--color-primary, #ff5a1f);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: box-shadow 120ms ease;
+}
+
+.um__trigger:hover {
+  box-shadow: 0 0 0 4px rgba(255, 90, 31, 0.18);
+}
+
+.um__trigger:focus-visible,
+.um__trigger[aria-expanded="true"] {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 90, 31, 0.28);
+}
+
 .um__panel {
   position: absolute;
   top: calc(100% + 10px);
   right: 0;
   z-index: 1000;
-  width: 272px;
+  width: 300px;
   max-width: calc(100vw - 24px);
   padding: 6px;
   background: var(--color-surface, #ffffff);
@@ -54,7 +92,7 @@
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: var(--color-primary, #f26b21);
+  background: var(--color-primary, #ff5a1f);
   color: #ffffff;
   font-weight: 700;
   font-size: 1rem;
@@ -126,16 +164,16 @@
 }
 
 .um__item:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-primary, #f26b21) inset;
+  box-shadow: 0 0 0 2px var(--color-primary, #ff5a1f) inset;
 }
 
 .um__item.is-current {
   font-weight: 600;
-  background: rgba(242, 107, 33, 0.1);
+  background: rgba(255, 90, 31, 0.1);
 }
 
 .um__item.is-current svg {
-  color: var(--color-primary, #f26b21);
+  color: var(--color-primary, #ff5a1f);
 }
 
 .um__item--danger,

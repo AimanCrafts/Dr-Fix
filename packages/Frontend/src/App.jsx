@@ -12,6 +12,7 @@ import Checkout from "./client/jsx/checkout";
 import BookingConfirmed from "./client/jsx/confirmation";
 import BookingTracking from "./client/jsx/booking-tracking";
 import Profile from "./client/jsx/profile";
+import Settings from "./client/jsx/settings";
 import ProtectedRoute from "./client/jsx/ProtectedRoute";
 
 import AdminLogin from "./admin/jsx/login";
@@ -25,6 +26,7 @@ import TechnicianJobRequests from "./technician/jsx/job-requests";
 import TechnicianEarnings from "./technician/jsx/earnings";
 import TechnicianSchedule from "./technician/jsx/schedule";
 import TechnicianProfile from "./technician/jsx/profile";
+import TechnicianSettings from "./technician/jsx/settings";
 import TechnicianMyBookings from "./technician/jsx/my-bookings";
 import ApplicationUnderReview from "./technician/jsx/application";
 import TechnicianProtectedRoute from "./technician/jsx/TechnicianProtectedRoute";
@@ -118,6 +120,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
+
       {/* ================= ADMIN ================= */}
 
       <Route path="/admin/login" element={<AdminLogin />} />
@@ -185,6 +196,15 @@ function App() {
         element={
           <TechnicianProtectedRoute>
             <TechnicianProfile />
+          </TechnicianProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/technician/settings"
+        element={
+          <TechnicianProtectedRoute>
+            <TechnicianSettings />
           </TechnicianProtectedRoute>
         }
       />

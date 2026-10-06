@@ -1,0 +1,474 @@
+/*
+ * settings-page.css
+ * Styles for the shared Settings page. Every class starts with "st-" so
+ * nothing here can clash with the rest of the app. The page's outer width
+ * and height come from the wrapper classes the role passes in
+ * (profile-page / tech-page ...), exactly like every other page.
+ */
+
+.st-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  padding: 8px 0 48px;
+}
+
+/* ---- title ---- */
+.st-title h1 {
+  margin: 4px 0 6px;
+  font-size: 2.1rem;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.st-title p:last-child {
+  margin: 0;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--color-primary, #ff5a1f);
+}
+
+/* ---- cards ---- */
+.st-card {
+  background: var(--color-surface, #ffffff);
+  border: 1px solid var(--color-border, #ececf0);
+  border-radius: 20px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+.st-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-card__head h2 {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text, #1f2430);
+}
+
+.st-loading {
+  text-align: center;
+  color: var(--color-text-muted, #6b7280);
+}
+
+/* ---- identity strip ---- */
+.st-identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 28px;
+}
+
+.st-identity__avatar {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary, #ff5a1f);
+  color: #ffffff;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.st-identity__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.st-identity__text strong {
+  font-size: 1.05rem;
+}
+
+.st-identity__text span {
+  color: var(--color-text-muted, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- two-column grid ---- */
+.st-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+/* ---- forms ---- */
+.st-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.st-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.st-field__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.st-field__control {
+  position: relative;
+  display: block;
+}
+
+.st-field__control input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 48px;
+  padding: 0 46px 0 14px;
+  border: 1px solid var(--color-border, #dcdee6);
+  border-radius: 12px;
+  background: var(--color-surface, #ffffff);
+  color: inherit;
+  font: inherit;
+}
+
+.st-field__control input:focus {
+  outline: none;
+  border-color: var(--color-primary, #ff5a1f);
+  box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.16);
+}
+
+.st-field__eye {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 46px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted, #6b7280);
+  cursor: pointer;
+}
+
+.st-field__hint,
+.st-hint {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-hint {
+  margin: 12px 0 0;
+}
+
+/* ---- buttons ---- */
+.st-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.st-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.st-btn--primary {
+  background: var(--color-primary, #ff5a1f);
+  color: #ffffff;
+}
+
+.st-btn--primary:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+.st-btn--ghost {
+  background: transparent;
+  border-color: var(--color-border, #dcdee6);
+  color: inherit;
+}
+
+.st-btn--ghost:hover:not(:disabled) {
+  background: var(--color-hover, #f4f5f8);
+}
+
+.st-btn--danger {
+  background: #d92d20;
+  color: #ffffff;
+}
+
+.st-btn--danger-outline {
+  background: transparent;
+  border-color: #f0b4af;
+  color: #d92d20;
+}
+
+.st-btn--danger-outline:hover {
+  background: rgba(217, 45, 32, 0.07);
+}
+
+/* ---- messages ---- */
+.st-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.st-msg--error {
+  background: rgba(217, 45, 32, 0.08);
+  color: #b42318;
+}
+
+.st-msg--success {
+  background: rgba(18, 140, 80, 0.1);
+  color: #0e7a45;
+}
+
+.st-note {
+  margin: 14px 0 0;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+/* ---- toggle rows ---- */
+.st-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.st-row__text strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.st-row__text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-switch {
+  position: relative;
+  flex: none;
+  width: 50px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #cfd2da;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.st-switch.is-on {
+  background: var(--color-primary, #ff5a1f);
+}
+
+.st-switch:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.st-switch:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.28);
+}
+
+.st-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms ease;
+}
+
+.st-switch.is-on .st-switch__thumb {
+  transform: translateX(22px);
+}
+
+/* ---- facts (label / value pairs) ---- */
+.st-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0 0;
+}
+
+.st-facts div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.st-facts dt {
+  font-size: 0.8rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-facts dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.st-status {
+  color: #0e7a45;
+}
+
+/* ---- account card ---- */
+.st-account {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.st-facts--stacked {
+  margin: 0;
+  grid-template-columns: repeat(3, auto);
+  gap: 16px 48px;
+}
+
+.st-danger {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #f3c6c2;
+  border-radius: 14px;
+  background: rgba(217, 45, 32, 0.03);
+}
+
+.st-danger__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.st-danger__head strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #d92d20;
+}
+
+.st-danger__head p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.st-danger__form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 420px;
+  margin-top: 18px;
+}
+
+.st-danger__actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  .st-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .st-account,
+  .st-danger__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .st-facts--stacked {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .st-card {
+    padding: 20px;
+  }
+
+  .st-identity {
+    flex-wrap: wrap;
+  }
+
+  .st-title h1 {
+    font-size: 1.75rem;
+  }
+
+  .st-row {
+    align-items: flex-start;
+  }
+
+  .st-facts {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- dark mode (follows the app's html[data-theme="dark"] switch) ---- */
+html[data-theme="dark"] .st-card {
+  background: var(--color-surface, #1c2030);
+  border-color: var(--color-border, #2d3348);
+}
+
+html[data-theme="dark"] .st-card__head h2 {
+  color: var(--color-text, #eef0f6);
+}
+
+html[data-theme="dark"] .st-field__control input {
+  background: var(--color-surface, #1c2030);
+  border-color: var(--color-border, #2d3348);
+}
+
+html[data-theme="dark"] .st-btn--ghost {
+  border-color: var(--color-border, #2d3348);
+}
+
+html[data-theme="dark"] .st-btn--ghost:hover:not(:disabled) {
+  background: var(--color-hover, #262b40);
+}
+
+html[data-theme="dark"] .st-danger {
+  border-color: rgba(217, 45, 32, 0.45);
+  background: rgba(217, 45, 32, 0.07);
+}

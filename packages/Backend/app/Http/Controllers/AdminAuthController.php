@@ -5,16 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-/**
- * AdminAuthController
- * --------------------
- * Deliberately simple: one fixed admin account defined in .env
- * (ADMIN_EMAIL / ADMIN_PASSWORD), checked on login and tracked via PHP
- * session (not Sanctum tokens — no "admins" DB table needed for this
- * project's scope). This is intentionally separate from AuthController
- * (which handles customer register/login/OTP with Sanctum tokens) so a
- * customer session and an admin session never mix.
- */
+
 class AdminAuthController extends Controller
 {
     public function login(Request $request)

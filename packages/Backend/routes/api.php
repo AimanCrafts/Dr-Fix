@@ -12,6 +12,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\TechnicianAuthController;
 use App\Http\Controllers\TechnicianBookingController;
 use App\Http\Controllers\TechnicianDashboardController;
+use App\Http\Controllers\SettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,11 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::put('/profile', [AuthController::class, 'updateProfile']);
+
+    Route::get('/settings', [SettingsController::class, 'show']);
+    Route::put('/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
+    Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications']);
+    Route::post('/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
 
     Route::get('/addresses', [AddressController::class, 'index']);
     Route::post('/addresses', [AddressController::class, 'store']);
@@ -88,6 +94,10 @@ Route::middleware('jwt.auth:provider')->group(function () {
     Route::get('/technician/me', [TechnicianAuthController::class, 'me']);
     Route::post('/technician/logout', [TechnicianAuthController::class, 'logout']);
     Route::put('/technician/profile', [TechnicianAuthController::class, 'updateProfile']);
+
+    Route::get('/technician/settings', [SettingsController::class, 'show']);
+    Route::put('/technician/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
+    Route::post('/technician/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
     Route::post('/technician/availability', [TechnicianAuthController::class, 'availability']);
 
     Route::get('/technician/dashboard-summary', [TechnicianDashboardController::class, 'summary']);

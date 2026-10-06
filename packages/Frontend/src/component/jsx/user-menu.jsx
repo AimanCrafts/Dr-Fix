@@ -90,7 +90,7 @@ function UserMenu({
       <button
         ref={triggerRef}
         type="button"
-        className="avatar-placeholder avatar-placeholder--button"
+        className="um__trigger"
         aria-label={ariaLabel}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -106,8 +106,14 @@ function UserMenu({
               {initial}
             </span>
             <span className="um__who">
-              <span className="um__name">{name}</span>
-              {subtitle && <span className="um__subtitle">{subtitle}</span>}
+              <span className="um__name" title={name}>
+                {name}
+              </span>
+              {subtitle && (
+                <span className="um__subtitle" title={subtitle}>
+                  {subtitle}
+                </span>
+              )}
             </span>
           </div>
 

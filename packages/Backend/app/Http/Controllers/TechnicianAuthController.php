@@ -94,6 +94,10 @@ class TechnicianAuthController extends Controller
             return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
+        if ($user->deactivated_at) {
+            return response()->json(['message' => 'This account has been deactivated.'], 403);
+        }
+
         $token = (new JwtService())->issueToken($user->id, 'provider');
 
         return response()->json([

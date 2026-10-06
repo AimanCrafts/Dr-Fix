@@ -7,9 +7,7 @@ import {
   CalendarDays,
   LayoutDashboard,
   MapPin,
-  Moon,
   Settings,
-  Sun,
   UserRound,
   Wallet,
 } from "lucide-react";
@@ -19,16 +17,12 @@ import "../css/header.css";
 import logo from "../../assets/logo.png";
 
 /*
- * Flip to true once the /settings and /technician/settings pages exist.
- * Until then the "Settings" item stays hidden so nobody lands on a blank page.
+ * Settings pages exist (/settings and /technician/settings), so the
+ * "Settings" item is shown in the avatar menu. Set to false to hide it.
  */
-const SETTINGS_ENABLED = false;
+const SETTINGS_ENABLED = true;
 
-function Header({
-  variant = "marketing",
-  isDarkMode = false,
-  onToggleDarkMode = () => {},
-}) {
+function Header({ variant = "marketing" }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -256,18 +250,6 @@ function Header({
             </nav>
 
             <div className="site-header__actions">
-              <button
-                type="button"
-                className="site-header__icon-button"
-                onClick={onToggleDarkMode}
-                aria-label={
-                  isDarkMode ? "Switch to light mode" : "Switch to dark mode"
-                }
-                title={isDarkMode ? "Light mode" : "Dark mode"}
-              >
-                {isDarkMode ? <Moon size={18} /> : <Sun size={18} />}
-              </button>
-
               <button
                 type="button"
                 className="site-header__icon-button"

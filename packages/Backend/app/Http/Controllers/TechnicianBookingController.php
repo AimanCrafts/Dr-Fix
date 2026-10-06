@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Services\BookingNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -84,6 +85,8 @@ class TechnicianBookingController extends Controller
             ], 409);
         }
 
+        BookingNotifier::customer($id, 'accepted');
+
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
     }
 
@@ -159,6 +162,8 @@ class TechnicianBookingController extends Controller
                 'message' => 'This job cannot be completed before the service is started.',
             ], 422);
         }
+
+        BookingNotifier::customer($id, 'completed');
 
         return response()->json(Booking::with('customer:id,name,phone')->find($id));
     }
