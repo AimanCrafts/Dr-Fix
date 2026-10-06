@@ -1,0 +1,183 @@
+/*
+ * user-menu.css
+ * Avatar dropdown shared by the client and technician headers.
+ * Every class is prefixed "um" so nothing here can clash with header.css.
+ * Colours read the app's existing CSS variables when they exist and fall
+ * back to neutral values otherwise; dark mode follows the same
+ * html[data-theme="dark"] switch the home page already uses.
+ */
+
+.um {
+  position: relative;
+}
+
+.um__panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+  width: 272px;
+  max-width: calc(100vw - 24px);
+  padding: 6px;
+  background: var(--color-surface, #ffffff);
+  color: var(--color-text, #1f2430);
+  border: 1px solid var(--color-border, #e6e8ee);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(20, 24, 40, 0.14);
+  transform-origin: top right;
+  animation: um-open 140ms ease-out;
+}
+
+@keyframes um-open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.um__identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px 14px;
+  border-bottom: 1px solid var(--color-border, #e6e8ee);
+}
+
+.um__avatar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary, #f26b21);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.um__who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.um__name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.um__subtitle {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  color: var(--color-text-muted, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.um__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+}
+
+.um__group--last {
+  border-top: 1px solid var(--color-border, #e6e8ee);
+  padding-bottom: 2px;
+}
+
+.um__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.um__item svg {
+  flex: none;
+  color: var(--color-text-muted, #6b7280);
+}
+
+.um__item:hover,
+.um__item:focus-visible {
+  background: var(--color-hover, #f3f4f8);
+  outline: none;
+}
+
+.um__item:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-primary, #f26b21) inset;
+}
+
+.um__item.is-current {
+  font-weight: 600;
+  background: rgba(242, 107, 33, 0.1);
+}
+
+.um__item.is-current svg {
+  color: var(--color-primary, #f26b21);
+}
+
+.um__item--danger,
+.um__item--danger svg {
+  color: #d92d20;
+}
+
+.um__item--danger:hover,
+.um__item--danger:focus-visible {
+  background: rgba(217, 45, 32, 0.08);
+}
+
+/* ---- dark mode ---- */
+html[data-theme="dark"] .um__panel {
+  background: var(--color-surface, #1c2030);
+  color: var(--color-text, #eef0f6);
+  border-color: var(--color-border, #2d3348);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="dark"] .um__identity,
+html[data-theme="dark"] .um__group--last {
+  border-color: var(--color-border, #2d3348);
+}
+
+html[data-theme="dark"] .um__subtitle,
+html[data-theme="dark"] .um__item svg {
+  color: var(--color-text-muted, #9aa3b8);
+}
+
+html[data-theme="dark"] .um__item:hover,
+html[data-theme="dark"] .um__item:focus-visible {
+  background: var(--color-hover, #262b40);
+}
+
+html[data-theme="dark"] .um__item--danger,
+html[data-theme="dark"] .um__item--danger svg {
+  color: #ff6b61;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .um__panel {
+    animation: none;
+  }
+}
