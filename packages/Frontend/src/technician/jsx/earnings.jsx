@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "../../component/jsx/header.jsx";
 import { getTechnicianEarnings } from "../api/technician-dashboard-api";
 import "../css/earnings.css";
+import "../css/commission.css";
 
 function Earnings() {
   const [data, setData] = useState(null);
@@ -22,8 +23,7 @@ function Earnings() {
         <p className="tech-page__eyebrow">Financial overview</p>
         <h1>Earnings</h1>
         <p className="earnings-intro">
-          Your earnings are calculated from completed jobs recorded by the
-          backend.
+          What you keep from completed jobs, after the platform fee.
         </p>
         {error && <div className="tech-message">{error}</div>}
         {!data ? (
@@ -50,6 +50,27 @@ function Earnings() {
                 <strong>৳{data.total.toLocaleString()}</strong>
               </div>
             </section>
+            <section className="fee-breakdown" aria-label="Earnings breakdown">
+              <div>
+                <span>Customer payments</span>
+                <strong>৳{data.gross_total.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Platform fee</span>
+                <strong>−৳{data.fee_total.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>You keep</span>
+                <strong>৳{data.total.toLocaleString()}</strong>
+              </div>
+            </section>
+            <p className="fee-note fee-note--block">
+              Customers pay the listed price. Dr.-Fix keeps{" "}
+              {data.commission_rate}% of each completed job and the rest is
+              your earning. For cash jobs, the fee is settled with Dr.-Fix
+              separately.
+            </p>
+
             <section className="earnings-table-wrap">
               <h2>Completed Jobs</h2>
               {data.jobs.length === 0 ? (
@@ -67,7 +88,18 @@ function Earnings() {
                           ? new Date(job.completed_at).toLocaleDateString()
                           : job.date_label}
                       </span>
-                      <strong>৳{Number(job.price).toLocaleString()}</strong>
+                      <div className="earning-amount">
+                        <strong>
+                          ৳
+                          {Number(
+                            job.commission?.earning ?? job.price,
+                          ).toLocaleString()}
+                        </strong>
+                        <span className="fee-note">
+                          ৳{Number(job.price).toLocaleString()} − ৳
+                          {Number(job.commission?.fee ?? 0).toLocaleString()} fee
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

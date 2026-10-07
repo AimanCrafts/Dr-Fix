@@ -13,7 +13,7 @@ class ReviewController extends Controller
     public function recent()
     {
         $reviews = Review::with([
-            'technician:id,name,service_category',
+            'technician:id,name,service_category,work_area',
             'booking:id,address',
         ])
             ->whereNotNull('technician_id')
@@ -23,7 +23,32 @@ class ReviewController extends Controller
                 'id', 'booking_id', 'technician_id', 'rating', 'review', 'created_at',
             ]);
 
+        // This endpoint is public. Never return a customer's full address -
+        // only a coarse area (or the technician's work area as a fallback).
+        $reviews->each(function ($review) {
+            if ($review->booking) {
+                $review->booking->address = self::coarseArea(
+                    $review->booking->address,
+                    $review->technician?->work_area
+                );
+            }
+        });
+
         return response()->json($reviews);
+    }
+
+    private static function coarseArea(?string $address, ?string $fallback): string
+    {
+        if ($address) {
+            $parts = array_map('trim', explode(',', $address));
+            $last = end($parts);
+
+            if (count($parts) > 1 && $last !== '' && mb_strlen($last) <= 30 && ! preg_match('/\d/', $last)) {
+                return $last;
+            }
+        }
+
+        return $fallback ?: 'Bangladesh';
     }
 
     public function store(Request $request, int $bookingId)

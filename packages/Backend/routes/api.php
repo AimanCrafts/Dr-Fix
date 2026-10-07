@@ -14,6 +14,8 @@ use App\Http\Controllers\TechnicianBookingController;
 use App\Http\Controllers\TechnicianDashboardController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TechnicianReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,6 +61,8 @@ Route::middleware('jwt.auth:customer')->group(function () {
 */
 Route::get('/public/reviews', [ReviewController::class, 'recent']);
 Route::get('/public/technicians', [AdminTechnicianController::class, 'publicIndex']);
+Route::get('/public/services', [ServiceController::class, 'publicIndex']);
+Route::get('/public/commission', [ServiceController::class, 'publicCommission']);
 
 /* Dummy CRUD operations for items using UsersController */
 Route::get('/items', [UsersController::class, 'index']);
@@ -85,6 +89,10 @@ Route::middleware('web')->group(function () {
         Route::get('/admin/technicians/{id}', [AdminTechnicianController::class, 'show']);
         Route::post('/admin/technicians/{id}/approve', [AdminTechnicianController::class, 'approve']);
         Route::post('/admin/technicians/{id}/reject', [AdminTechnicianController::class, 'reject']);
+
+        Route::get('/admin/services', [ServiceController::class, 'adminIndex']);
+        Route::put('/admin/services/{id}', [ServiceController::class, 'adminUpdate']);
+        Route::put('/admin/commission', [ServiceController::class, 'adminCommission']);
     });
 });
 
@@ -104,6 +112,8 @@ Route::middleware('jwt.auth:provider')->group(function () {
     Route::get('/technician/settings', [SettingsController::class, 'show']);
     Route::put('/technician/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
     Route::post('/technician/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
+
+    Route::get('/technician/reviews', [TechnicianReviewController::class, 'index']);
 
     Route::get('/technician/notifications', [NotificationController::class, 'index']);
     Route::get('/technician/notifications/unread-count', [NotificationController::class, 'unreadCount']);

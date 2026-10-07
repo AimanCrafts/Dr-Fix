@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   MapPin,
   Settings,
+  Star,
   UserRound,
   Wallet,
 } from "lucide-react";
@@ -89,7 +90,7 @@ function Header({ variant = "marketing" }) {
   const technicianMenuItems = [
     { label: "Overview", to: "/technician/dashboard", icon: LayoutDashboard },
     { label: "Job Requests", to: "/technician/job-requests", icon: Briefcase },
-    { label: "My Bookings", to: "/technician/my-bookings", icon: CalendarCheck },
+    { label: "Reviews", to: "/technician/reviews", icon: Star },
     { label: "Schedule", to: "/technician/schedule", icon: CalendarDays },
     { label: "Earnings", to: "/technician/earnings", icon: Wallet },
     { label: "Profile", to: "/technician/profile", icon: UserRound },
@@ -318,14 +319,12 @@ function Header({ variant = "marketing" }) {
               </Link>
 
               <Link
-                to="/technician/my-bookings"
+                to="/technician/reviews"
                 className={`pill-nav__item ${
-                  location.pathname === "/technician/my-bookings"
-                    ? "is-active"
-                    : ""
+                  location.pathname === "/technician/reviews" ? "is-active" : ""
                 }`}
               >
-                My Bookings
+                Reviews
               </Link>
 
               <Link

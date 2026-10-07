@@ -27,6 +27,7 @@ import TechnicianEarnings from "./technician/jsx/earnings";
 import TechnicianSchedule from "./technician/jsx/schedule";
 import TechnicianProfile from "./technician/jsx/profile";
 import TechnicianSettings from "./technician/jsx/settings";
+import TechnicianReviews from "./technician/jsx/reviews";
 import TechnicianMyBookings from "./technician/jsx/my-bookings";
 import ApplicationUnderReview from "./technician/jsx/application";
 import TechnicianProtectedRoute from "./technician/jsx/TechnicianProtectedRoute";
@@ -196,6 +197,15 @@ function App() {
         element={
           <TechnicianProtectedRoute>
             <TechnicianProfile />
+          </TechnicianProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/technician/reviews"
+        element={
+          <TechnicianProtectedRoute>
+            <TechnicianReviews />
           </TechnicianProtectedRoute>
         }
       />

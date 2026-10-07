@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   CheckCircle2,
   Clock3,
@@ -8,6 +9,7 @@ import {
   Wrench,
 } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
+import "../css/commission.css";
 import {
   listAvailableJobs,
   listMyJobs,
@@ -209,22 +211,40 @@ function TechnicianDashboard() {
             {
               label: "Total Earnings",
               value: summary ? formatMoney(summary.total_earnings) : "—",
-              change: "From completed jobs",
+              change: "After platform fee",
             },
             {
               label: "Rating",
-              value: summary?.rating ?? "—",
+              value:
+                summary?.rating != null ? summary.rating.toFixed(1) : "—",
               change: summary
-                ? `${summary.review_count} reviews`
+                ? `${summary.review_count} ${summary.review_count === 1 ? "review" : "reviews"} · View all`
                 : "Loading reviews",
+              to: "/technician/reviews",
             },
-          ].map((stat) => (
-            <div key={stat.label} className="stat-card">
-              <p className="stat-card__label">{stat.label}</p>
-              <p className="stat-card__value">{stat.value}</p>
-              <p className="stat-card__change">{stat.change}</p>
-            </div>
-          ))}
+          ].map((stat) => {
+            const content = (
+              <>
+                <p className="stat-card__label">{stat.label}</p>
+                <p className="stat-card__value">{stat.value}</p>
+                <p className="stat-card__change">{stat.change}</p>
+              </>
+            );
+
+            return stat.to ? (
+              <Link
+                key={stat.label}
+                to={stat.to}
+                className="stat-card stat-card--link"
+              >
+                {content}
+              </Link>
+            ) : (
+              <div key={stat.label} className="stat-card">
+                {content}
+              </div>
+            );
+          })}
         </section>
 
         {notice && (
@@ -289,8 +309,14 @@ function TechnicianDashboard() {
                   </div>
                   <div className="request-card__bottom">
                     <div>
-                      <span className="detail-label">Service amount</span>
-                      <strong>{formatMoney(job.price)}</strong>
+                      <span className="detail-label">You earn</span>
+                      <strong>
+                        {formatMoney(job.commission?.earning ?? job.price)}
+                      </strong>
+                      <span className="fee-note">
+                        Customer pays {formatMoney(job.price)} ·{" "}
+                        {job.commission?.rate ?? 0}% platform fee
+                      </span>
                     </div>
                     <button
                       type="button"
@@ -418,7 +444,9 @@ function TechnicianDashboard() {
                       </span>
                     </div>
                     <div>
-                      <strong>{formatMoney(job.price)}</strong>
+                      <strong>
+                        {formatMoney(job.commission?.earning ?? job.price)}
+                      </strong>
                       <span>{job.date_label}</span>
                     </div>
                     <span className="status-pill status-pill--completed">

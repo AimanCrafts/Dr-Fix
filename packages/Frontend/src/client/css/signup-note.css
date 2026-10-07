@@ -1,0 +1,10 @@
+/* shown on the technician sign-up form */
+.signup-form__note {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 90, 31, 0.07);
+  color: inherit;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

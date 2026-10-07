@@ -1,0 +1,40 @@
+/* checkout-date.css (loaded after checkout.css): date chips + calendar input */
+
+.date-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.pill-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.date-picker-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px dashed var(--color-border, #d4d7e0);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  color: var(--color-text-muted, #5d6472);
+}
+
+.date-picker-custom input {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.date-picker-custom input:focus {
+  outline: none;
+}
+
+.date-picker-custom:focus-within {
+  border-color: var(--color-primary, #ff5a1f);
+}

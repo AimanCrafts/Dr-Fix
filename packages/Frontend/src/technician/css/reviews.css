@@ -1,0 +1,160 @@
+/* reviews.css - technician Reviews page. All classes start with "rv-". */
+
+.rv-page h1 {
+  margin-bottom: 4px;
+}
+
+.rv-intro {
+  margin: 0 0 24px;
+  color: #7a808c;
+}
+
+.rv-summary {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) 1fr;
+  gap: 32px;
+  align-items: center;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  border: 1px solid #ececf0;
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.rv-summary__score {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.rv-summary__score strong {
+  font-size: 3rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.rv-summary__score span {
+  color: #7a808c;
+  font-size: 0.9rem;
+}
+
+.rv-stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.rv-stars svg {
+  color: #d6d9e0;
+  fill: #e6e8ee;
+}
+
+.rv-stars svg.is-on {
+  color: #f5a623;
+  fill: #f5a623;
+}
+
+.rv-summary__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rv-bar {
+  display: grid;
+  grid-template-columns: 52px 1fr 28px;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.85rem;
+  color: #5d6472;
+}
+
+.rv-bar > span:last-child {
+  text-align: right;
+}
+
+.rv-bar__track {
+  height: 8px;
+  border-radius: 999px;
+  background: #eef0f4;
+  overflow: hidden;
+}
+
+.rv-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #f5a623;
+}
+
+.rv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.rv-card {
+  padding: 20px 24px;
+  border: 1px solid #ececf0;
+  border-radius: 16px;
+  background: #ffffff;
+}
+
+.rv-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.rv-card__top > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rv-card__top span {
+  font-size: 0.82rem;
+  color: #7a808c;
+}
+
+.rv-card p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.rv-card__none {
+  color: #9aa0ad;
+  font-style: italic;
+}
+
+.rv-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 56px 24px;
+  border: 1px dashed #d9dce4;
+  border-radius: 20px;
+  text-align: center;
+  color: #7a808c;
+}
+
+.rv-empty h2 {
+  margin: 8px 0 0;
+  font-size: 1.15rem;
+  color: #1f2430;
+  font-weight: 500;
+}
+
+.rv-empty p {
+  margin: 0;
+  max-width: 360px;
+}
+
+@media (max-width: 720px) {
+  .rv-summary {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}

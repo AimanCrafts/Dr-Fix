@@ -1,0 +1,79 @@
+/* commission.css - platform-fee notes used across the technician pages */
+
+.fee-note {
+  display: block;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #7a808c;
+}
+
+.fee-note--block {
+  margin: 4px 0 24px;
+  font-size: 0.85rem;
+}
+
+.fee-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin: 20px 0 8px;
+  border: 1px solid #ececf0;
+  border-radius: 16px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.fee-breakdown > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  border-right: 1px solid #ececf0;
+}
+
+.fee-breakdown > div:last-child {
+  border-right: 0;
+}
+
+.fee-breakdown span {
+  font-size: 0.8rem;
+  color: #7a808c;
+}
+
+.fee-breakdown strong {
+  font-size: 1.15rem;
+}
+
+.earning-amount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+/* the Rating card on the dashboard is a link to the Reviews page */
+.stat-card--link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.stat-card--link:hover .stat-card__value {
+  color: var(--df-orange, #ff5a1f);
+}
+
+@media (max-width: 640px) {
+  .fee-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .fee-breakdown > div {
+    border-right: 0;
+    border-bottom: 1px solid #ececf0;
+  }
+
+  .fee-breakdown > div:last-child {
+    border-bottom: 0;
+  }
+}

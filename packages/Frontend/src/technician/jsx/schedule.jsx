@@ -4,6 +4,7 @@ import Header from "../../component/jsx/header.jsx";
 import { getTechnicianSchedule } from "../api/technician-dashboard-api";
 import { completeJob, startJob } from "../api/bookings";
 import "../css/schedule.css";
+import "../css/commission.css";
 
 const statusMeta = {
   accepted: {
@@ -95,6 +96,14 @@ function Schedule() {
                     </p>
                     <p>
                       <MapPin size={14} /> {job.address}
+                    </p>
+                    <p className="fee-note">
+                      You earn ৳
+                      {Number(
+                        job.commission?.earning ?? job.price ?? 0,
+                      ).toLocaleString()}{" "}
+                      (customer pays ৳{Number(job.price || 0).toLocaleString()},{" "}
+                      {job.commission?.rate ?? 0}% platform fee)
                     </p>
                   </div>
 

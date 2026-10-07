@@ -4,6 +4,7 @@ import { acceptJob, listAvailableJobs, rejectJob } from "../api/bookings";
 import { getCurrentTechnician } from "../api/auth";
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
 import "../css/job-requests.css";
+import "../css/commission.css";
 
 function JobRequests() {
   const [jobs, setJobs] = useState([]);
@@ -134,8 +135,16 @@ function JobRequests() {
                   )}
                 </div>
                 <div className="request-card__side">
-                  <strong>৳{Number(job.price || 0).toLocaleString()}</strong>
-                  <span>Service payout</span>
+                  <strong>
+                    ৳
+                    {Number(
+                      job.commission?.earning ?? job.price ?? 0,
+                    ).toLocaleString()}
+                  </strong>
+                  <span>You earn after the {job.commission?.rate ?? 0}% platform fee</span>
+                  <span className="fee-note">
+                    Customer pays ৳{Number(job.price || 0).toLocaleString()}
+                  </span>
                   <div className="request-card__actions">
                     <button
                       className="request-card__reject"

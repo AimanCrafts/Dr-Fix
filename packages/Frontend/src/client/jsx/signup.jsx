@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { registerUser } from "../api/auth";
 import { registerTechnician } from "../../technician/api/auth";
 import "../css/signup.css";
+import "../css/signup-note.css";
+import { getCommission } from "../api/services";
 import { Eye, EyeOff, Home, Wrench } from "lucide-react";
 /**
  * Signup
@@ -46,6 +48,15 @@ function Signup() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  // Shown to technicians so the platform fee is never a surprise.
+  const [commissionRate, setCommissionRate] = useState(null);
+
+  useEffect(() => {
+    getCommission()
+      .then(({ data }) => setCommissionRate(data.rate))
+      .catch(() => {});
+  }, []);
+
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -231,6 +242,15 @@ function Signup() {
           {role === "provider" && (
             <div className="signup-form__provider-fields">
               <p className="signup-form__section-label">Professional Details</p>
+
+              {commissionRate !== null && (
+                <p className="signup-form__note">
+                  Dr.-Fix keeps a {commissionRate}% platform fee from each
+                  completed job and you receive the remaining{" "}
+                  {Number((100 - commissionRate).toFixed(2))}%. You will see
+                  your exact earning on every job before you accept it.
+                </p>
+              )}
 
               <div className="signup-form__grid">
                 <label className="signup-field">

@@ -14,6 +14,7 @@ class Booking extends Model
         'price',
         'address',
         'date_label',
+        'scheduled_date',
         'time_slot',
         'instructions',
         'payment_method',
@@ -21,12 +22,17 @@ class Booking extends Model
         'accepted_at',
         'started_at',
         'completed_at',
+        'commission_rate',
+        'platform_fee',
+        'technician_earning',
     ];
 
     protected $casts = [
         'accepted_at' => 'datetime',
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
+        'scheduled_date' => 'date:Y-m-d',
+        'commission_rate' => 'float',
     ];
 
     public function customer()

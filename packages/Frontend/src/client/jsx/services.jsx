@@ -1,9 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../client/context/AuthContext.jsx";
 import Header from "../../component/jsx/header.jsx";
 import Footer from "../../component/jsx/footer.jsx";
 import "../css/services.css";
+import "../css/services-grid.css";
+import { listServices } from "../api/services";
 import {
   Zap,
   Droplets,
@@ -19,73 +21,31 @@ const CATEGORIES = [
     id: "electric",
     icon: Zap,
     name: "Electric Services",
-    tasks: [
-      { name: "Switch/Socket Repair", price: 300 },
-      { name: "Light Installation", price: 450 },
-      { name: "Ceiling Fan Installation", price: 500 },
-      { name: "MCB/Breaker Replacement", price: 650 },
-    ],
-    moreCount: 3,
   },
   {
     id: "plumbing",
     icon: Droplets,
     name: "Plumbing Services",
-    tasks: [
-      { name: "Tap/Faucet Repair", price: 350 },
-      { name: "Pipe Leak Fixing", price: 500 },
-      { name: "Drain Blockage Cleaning", price: 800 },
-      { name: "Toilet Repair", price: 900 },
-    ],
-    moreCount: 3,
   },
   {
-    id: "ac-repair",
+    id: "ac_repair",
     icon: Snowflake,
     name: "AC Repair",
-    tasks: [
-      { name: "AC General Service", price: 800 },
-      { name: "AC Gas Refill", price: 1200 },
-      { name: "AC Coil Cleaning", price: 900 },
-      { name: "AC Installation", price: 1500 },
-    ],
-    moreCount: 3,
   },
   {
     id: "carpentry",
     icon: Hammer,
     name: "Carpentry Services",
-    tasks: [
-      { name: "Door Repair", price: 600 },
-      { name: "Wardrobe Repair", price: 900 },
-      { name: "Custom Shelf Installation", price: 1000 },
-      { name: "Wood Polishing", price: 700 },
-    ],
-    moreCount: 3,
   },
   {
     id: "painting",
     icon: Paintbrush,
     name: "Painting Services",
-    tasks: [
-      { name: "Single Wall Painting", price: 600 },
-      { name: "Full Room Painting", price: 3500 },
-      { name: "Damp Wall Treatment", price: 900 },
-      { name: "Ceiling Painting", price: 800 },
-    ],
-    moreCount: 2,
   },
   {
     id: "cleaning",
     icon: Sparkles,
     name: "Cleaning Services",
-    tasks: [
-      { name: "Deep Home Cleaning", price: 1800 },
-      { name: "Bathroom Deep Clean", price: 700 },
-      { name: "Sofa/Carpet Cleaning", price: 900 },
-      { name: "Kitchen Deep Clean", price: 800 },
-    ],
-    moreCount: 2,
   },
 ];
 
@@ -93,9 +53,31 @@ function Services() {
   const { isLoggedIn } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
-  const [activeCategory, setActiveCategory] = useState(
-    initialSearch ? null : CATEGORIES[0].id,
+
+  // null = still loading. Prices come from the database, not from this file.
+  const [services, setServices] = useState(null);
+  const [loadError, setLoadError] = useState("");
+
+  // The chips jump to a card and highlight it; they no longer hide the others.
+  const [activeCategory, setActiveCategory] = useState(null);
+
+  useEffect(() => {
+    listServices()
+      .then(({ data }) => setServices(data))
+      .catch(() => setLoadError("Couldn't load services. Please try again."));
+  }, []);
+
+  const categories = useMemo(
+    () =>
+      CATEGORIES.map((cat) => ({
+        ...cat,
+        tasks: (services || [])
+          .filter((service) => service.category === cat.id)
+          .map((service) => ({ name: service.name, price: service.price })),
+      })).filter((cat) => cat.tasks.length > 0),
+    [services],
   );
+
   const [searchValue, setSearchValue] = useState(initialSearch);
 
   const handleChipClick = (id) => {
@@ -132,35 +114,32 @@ function Services() {
   const query = searchValue.trim().toLowerCase();
 
   const visibleCategories = useMemo(() => {
-    // A selected category always means exactly one category card is shown.
-    if (!query && activeCategory) {
-      return CATEGORIES.filter((cat) => cat.id === activeCategory);
-    }
+    if (!query) return categories;
 
-    if (!query) return CATEGORIES;
+    return categories
+      .map((cat) => {
+        const categoryMatches =
+          cat.id.includes(query) ||
+          cat.name.toLowerCase().includes(query) ||
+          cat.name
+            .replace(/ services?/i, "")
+            .toLowerCase()
+            .includes(query);
 
-    return CATEGORIES.map((cat) => {
-      const categoryMatches =
-        cat.id.includes(query) ||
-        cat.name.toLowerCase().includes(query) ||
-        cat.name
-          .replace(/ services?/i, "")
-          .toLowerCase()
-          .includes(query);
+        const matchingTasks = categoryMatches
+          ? cat.tasks
+          : cat.tasks.filter((task) => task.name.toLowerCase().includes(query));
 
-      const matchingTasks = categoryMatches
-        ? cat.tasks
-        : cat.tasks.filter((task) => task.name.toLowerCase().includes(query));
-
-      return { ...cat, tasks: matchingTasks };
-    }).filter((cat) => cat.tasks.length > 0);
-  }, [activeCategory, query]);
+        return { ...cat, tasks: matchingTasks };
+      })
+      .filter((cat) => cat.tasks.length > 0);
+  }, [categories, query]);
 
   const hasResults = visibleCategories.length > 0;
 
   return (
     <div className="services-page">
-      <Header variant={isLoggedIn ? "app" : "marketing"} />
+      <Header variant={isLoggedIn ? "client" : "marketing"} />
 
       <div className="services-page__intro">
         <h1>All Services</h1>
@@ -206,7 +185,17 @@ function Services() {
         })}
       </div>
 
-      {query && !hasResults && (
+      {loadError && (
+        <div className="services-search__empty" role="alert">
+          <p>{loadError}</p>
+        </div>
+      )}
+
+      {!loadError && services === null && (
+        <p className="services-search__result-count">Loading services...</p>
+      )}
+
+      {query && !hasResults && services !== null && (
         <div className="services-search__empty">
           <Search size={22} aria-hidden="true" />
           <p>No service found for &ldquo;{searchValue}&rdquo;.</p>
@@ -248,11 +237,6 @@ function Services() {
                 ))}
               </div>
 
-              {!query && cat.moreCount > 0 && (
-                <Link to={`/services/${cat.id}`} className="service-card__more">
-                  +{cat.moreCount} more services
-                </Link>
-              )}
             </section>
           );
         })}

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\PlatformSetting;
 use App\Services\BookingNotifier;
+use App\Services\CommissionService;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +46,8 @@ class TechnicianBookingController extends Controller
             ->latest()
             ->get();
 
+        CommissionService::attach($jobs);
+
         return response()->json($jobs);
     }
 
@@ -56,6 +60,8 @@ class TechnicianBookingController extends Controller
             ->with('customer:id,name,phone')
             ->latest()
             ->get();
+
+        CommissionService::attach($jobs);
 
         return response()->json($jobs);
     }
@@ -77,6 +83,7 @@ class TechnicianBookingController extends Controller
                 'status' => 'accepted',
                 'technician_id' => $technician->id,
                 'accepted_at' => now(),
+                'commission_rate' => PlatformSetting::commissionRate(),
                 'updated_at' => now(),
             ]);
 
@@ -151,6 +158,24 @@ class TechnicianBookingController extends Controller
     {
         $technician = $request->attributes->get('technician');
 
+        $row = DB::table('bookings')
+            ->where('id', $id)
+            ->where('technician_id', $technician->id)
+            ->where('status', 'in_progress')
+            ->first();
+
+        if (! $row) {
+            return response()->json([
+                'message' => 'This job cannot be completed before the service is started.',
+            ], 422);
+        }
+
+        // Use the rate agreed when the job was accepted (fall back to today's).
+        $rate = $row->commission_rate !== null
+            ? (float) $row->commission_rate
+            : PlatformSetting::commissionRate();
+        $split = CommissionService::split((int) $row->price, $rate);
+
         $affected = DB::table('bookings')
             ->where('id', $id)
             ->where('technician_id', $technician->id)
@@ -158,6 +183,9 @@ class TechnicianBookingController extends Controller
             ->update([
                 'status' => 'completed',
                 'completed_at' => now(),
+                'commission_rate' => $rate,
+                'platform_fee' => $split['fee'],
+                'technician_earning' => $split['earning'],
                 'updated_at' => now(),
             ]);
 

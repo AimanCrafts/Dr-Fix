@@ -1,38 +1,53 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { createBooking } from "../api/bookings";
+import { listServices } from "../api/services";
 import { listAddresses, createAddress } from "../api/addresses";
 import "../css/checkout.css";
+import "../css/checkout-date.css";
 
-const PRICE_MAP = {
-  "Switch/Socket Repair": 300,
-  "Light Installation": 450,
-  "Ceiling Fan Installation": 500,
-  "MCB/Breaker Replacement": 650,
-  "Tap/Faucet Repair": 350,
-  "Pipe Leak Fixing": 500,
-  "Drain Blockage Cleaning": 800,
-  "Toilet Repair": 900,
-  "AC General Service": 800,
-  "AC Gas Refill": 1200,
-  "AC Coil Cleaning": 900,
-  "AC Installation": 1500,
-  "Door Repair": 600,
-  "Wardrobe Repair": 900,
-  "Custom Shelf Installation": 1000,
-  "Wood Polishing": 700,
+/*
+ * Time windows. They must NOT overlap and must match the list the backend
+ * accepts (BookingController::SLOTS). "start" is the opening hour.
+ */
+const SLOTS = [
+  { label: "8-11 AM", start: 8 },
+  { label: "11 AM-2 PM", start: 11 },
+  { label: "2-5 PM", start: 14 },
+  { label: "5-8 PM", start: 17 },
+];
+
+const MAX_DAYS_AHEAD = 30;
+
+// "YYYY-MM-DD" in the browser's local calendar (what <input type="date"> uses).
+const toIso = (date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+const fromIso = (iso) => {
+  const [year, month, day] = iso.split("-").map(Number);
+  return new Date(year, month - 1, day);
 };
 
-const DATE_OPTIONS = ["Today", "Tomorrow", "Pick a Date"];
-const TIME_SLOTS = [
-  "8-11 AM",
-  "11 AM-2 PM",
-  "12-3 PM",
-  "3-6 PM",
-  "4-7 PM",
-  "7-10 PM",
-];
+const addDays = (date, days) => {
+  const copy = new Date(date);
+  copy.setDate(copy.getDate() + days);
+  return copy;
+};
+
+const prettyDate = (iso) =>
+  fromIso(iso).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+
+// Same-day jobs need at least one hour of notice.
+const slotAvailable = (iso, slot, now) => {
+  if (!slot) return false;
+  if (iso !== toIso(now)) return true;
+  return now.getHours() + now.getMinutes() / 60 < slot.start - 1;
+};
 
 const PAYMENT_METHODS = [
   {
@@ -48,16 +63,45 @@ function Checkout() {
   const navigate = useNavigate();
 
   const serviceName = searchParams.get("service") || "AC Gas Refill";
-  const serviceCategory = searchParams.get("category") || "electric";
-  const price = PRICE_MAP[serviceName] || 1000;
+
+  // The price comes from the server (services table), never from this file.
+  const [services, setServices] = useState(null);
+  const service = services?.find((item) => item.name === serviceName) || null;
+  const price = service ? service.price : null;
+  const priceText = price !== null ? price.toLocaleString() : "...";
+
+  useEffect(() => {
+    listServices()
+      .then(({ data }) => setServices(data))
+      .catch(() => setServices([]));
+  }, []);
+
+  const now = useMemo(() => new Date(), []);
+  const todayIso = toIso(now);
+  const maxIso = toIso(addDays(now, MAX_DAYS_AHEAD));
+  const todayHasSlots = SLOTS.some((slot) => slotAvailable(todayIso, slot, now));
+
+  const dayOptions = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, index) => {
+        const date = addDays(now, index);
+        const iso = toIso(date);
+        const label =
+          index === 0 ? "Today" : index === 1 ? "Tomorrow" : prettyDate(iso);
+        return { iso, label };
+      }),
+    [now],
+  );
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newAddress, setNewAddress] = useState({ label: "", detail: "" });
   const [addingAddress, setAddingAddress] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("Today");
-  const [selectedSlot, setSelectedSlot] = useState(TIME_SLOTS[2]);
+  const [selectedDate, setSelectedDate] = useState(
+    todayHasSlots ? todayIso : toIso(addDays(now, 1)),
+  );
+  const [selectedSlot, setSelectedSlot] = useState("");
   const [instructions, setInstructions] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("cash");
   const [submitting, setSubmitting] = useState(false);
@@ -72,6 +116,24 @@ function Checkout() {
       })
       .catch(() => setAddresses([]));
   }, []);
+
+  useEffect(() => {
+    setSelectedSlot((current) => {
+      const stillOk = SLOTS.find(
+        (slot) => slot.label === current && slotAvailable(selectedDate, slot, now),
+      );
+      if (stillOk) return current;
+      return (
+        SLOTS.find((slot) => slotAvailable(selectedDate, slot, now))?.label || ""
+      );
+    });
+  }, [selectedDate, now]);
+
+  const handleCustomDate = (iso) => {
+    if (!iso || iso < todayIso || iso > maxIso) return;
+    if (iso === todayIso && !todayHasSlots) return;
+    setSelectedDate(iso);
+  };
 
   const handleAddAddress = async (e) => {
     e.preventDefault();
@@ -103,14 +165,17 @@ function Checkout() {
       return;
     }
 
+    if (!selectedSlot) {
+      setError("Please choose a time slot.");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const { data: booking } = await createBooking({
-        service_category: serviceCategory,
         service_name: serviceName,
-        price,
         address: addressDetail,
-        date_label: selectedDate,
+        scheduled_date: selectedDate,
         time_slot: selectedSlot,
         instructions: instructions || null,
         payment_method: selectedPayment,
@@ -119,7 +184,7 @@ function Checkout() {
       navigate(
         `/booking-confirmed?bookingId=${booking.id}&service=${encodeURIComponent(
           serviceName,
-        )}&date=${encodeURIComponent(selectedDate)}&slot=${encodeURIComponent(selectedSlot)}`,
+        )}&date=${encodeURIComponent(selectedDate === todayIso ? "Today" : prettyDate(selectedDate))}&slot=${encodeURIComponent(selectedSlot)}`,
       );
     } catch (err) {
       setError(
@@ -130,6 +195,27 @@ function Checkout() {
       setSubmitting(false);
     }
   };
+
+  if (services && !service) {
+    return (
+      <div className="checkout-page">
+        <Header variant="app" />
+        <div className="checkout-container">
+          <div className="checkout-main">
+            <div className="card selected-service">
+              <div className="selected-service__text">
+                <h2>This service isn&apos;t available</h2>
+                <p>It may have been removed or hidden. Please pick another one.</p>
+              </div>
+              <div className="selected-service__price">
+                <Link to="/services">Browse services</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="checkout-page">
@@ -144,7 +230,7 @@ function Checkout() {
               <p>Fixed price, no hidden charges</p>
             </div>
             <div className="selected-service__price">
-              <span>৳{price.toLocaleString()}</span>
+              <span>৳{priceText}</span>
               <Link to="/services">Change Service</Link>
             </div>
           </div>
@@ -229,28 +315,56 @@ function Checkout() {
           <section className="checkout-section">
             <h3>2. Choose Date &amp; Time</h3>
             <div className="date-options">
-              {DATE_OPTIONS.map((date) => (
-                <button
-                  key={date}
-                  type="button"
-                  className={`pill-option ${selectedDate === date ? "is-selected" : ""}`}
-                  onClick={() => setSelectedDate(date)}
-                >
-                  {date}
+              {dayOptions.map((day) => {
+                const disabled = day.iso === todayIso && !todayHasSlots;
+                return (
+                  <button
+                    key={day.iso}
+                    type="button"
+                    disabled={disabled}
+                    title={disabled ? "No slots left today" : undefined}
+                    className={`pill-option ${selectedDate === day.iso ? "is-selected" : ""}`}
+                    onClick={() => setSelectedDate(day.iso)}
+                  >
+                    {day.label}
+                  </button>
+                );
+              })}
+
+              {!dayOptions.some((day) => day.iso === selectedDate) && (
+                <button type="button" className="pill-option is-selected">
+                  {prettyDate(selectedDate)}
                 </button>
-              ))}
+              )}
+
+              <label className="date-picker-custom">
+                <span>Other date</span>
+                <input
+                  type="date"
+                  min={todayIso}
+                  max={maxIso}
+                  value={selectedDate}
+                  onChange={(e) => handleCustomDate(e.target.value)}
+                />
+              </label>
             </div>
+
             <div className="slot-options">
-              {TIME_SLOTS.map((slot) => (
-                <button
-                  key={slot}
-                  type="button"
-                  className={`pill-option ${selectedSlot === slot ? "is-selected" : ""}`}
-                  onClick={() => setSelectedSlot(slot)}
-                >
-                  {slot}
-                </button>
-              ))}
+              {SLOTS.map((slot) => {
+                const available = slotAvailable(selectedDate, slot, now);
+                return (
+                  <button
+                    key={slot.label}
+                    type="button"
+                    disabled={!available}
+                    title={available ? undefined : "This time has passed"}
+                    className={`pill-option ${selectedSlot === slot.label ? "is-selected" : ""}`}
+                    onClick={() => setSelectedSlot(slot.label)}
+                  >
+                    {slot.label}
+                  </button>
+                );
+              })}
             </div>
           </section>
 
@@ -298,7 +412,7 @@ function Checkout() {
             <h3>Order Summary</h3>
             <div className="order-summary__row">
               <span>{serviceName}</span>
-              <span>৳{price.toLocaleString()}</span>
+              <span>৳{priceText}</span>
             </div>
             <div className="order-summary__row">
               <span>Visit Charge</span>
@@ -307,13 +421,13 @@ function Checkout() {
             <div className="order-summary__divider" />
             <div className="order-summary__row order-summary__row--total">
               <span>Total</span>
-              <span>৳{price.toLocaleString()}</span>
+              <span>৳{priceText}</span>
             </div>
             <button
               type="button"
               className="btn btn--primary btn--full"
               onClick={handleConfirm}
-              disabled={submitting}
+              disabled={submitting || price === null || !selectedSlot}
             >
               {submitting ? "Booking..." : "Confirm Booking"}
             </button>

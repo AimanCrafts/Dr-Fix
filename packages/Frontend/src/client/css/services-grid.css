@@ -1,0 +1,25 @@
+/*
+ * services-grid.css (loaded after services.css)
+ * Shows ALL category cards side by side so the page no longer looks
+ * half-empty. While searching, only the matching card(s) appear.
+ */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.services-grid .service-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  /* keep the chip-scroll from hiding a card under the sticky header */
+  scroll-margin-top: 96px;
+}
+
+@media (max-width: 900px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
