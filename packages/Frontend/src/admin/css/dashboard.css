@@ -54,7 +54,7 @@
 .admin-page-header h1 {
   margin: 0;
   font-family: var(--df-font-heading);
-  font-size: 30px;
+  font-size: 32px;
   line-height: 1.1;
   color: var(--df-heading);
 }

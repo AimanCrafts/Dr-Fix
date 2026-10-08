@@ -20,7 +20,7 @@
   margin: 0 0 13px;
   color: var(--df-heading);
   font-family: var(--df-font-heading);
-  font-size: clamp(38px, 5vw, 56px);
+  font-size: clamp(40px, 5vw, 58px);
   line-height: 1.08;
 }
 .df-faq-hero > p:last-child {

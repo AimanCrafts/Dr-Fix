@@ -20,7 +20,7 @@
   margin: 0 0 10px;
   color: var(--df-heading);
   font-family: var(--df-font-heading);
-  font-size: clamp(42px, 5vw, 62px);
+  font-size: clamp(40px, 5vw, 58px);
   line-height: 1.05;
 }
 .df-about-hero > p:last-child {

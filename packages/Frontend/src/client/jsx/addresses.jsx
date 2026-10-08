@@ -106,8 +106,6 @@ function Addresses() {
 
       <main className="addresses-main">
         <div className="addresses-heading">
-          <p className="addresses-eyebrow">Account</p>
-
           <h1>My Addresses</h1>
 
           <p>Manage the addresses you use for your service bookings.</p>

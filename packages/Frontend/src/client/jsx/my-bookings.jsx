@@ -85,7 +85,7 @@ function MyBookings() {
       <Header variant="client" />
 
       <main className="my-bookings-main">
-        <p className="my-bookings-eyebrow">Your services</p>
+        
 
         <h1>My Bookings</h1>
 

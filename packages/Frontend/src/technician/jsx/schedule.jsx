@@ -58,7 +58,6 @@ function Schedule() {
     <div className="tech-page">
       <Header variant="technician" />
       <main className="tech-page__main">
-        <p className="tech-page__eyebrow">YOUR WORKDAY</p>
         <h1>Schedule</h1>
         <p className="schedule-intro">
           Your accepted and in-progress services, ordered by booking time.

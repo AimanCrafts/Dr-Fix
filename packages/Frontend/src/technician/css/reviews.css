@@ -1,7 +1,11 @@
 /* reviews.css - technician Reviews page. All classes start with "rv-". */
 
 .rv-page h1 {
-  margin-bottom: 4px;
+  margin: 0 0 4px;
+  color: var(--df-heading);
+  font-family: var(--df-font-heading);
+  font-size: 32px;
+  line-height: 1.15;
 }
 
 .rv-intro {

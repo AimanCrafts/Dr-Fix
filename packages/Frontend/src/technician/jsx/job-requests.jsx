@@ -85,7 +85,7 @@ function JobRequests() {
       <main className="tech-page__main">
         <div className="tech-page__topline">
           <div>
-            <p className="tech-page__eyebrow">Technician workspace</p>
+            
             <h1>Job Requests</h1>
             <p>Review new service requests that match your service category.</p>
           </div>

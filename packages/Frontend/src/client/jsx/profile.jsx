@@ -61,7 +61,6 @@ function Profile() {
             {initial}
           </div>
           <div>
-            <p className="profile-eyebrow">ACCOUNT</p>
             <h1>My Profile</h1>
             <p>Manage your personal information and contact details.</p>
           </div>

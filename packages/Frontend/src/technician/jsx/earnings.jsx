@@ -20,7 +20,6 @@ function Earnings() {
     <div className="tech-page">
       <Header variant="technician" />
       <main className="tech-page__main earnings-page">
-        <p className="tech-page__eyebrow">Financial overview</p>
         <h1>Earnings</h1>
         <p className="earnings-intro">
           What you keep from completed jobs, after the platform fee.
@@ -66,8 +65,8 @@ function Earnings() {
             </section>
             <p className="fee-note fee-note--block">
               Customers pay the listed price. Dr.-Fix keeps{" "}
-              {data.commission_rate}% of each completed job and the rest is
-              your earning. For cash jobs, the fee is settled with Dr.-Fix
+              {data.commission_rate}% of each completed job and the rest is your
+              earning. For cash jobs, the fee is settled with Dr.-Fix
               separately.
             </p>
 
@@ -97,7 +96,8 @@ function Earnings() {
                         </strong>
                         <span className="fee-note">
                           ৳{Number(job.price).toLocaleString()} − ৳
-                          {Number(job.commission?.fee ?? 0).toLocaleString()} fee
+                          {Number(job.commission?.fee ?? 0).toLocaleString()}{" "}
+                          fee
                         </span>
                       </div>
                     </div>

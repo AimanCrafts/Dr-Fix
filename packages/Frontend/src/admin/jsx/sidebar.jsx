@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ClipboardCheck, Home, LogOut, Tag } from "lucide-react";
+import logo from "../../assets/logo.png";
 import { listTechnicians } from "../api/technicians";
 import "../css/sidebar.css";
 
@@ -76,7 +77,7 @@ function Sidebar() {
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar__logo">
-        <div className="logo-placeholder" aria-hidden="true" />
+        <img src={logo} alt="Dr.-Fix logo" className="admin-sidebar__logo-image" />
         <span>Dr.-Fix</span>
       </div>
 

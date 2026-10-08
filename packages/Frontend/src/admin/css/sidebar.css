@@ -20,17 +20,12 @@
   padding: 8px 10px 20px;
 }
 
-.logo-placeholder {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  border: 1.5px dashed var(--df-orange, #ff5a1f);
-  background: var(--df-orange-tint, #fff1eb);
-  display: grid;
-  place-items: center;
-  color: var(--df-orange, #ff5a1f);
-  font-size: 12px;
-  font-weight: 800;
+.admin-sidebar__logo-image {
+  width: 30px;
+  height: 30px;
+  display: block;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .admin-sidebar__logo span {

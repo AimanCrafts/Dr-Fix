@@ -172,7 +172,6 @@ function TechnicianDashboard() {
       <main className="tech-dashboard__main">
         <section className="tech-welcome">
           <div>
-            <p className="tech-eyebrow">TECHNICIAN DASHBOARD</p>
             <h1>Manage your service jobs</h1>
             <p>
               Accept requests, start the work when you are ready, and complete
@@ -215,8 +214,7 @@ function TechnicianDashboard() {
             },
             {
               label: "Rating",
-              value:
-                summary?.rating != null ? summary.rating.toFixed(1) : "—",
+              value: summary?.rating != null ? summary.rating.toFixed(1) : "—",
               change: summary
                 ? `${summary.review_count} ${summary.review_count === 1 ? "review" : "reviews"} · View all`
                 : "Loading reviews",
@@ -263,7 +261,6 @@ function TechnicianDashboard() {
         <section className="dashboard-section">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">NEW WORK</p>
               <h2>Incoming job requests</h2>
             </div>
             <span className="section-count">
@@ -338,7 +335,6 @@ function TechnicianDashboard() {
         <section className="dashboard-section">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">YOUR WORK</p>
               <h2>Active services</h2>
             </div>
             <span className="section-count">{activeJobs.length} active</span>
@@ -420,7 +416,6 @@ function TechnicianDashboard() {
         <section className="dashboard-section dashboard-section--last">
           <div className="section-heading">
             <div>
-              <p className="section-kicker">HISTORY</p>
               <h2>Recently completed</h2>
             </div>
           </div>

@@ -75,7 +75,6 @@ function Profile() {
     <div className="tech-page">
       <Header variant="technician" />
       <main className="tech-page__main">
-        <p className="tech-page__eyebrow">Account settings</p>
         <h1>Profile</h1>
         <p className="profile-intro">
           Keep your professional information up to date for customers and job
