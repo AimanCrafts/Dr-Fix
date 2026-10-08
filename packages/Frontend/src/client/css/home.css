@@ -152,6 +152,13 @@
   cursor: pointer;
   font-size: 16px;
   flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  transition: filter 0.15s ease;
+}
+
+.hero__search button:hover {
+  filter: brightness(0.94);
 }
 
 .hero__image {

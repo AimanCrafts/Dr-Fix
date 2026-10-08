@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\PlatformSetting;
+use App\Services\BookingExpiry;
 use App\Services\BookingNotifier;
 use App\Services\CommissionService;
 use App\Services\NotificationService;
@@ -27,6 +28,8 @@ class TechnicianBookingController extends Controller
     /** GET /api/technician/bookings/available */
     public function available(Request $request)
     {
+        BookingExpiry::sweep();
+
         $technician = $request->attributes->get('technician');
 
         if ($technician->approval_status !== 'approved') {

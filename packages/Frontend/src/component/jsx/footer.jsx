@@ -33,18 +33,16 @@ function Footer({ size = "full" }) {
       title: "Company",
       links: [
         ["About Dr.-Fix", "/about-dr-fix"],
-        ["Careers", "/careers"],
-        ["Become a Partner", "/become-a-partner"],
         ["Technician Login", "/technician/login"],
+        ["Terms of Service", "/terms"],
+        ["Privacy Policy", "/privacy"],
       ],
     },
     {
       title: "Customer",
       links: [
-        ["Help Center", "/help"],
         ["My Bookings", "/my-bookings"],
-        ["Pricing", "/pricing"],
-        ["Service Areas", "/service-areas"],
+        ["Account Settings", "/settings"],
         ["FAQ", "/faq"],
       ],
     },

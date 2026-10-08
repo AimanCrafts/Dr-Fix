@@ -316,7 +316,14 @@ function Signup() {
               onChange={updateField("agreed")}
             />
             <span>
-              I agree to <a href="/terms">Terms &amp; Conditions</a>
+              I agree to the{" "}
+              <a href="/terms" target="_blank" rel="noreferrer">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a href="/privacy" target="_blank" rel="noreferrer">
+                Privacy Policy
+              </a>
             </span>
           </label>
 

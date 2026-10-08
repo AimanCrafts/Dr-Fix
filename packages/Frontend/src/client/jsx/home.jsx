@@ -174,6 +174,16 @@ const TRUST_BADGES = [
 
 /* ---------------------------------------------------------------------- */
 
+// Categories that exist on the Services page (the others open the full list).
+const SERVICE_PAGE_CATEGORIES = [
+  "electric",
+  "plumbing",
+  "ac-repair",
+  "carpentry",
+  "painting",
+  "cleaning",
+];
+
 function Home() {
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -264,7 +274,7 @@ function Home() {
                 aria-label="What needs fixing?"
               />
               <button type="submit" aria-label="Search">
-                🔍
+                <Search size={20} strokeWidth={2.4} aria-hidden="true" />
               </button>
             </form>
           </div>
@@ -336,7 +346,11 @@ function Home() {
               <h3>{selectedCategory.name} Services</h3>
               <p>{selectedCategory.description}</p>
               <a
-                href={`/services/${selectedCategory.slug}`}
+                href={
+                  SERVICE_PAGE_CATEGORIES.includes(selectedCategory.slug)
+                    ? `/services?search=${encodeURIComponent(selectedCategory.name)}`
+                    : "/services"
+                }
                 className="link-arrow"
               >
                 Explore {selectedCategory.name} Services →

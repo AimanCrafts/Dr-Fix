@@ -19,6 +19,7 @@ import AdminLogin from "./admin/jsx/login";
 import AdminDashboard from "./admin/jsx/dashboard";
 import AdminProtectedRoute from "./admin/jsx/AdminProtectedRoute";
 import AdminApprovals from "./admin/jsx/approvals";
+import AdminServices from "./admin/jsx/services";
 
 import TechnicianLogin from "./technician/jsx/login";
 import TechnicianDashboard from "./technician/jsx/dashboard";
@@ -38,6 +39,8 @@ import HowItWorks from "./component/jsx/how-it-works";
 import ContactUs from "./component/jsx/contact-us";
 import AboutDrFix from "./component/jsx/about-dr-fix";
 import FAQ from "./component/jsx/faq";
+import Terms from "./component/jsx/terms";
+import Privacy from "./component/jsx/privacy";
 
 function App() {
   return (
@@ -55,6 +58,8 @@ function App() {
       <Route path="/about-dr-fix" element={<AboutDrFix />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/faq" element={<FAQ />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/privacy" element={<Privacy />} />
 
       {/* ================= CUSTOMER ================= */}
 
@@ -148,6 +153,15 @@ function App() {
         element={
           <AdminProtectedRoute>
             <AdminApprovals />
+          </AdminProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/services"
+        element={
+          <AdminProtectedRoute>
+            <AdminServices />
           </AdminProtectedRoute>
         }
       />

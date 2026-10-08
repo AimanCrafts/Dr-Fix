@@ -1,7 +1,8 @@
 /*
  * services-grid.css (loaded after services.css)
- * Shows ALL category cards side by side so the page no longer looks
- * half-empty. While searching, only the matching card(s) appear.
+ * All category cards sit side by side. The card keeps its own padding, so it
+ * must use border-box sizing and width:auto, otherwise "width:100%" plus
+ * padding pushes it past its grid cell (cards touched and overflowed).
  */
 .services-grid {
   display: grid;
@@ -11,11 +12,11 @@
 }
 
 .services-grid .service-card {
-  width: 100%;
+  box-sizing: border-box;
+  width: auto;
   max-width: none;
   margin: 0;
-  /* keep the chip-scroll from hiding a card under the sticky header */
-  scroll-margin-top: 96px;
+  min-width: 0;
 }
 
 @media (max-width: 900px) {

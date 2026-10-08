@@ -2,9 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { listMyBookings } from "../api/bookings";
+import CancelBooking from "./cancel-booking.jsx";
 import "../css/my-bookings.css";
 
-const activeStatuses = ["accepted", "in_progress"];
+// "pending" counts as active: the request is still live and can be cancelled.
+const activeStatuses = ["pending", "accepted", "in_progress"];
 
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
@@ -23,6 +25,11 @@ function MyBookings() {
         setLoading(false);
       });
   }, []);
+
+  const handleCancelled = (updated) =>
+    setBookings((prev) =>
+      prev.map((item) => (item.id === updated.id ? { ...item, ...updated } : item)),
+    );
 
   const active = useMemo(
     () => bookings.filter((booking) => activeStatuses.includes(booking.status)),
@@ -57,12 +64,18 @@ function MyBookings() {
         <strong>৳{Number(booking.price || 0).toLocaleString()}</strong>
 
         {activeStatuses.includes(booking.status) && (
-          <Link to={`/track-service/${booking.id}`}>Track Service</Link>
+          <Link to={`/booking-tracking?bookingId=${booking.id}`}>
+            Track Service
+          </Link>
         )}
 
         {booking.status === "completed" && (
-          <Link to={`/track-service/${booking.id}`}>View Details</Link>
+          <Link to={`/booking-tracking?bookingId=${booking.id}`}>
+            View Details
+          </Link>
         )}
+
+        <CancelBooking booking={booking} onCancelled={handleCancelled} />
       </div>
     </article>
   );

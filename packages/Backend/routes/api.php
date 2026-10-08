@@ -51,6 +51,7 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::get('/bookings/{id}', [BookingController::class, 'show']);
+    Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
     Route::post('/bookings/{bookingId}/review', [ReviewController::class, 'store']);
 });
 
@@ -63,6 +64,7 @@ Route::get('/public/reviews', [ReviewController::class, 'recent']);
 Route::get('/public/technicians', [AdminTechnicianController::class, 'publicIndex']);
 Route::get('/public/services', [ServiceController::class, 'publicIndex']);
 Route::get('/public/commission', [ServiceController::class, 'publicCommission']);
+Route::get('/public/availability', [ServiceController::class, 'availability']);
 
 /* Dummy CRUD operations for items using UsersController */
 Route::get('/items', [UsersController::class, 'index']);

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { getBooking, listMyBookings } from "../api/bookings";
+import CancelBooking from "./cancel-booking.jsx";
 import "../css/confirmation.css";
 import "../css/booking-tracking.css";
 
@@ -189,6 +190,10 @@ function BookingTracking() {
               <Link to="/client_dashboard" className="btn btn--outline">
                 Go to Dashboard
               </Link>
+            </div>
+
+            <div className="cancel-booking--center">
+              <CancelBooking booking={booking} onCancelled={setBooking} />
             </div>
           </>
         )}

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { createBooking } from "../api/bookings";
-import { listServices } from "../api/services";
+import { getAvailability, listServices } from "../api/services";
 import { listAddresses, createAddress } from "../api/addresses";
 import "../css/checkout.css";
 import "../css/checkout-date.css";
@@ -75,6 +75,16 @@ function Checkout() {
       .then(({ data }) => setServices(data))
       .catch(() => setServices([]));
   }, []);
+
+  // How many technicians can take this job right now (null = unknown yet).
+  const [technicianCount, setTechnicianCount] = useState(null);
+
+  useEffect(() => {
+    if (!service) return;
+    getAvailability(service.category)
+      .then(({ data }) => setTechnicianCount(data.technicians))
+      .catch(() => setTechnicianCount(null));
+  }, [service]);
 
   const now = useMemo(() => new Date(), []);
   const todayIso = toIso(now);
@@ -432,6 +442,14 @@ function Checkout() {
               {submitting ? "Booking..." : "Confirm Booking"}
             </button>
             {error && <p className="checkout-error">{error}</p>}
+            {technicianCount === 0 && (
+              <p className="checkout-notice" role="status">
+                No technician is available for this service right now. You can
+                still place the request. If nobody accepts it before your
+                chosen time, it is cancelled automatically and you will be
+                notified.
+              </p>
+            )}
             <p className="order-summary__note">
               🔒 Secure booking. Your details are protected.
             </p>

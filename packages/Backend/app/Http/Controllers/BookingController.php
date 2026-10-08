@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Service;
+use App\Services\BookingExpiry;
 use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -107,6 +108,8 @@ class BookingController extends Controller
     /** GET /api/bookings — the logged-in customer's own bookings. */
     public function index(Request $request)
     {
+        BookingExpiry::sweep();
+
         $customer = $request->attributes->get('customer');
 
         $bookings = Booking::where('customer_id', $customer->id)
@@ -123,6 +126,8 @@ class BookingController extends Controller
      */
     public function show(Request $request, int $id)
     {
+        BookingExpiry::sweep();
+
         $customer = $request->attributes->get('customer');
 
         $booking = Booking::where('customer_id', $customer->id)
@@ -134,5 +139,49 @@ class BookingController extends Controller
         }
 
         return response()->json($booking);
+    }
+
+    /**
+     * POST /api/bookings/{id}/cancel
+     *
+     * A customer can cancel while the booking is still pending or accepted
+     * (i.e. before the technician has started work). The conditional update
+     * means a job that was just started can't be cancelled by a stale click.
+     */
+    public function cancel(Request $request, int $id)
+    {
+        $customer = $request->attributes->get('customer');
+
+        $booking = Booking::where('customer_id', $customer->id)->find($id);
+
+        if (! $booking) {
+            return response()->json(['message' => 'Booking not found.'], 404);
+        }
+
+        $affected = Booking::where('id', $id)
+            ->where('customer_id', $customer->id)
+            ->whereIn('status', ['pending', 'accepted'])
+            ->update(['status' => 'cancelled', 'updated_at' => now()]);
+
+        if ($affected === 0) {
+            return response()->json([
+                'message' => 'This booking can no longer be cancelled.',
+            ], 422);
+        }
+
+        $fresh = Booking::with(['technician:id,name,phone', 'review'])->find($id);
+
+        // If a technician had already accepted it, let them know.
+        if ($fresh->technician_id) {
+            NotificationService::push(
+                $fresh->technician_id,
+                'booking_cancelled',
+                'Booking cancelled',
+                "The customer cancelled the {$fresh->service_name} job ({$fresh->date_label}, {$fresh->time_slot}).",
+                '/technician/schedule'
+            );
+        }
+
+        return response()->json($fresh);
     }
 }

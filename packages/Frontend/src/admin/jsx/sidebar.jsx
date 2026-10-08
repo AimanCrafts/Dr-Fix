@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ClipboardCheck, Home, LogOut } from "lucide-react";
+import { ClipboardCheck, Home, LogOut, Tag } from "lucide-react";
 import { listTechnicians } from "../api/technicians";
 import "../css/sidebar.css";
 
@@ -14,6 +14,11 @@ const MENU_ITEMS = [
     label: "Provider Approvals",
     icon: ClipboardCheck,
     path: "/admin/approvals",
+  },
+  {
+    label: "Services & Prices",
+    icon: Tag,
+    path: "/admin/services",
   },
 ];
 

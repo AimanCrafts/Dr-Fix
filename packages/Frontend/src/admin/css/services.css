@@ -1,0 +1,128 @@
+/* services.css - admin "Services & Prices" page. Classes start with "svc-". */
+
+.svc-commission,
+.svc-group {
+  margin-bottom: 20px;
+  padding: 20px 24px;
+}
+
+.svc-commission {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 24px;
+  align-items: center;
+}
+
+.svc-commission h2,
+.svc-group h2 {
+  margin: 0 0 4px;
+  font-size: 17px;
+}
+
+.svc-commission p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--df-body);
+}
+
+.svc-commission__control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.svc-commission > .svc-note {
+  grid-column: 1 / -1;
+}
+
+.svc-head,
+.svc-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.6fr) 150px 160px minmax(110px, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.svc-head {
+  padding: 10px 0 8px;
+  margin-top: 8px;
+  border-bottom: 1px solid var(--df-border);
+  font-size: 12px;
+  color: var(--df-body);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.svc-row {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--df-border);
+}
+
+.svc-row:last-child {
+  border-bottom: 0;
+}
+
+.svc-row.is-hidden .svc-row__name {
+  color: #9aa0ad;
+  text-decoration: line-through;
+}
+
+.svc-row__price {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 0 12px;
+  height: 38px;
+  border: 1px solid var(--df-border);
+  border-radius: 10px;
+  background: var(--df-surface);
+}
+
+.svc-row__price input {
+  width: 80px;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font: inherit;
+}
+
+.svc-row__price:focus-within {
+  border-color: var(--df-orange);
+}
+
+.svc-row__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.svc-row__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.svc-note {
+  font-size: 13px;
+}
+
+.svc-note--ok {
+  color: #0e7a45;
+}
+
+.svc-note--error {
+  color: #b42318;
+}
+
+@media (max-width: 900px) {
+  .svc-head {
+    display: none;
+  }
+
+  .svc-row,
+  .svc-commission {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,75 @@
+/* cancel-booking.css - used on My Bookings and the tracking page */
+
+.cancel-booking__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #d92d20;
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.cancel-booking__confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 280px;
+  padding: 14px 16px;
+  border: 1px solid #f3c6c2;
+  border-radius: 14px;
+  background: rgba(217, 45, 32, 0.04);
+  text-align: left;
+}
+
+.cancel-booking__confirm p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.cancel-booking__error {
+  color: #b42318;
+}
+
+.cancel-booking__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cancel-booking__yes,
+.cancel-booking__no {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.cancel-booking__yes {
+  border: 0;
+  background: #d92d20;
+  color: #ffffff;
+}
+
+.cancel-booking__no {
+  border: 1px solid #d9dce4;
+  background: transparent;
+  color: inherit;
+}
+
+.cancel-booking__yes:disabled,
+.cancel-booking__no:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-booking--center {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}

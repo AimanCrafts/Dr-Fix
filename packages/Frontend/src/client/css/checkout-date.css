@@ -38,3 +38,24 @@
 .date-picker-custom:focus-within {
   border-color: var(--color-primary, #ff5a1f);
 }
+
+/* four slots in one row (checkout.css defaults to three columns) */
+.slot-options {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 700px) {
+  .slot-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.checkout-notice {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(245, 166, 35, 0.12);
+  color: #7a4b00;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}

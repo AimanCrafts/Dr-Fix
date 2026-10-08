@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PlatformSetting;
 use App\Models\Service;
+use App\Models\User;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,6 +33,25 @@ class ServiceController extends Controller
     public function publicCommission()
     {
         return response()->json(['rate' => PlatformSetting::commissionRate()]);
+    }
+
+    /**
+     * GET /api/public/availability?category=electric
+     * How many approved, available technicians currently cover a category.
+     * Checkout uses this to warn when nobody can take the job right now.
+     */
+    public function availability(Request $request)
+    {
+        $category = (string) $request->query('category', '');
+
+        $count = User::where('role', 'provider')
+            ->where('approval_status', 'approved')
+            ->whereNull('deactivated_at')
+            ->where('is_available', true)
+            ->where('service_category', $category)
+            ->count();
+
+        return response()->json(['technicians' => $count]);
     }
 
     /** GET /api/admin/services */
