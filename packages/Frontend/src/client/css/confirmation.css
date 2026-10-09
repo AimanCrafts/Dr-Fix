@@ -160,3 +160,5 @@
     flex-direction: column;
   }
 }
+
+.confirmed-payment-note{display:flex;flex-direction:column;gap:6px;text-align:left;padding:14px 16px;margin:0 0 22px;border:1px solid #bfe8d2;border-radius:12px;background:#f0fbf5;color:#176b43;font-size:13px}.confirmed-payment-note span{overflow-wrap:anywhere;font-size:12px}.confirmed-payment-note small{color:#60816f;font-size:11px}

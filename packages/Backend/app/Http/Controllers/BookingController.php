@@ -41,7 +41,11 @@ class BookingController extends Controller
             'scheduled_date' => 'required|date_format:Y-m-d',
             'time_slot'      => 'required|string|in:' . implode(',', array_keys(self::SLOTS)),
             'instructions'   => 'nullable|string|max:250',
-            'payment_method' => 'required|string|in:cash',
+            'payment_method' => 'required|string|in:cash,online_bkash,online_nagad,online_rocket',
+            'payment_status' => 'nullable|string|in:unpaid,paid_demo',
+            'payment_provider' => 'nullable|string|max:30',
+            'payment_transaction_id' => 'nullable|string|max:40|unique:bookings,payment_transaction_id',
+            'payment_phone' => 'nullable|string|max:20',
         ]);
 
         if ($validator->fails()) {
@@ -96,6 +100,10 @@ class BookingController extends Controller
             'time_slot'         => $request->time_slot,
             'instructions'      => $request->instructions,
             'payment_method'    => $request->payment_method,
+            'payment_status'   => $request->payment_status ?? 'unpaid',
+            'payment_provider' => $request->payment_provider,
+            'payment_transaction_id' => $request->payment_transaction_id,
+            'payment_phone'    => $request->payment_phone,
             'status'            => 'pending',
         ]);
 

@@ -19,6 +19,9 @@ import "../css/confirmation.css";
 function BookingConfirmed() {
   const [searchParams] = useSearchParams();
   const bookingId = searchParams.get("bookingId");
+  const paymentStatus = searchParams.get("payment");
+  const paymentMethodLabel = searchParams.get("paymentMethod");
+  const paymentTransactionId = searchParams.get("transactionId");
   const serviceFallback = searchParams.get("service") || "Service";
   const dateFallback = searchParams.get("date") || "Today";
   const slotFallback = searchParams.get("slot") || "";
@@ -80,6 +83,18 @@ function BookingConfirmed() {
               ? "This service has been completed."
               : "We're matching you with a nearby available technician. This page updates automatically."}
         </p>
+        {paymentStatus === "success" && (
+          <div className="confirmed-payment-note">
+            <strong>Online payment successful · Demo</strong>
+            <span>
+              {paymentMethodLabel || "Mobile banking"} · Ref:{" "}
+              {paymentTransactionId || "Demo transaction"}
+            </span>
+            <small>
+              No real money was charged. This is a simulated payment.
+            </small>
+          </div>
+        )}
 
         <div className="card summary-card">
           <div className="summary-row summary-row--id">

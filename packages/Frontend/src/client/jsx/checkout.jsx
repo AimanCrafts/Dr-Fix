@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { createBooking } from "../api/bookings";
+import PaymentModal from "./PaymentModal.jsx";
 import { getAvailability, listServices } from "../api/services";
 import { listAddresses, createAddress } from "../api/addresses";
 import "../css/checkout.css";
@@ -50,12 +51,8 @@ const slotAvailable = (iso, slot, now) => {
 };
 
 const PAYMENT_METHODS = [
-  {
-    id: "cash",
-    label: "Cash on Service",
-    sub: "Pay when the job is done",
-    icon: "💵",
-  },
+  { id: "cash", label: "Cash", sub: "Pay when the service is complete" },
+  { id: "online", label: "Online Payment", sub: "bKash, Nagad or Rocket" },
 ];
 
 function Checkout() {
@@ -89,7 +86,9 @@ function Checkout() {
   const now = useMemo(() => new Date(), []);
   const todayIso = toIso(now);
   const maxIso = toIso(addDays(now, MAX_DAYS_AHEAD));
-  const todayHasSlots = SLOTS.some((slot) => slotAvailable(todayIso, slot, now));
+  const todayHasSlots = SLOTS.some((slot) =>
+    slotAvailable(todayIso, slot, now),
+  );
 
   const dayOptions = useMemo(
     () =>
@@ -115,6 +114,7 @@ function Checkout() {
   const [instructions, setInstructions] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("cash");
   const [submitting, setSubmitting] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -130,11 +130,13 @@ function Checkout() {
   useEffect(() => {
     setSelectedSlot((current) => {
       const stillOk = SLOTS.find(
-        (slot) => slot.label === current && slotAvailable(selectedDate, slot, now),
+        (slot) =>
+          slot.label === current && slotAvailable(selectedDate, slot, now),
       );
       if (stillOk) return current;
       return (
-        SLOTS.find((slot) => slotAvailable(selectedDate, slot, now))?.label || ""
+        SLOTS.find((slot) => slotAvailable(selectedDate, slot, now))?.label ||
+        ""
       );
     });
   }, [selectedDate, now]);
@@ -163,46 +165,60 @@ function Checkout() {
     }
   };
 
-  const handleConfirm = async () => {
+  const createBookingAfterPayment = async (paymentDetails = null) => {
+    const addressDetail = addresses.find((a) => a.id === selectedAddress)?.detail;
+    if (!addressDetail) throw new Error("Please select or add an address first.");
+    if (!selectedSlot) throw new Error("Please choose a time slot.");
+
+    const paymentMethod = paymentDetails?.method || "cash";
+    const { data: booking } = await createBooking({
+      service_name: serviceName,
+      address: addressDetail,
+      scheduled_date: selectedDate,
+      time_slot: selectedSlot,
+      instructions: instructions || null,
+      payment_method: paymentMethod,
+      payment_status: paymentDetails ? "paid_demo" : "unpaid",
+      payment_provider: paymentDetails?.provider || null,
+      payment_transaction_id: paymentDetails?.transactionId || null,
+      payment_phone: paymentDetails?.phone || null,
+    });
+
+    const query = new URLSearchParams({
+      bookingId: String(booking.id),
+      service: serviceName,
+      date: selectedDate === todayIso ? "Today" : prettyDate(selectedDate),
+      slot: selectedSlot,
+      ...(paymentDetails ? { payment: "success", paymentMethod: paymentDetails.provider, transactionId: paymentDetails.transactionId } : {}),
+    });
+    return `/booking-confirmed?${query.toString()}`;
+  };
+
+  const handleContinue = async () => {
     setError("");
+    const addressDetail = addresses.find((a) => a.id === selectedAddress)?.detail;
+    if (!addressDetail) { setError("Please select or add an address first."); return; }
+    if (!selectedSlot) { setError("Please choose a time slot."); return; }
 
-    const addressDetail = addresses.find(
-      (a) => a.id === selectedAddress,
-    )?.detail;
-
-    if (!addressDetail) {
-      setError("Please select or add an address first.");
-      return;
-    }
-
-    if (!selectedSlot) {
-      setError("Please choose a time slot.");
+    if (selectedPayment === "online") {
+      setShowPaymentModal(true);
       return;
     }
 
     setSubmitting(true);
     try {
-      const { data: booking } = await createBooking({
-        service_name: serviceName,
-        address: addressDetail,
-        scheduled_date: selectedDate,
-        time_slot: selectedSlot,
-        instructions: instructions || null,
-        payment_method: selectedPayment,
-      });
-
-      navigate(
-        `/booking-confirmed?bookingId=${booking.id}&service=${encodeURIComponent(
-          serviceName,
-        )}&date=${encodeURIComponent(selectedDate === todayIso ? "Today" : prettyDate(selectedDate))}&slot=${encodeURIComponent(selectedSlot)}`,
-      );
+      const confirmationPath = await createBookingAfterPayment();
+      navigate(confirmationPath);
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Couldn't create the booking. Please try again.",
-      );
-    } finally {
-      setSubmitting(false);
+      setError(err.response?.data?.message || err.message || "Couldn't create the booking. Please try again.");
+    } finally { setSubmitting(false); }
+  };
+
+  const handleMockPaymentSuccess = async (paymentDetails) => {
+    try {
+      return await createBookingAfterPayment(paymentDetails);
+    } catch (err) {
+      throw new Error(err.response?.data?.message || err.message || "Payment succeeded, but the booking could not be created. Please contact support before retrying.");
     }
   };
 
@@ -215,7 +231,9 @@ function Checkout() {
             <div className="card selected-service">
               <div className="selected-service__text">
                 <h2>This service isn&apos;t available</h2>
-                <p>It may have been removed or hidden. Please pick another one.</p>
+                <p>
+                  It may have been removed or hidden. Please pick another one.
+                </p>
               </div>
               <div className="selected-service__price">
                 <Link to="/services">Browse services</Link>
@@ -394,7 +412,7 @@ function Checkout() {
           {/* Payment method */}
           <section className="checkout-section">
             <h3>4. Payment Method</h3>
-            <div className="payment-options payment-options--single">
+            <div className="payment-options">
               {PAYMENT_METHODS.map((method) => (
                 <button
                   key={method.id}
@@ -405,7 +423,7 @@ function Checkout() {
                   onClick={() => setSelectedPayment(method.id)}
                 >
                   <span className="payment-option__radio" />
-                  <span className="payment-option__icon">{method.icon}</span>
+                  {method.id === "online" && <span className="payment-option__icon" aria-hidden="true">▣</span>}
                   <span>
                     <p className="payment-option__label">{method.label}</p>
                     <p className="payment-option__sub">{method.sub}</p>
@@ -436,26 +454,33 @@ function Checkout() {
             <button
               type="button"
               className="btn btn--primary btn--full"
-              onClick={handleConfirm}
+              onClick={handleContinue}
               disabled={submitting || price === null || !selectedSlot}
             >
-              {submitting ? "Booking..." : "Confirm Booking"}
+              {submitting ? "Processing..." : "Continue"}
             </button>
             {error && <p className="checkout-error">{error}</p>}
             {technicianCount === 0 && (
               <p className="checkout-notice" role="status">
                 No technician is available for this service right now. You can
-                still place the request. If nobody accepts it before your
-                chosen time, it is cancelled automatically and you will be
-                notified.
+                still place the request. If nobody accepts it before your chosen
+                time, it is cancelled automatically and you will be notified.
               </p>
             )}
             <p className="order-summary__note">
-              🔒 Secure booking. Your details are protected.
+              Secure booking. Your details are protected.
             </p>
           </div>
         </aside>
       </div>
+      {showPaymentModal && (
+        <PaymentModal
+          amount={price}
+          serviceName={serviceName}
+          onClose={() => setShowPaymentModal(false)}
+          onPaymentSuccess={handleMockPaymentSuccess}
+        />
+      )}
     </div>
   );
 }
