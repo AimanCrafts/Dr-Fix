@@ -46,7 +46,6 @@ function FAQ() {
       <Header variant="marketing" />
       <main>
         <section className="df-faq-hero">
-          <p className="df-faq-eyebrow">HELP CENTER</p>
           <h1>Frequently Asked Questions</h1>
           <p>
             Answers to common questions about booking, technicians, tracking,

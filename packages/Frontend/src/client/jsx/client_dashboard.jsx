@@ -347,7 +347,6 @@ function ClientDashboard() {
           <div className="card rate-service">
             <div className="card-heading-row">
               <div>
-                <p className="eyebrow">FEEDBACK</p>
                 <h2>Rate Your Last Service</h2>
               </div>
               <div className="heading-icon" aria-hidden="true">
@@ -385,7 +384,6 @@ function ClientDashboard() {
           <div className="card address-summary" id="addresses">
             <div className="card-heading-row">
               <div>
-                <p className="eyebrow">LOCATION</p>
                 <h2>Default Address</h2>
               </div>
               <div className="heading-icon" aria-hidden="true">
@@ -422,7 +420,6 @@ function ClientDashboard() {
         <section className="section-block" id="recent-services">
           <div className="section-block__header">
             <div>
-              <p className="eyebrow">HISTORY</p>
               <h2>Recent Services</h2>
             </div>
             {hasRecentServices && <Link to="/my-bookings">View All</Link>}
@@ -486,7 +483,6 @@ function ClientDashboard() {
         <section className="card addresses" id="addresses-list">
           <div className="section-block__header">
             <div>
-              <p className="eyebrow">SAVED LOCATIONS</p>
               <h2>Saved Addresses</h2>
             </div>
           </div>
@@ -597,7 +593,6 @@ function ClientDashboard() {
           >
             <div className="rating-modal__header">
               <div>
-                <p className="eyebrow">SERVICE FEEDBACK</p>
                 <h2 id="rating-modal-title">Rate Your Service</h2>
               </div>
               <button

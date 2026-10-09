@@ -34,7 +34,6 @@ function AboutUs() {
       <Header variant="marketing" />
       <main>
         <section className="df-info-hero">
-          <p className="df-info-eyebrow">THE TEAM</p>
           <h1>About Us</h1>
           <p>Meet the team behind the Dr.-Fix project.</p>
         </section>

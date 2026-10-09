@@ -38,7 +38,6 @@ function HowItWorks() {
       <Header variant="marketing" />
       <main>
         <section className="df-how-hero">
-          <p className="df-how-eyebrow">SIMPLE. CLEAR. RELIABLE.</p>
           <h1>How Dr.-Fix Works</h1>
           <p>
             From booking a service to getting the job completed, the process is

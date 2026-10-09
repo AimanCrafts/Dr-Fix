@@ -10,7 +10,6 @@ function AboutDrFix() {
       <Header variant="marketing" />
       <main>
         <section className="df-about-hero">
-          <p className="df-about-eyebrow">ABOUT DR.-FIX</p>
           <h1>Your home's doctor.</h1>
           <p>We diagnose. We fix. You relax.</p>
         </section>

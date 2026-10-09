@@ -12,25 +12,27 @@
   gap: 24px;
   width: 100%;
   padding: 8px 0 48px;
+  font-size: 15px;
 }
 
 /* ---- title ---- */
 .st-title h1 {
   margin: 4px 0 6px;
-  font-size: 2.1rem;
+  font-family: var(--df-font-heading, inherit);
+  font-size: 32px;
   line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 .st-title p:last-child {
   margin: 0;
+  font-size: 15px;
   color: var(--color-text-muted, #6b7280);
 }
 
 .st-eyebrow {
   margin: 0;
-  font-size: 0.72rem;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--color-primary, #ff5a1f);
@@ -56,7 +58,8 @@
 
 .st-card__head h2 {
   margin: 4px 0 0;
-  font-size: 1.25rem;
+  font-family: var(--df-font-heading, inherit);
+  font-size: 19px;
   font-weight: 700;
   color: var(--color-text, #1f2430);
 }
@@ -83,7 +86,7 @@
   border-radius: 50%;
   background: var(--color-primary, #ff5a1f);
   color: #ffffff;
-  font-size: 1.3rem;
+  font-size: 22px;
   font-weight: 700;
 }
 
@@ -95,10 +98,11 @@
 }
 
 .st-identity__text strong {
-  font-size: 1.05rem;
+  font-size: 16px;
 }
 
 .st-identity__text span {
+  font-size: 14px;
   color: var(--color-text-muted, #6b7280);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -127,7 +131,7 @@
 }
 
 .st-field__label {
-  font-size: 0.85rem;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -146,6 +150,7 @@
   background: var(--color-surface, #ffffff);
   color: inherit;
   font: inherit;
+  font-size: 15px;
 }
 
 .st-field__control input:focus {
@@ -170,7 +175,7 @@
 
 .st-field__hint,
 .st-hint {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: var(--color-text-muted, #6b7280);
 }
 
@@ -189,6 +194,7 @@
   border-radius: 12px;
   border: 1px solid transparent;
   font: inherit;
+  font-size: 15px;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -242,7 +248,7 @@
   margin: 0;
   padding: 10px 14px;
   border-radius: 12px;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .st-msg--error {
@@ -257,7 +263,7 @@
 
 .st-note {
   margin: 14px 0 0;
-  font-size: 0.85rem;
+  font-size: 14px;
   color: var(--color-text-muted, #6b7280);
 }
 
@@ -271,12 +277,13 @@
 
 .st-row__text strong {
   display: block;
+  font-size: 15px;
   margin-bottom: 4px;
 }
 
 .st-row__text p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 14px;
   color: var(--color-text-muted, #6b7280);
 }
 
@@ -338,12 +345,13 @@
 }
 
 .st-facts dt {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: var(--color-text-muted, #6b7280);
 }
 
 .st-facts dd {
   margin: 0;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -384,12 +392,13 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  font-size: 15px;
   color: #d92d20;
 }
 
 .st-danger__head p {
   margin: 6px 0 0;
-  font-size: 0.9rem;
+  font-size: 14px;
   color: var(--color-text-muted, #6b7280);
 }
 
@@ -433,7 +442,7 @@
   }
 
   .st-title h1 {
-    font-size: 1.75rem;
+    font-size: 26px;
   }
 
   .st-row {

@@ -159,6 +159,7 @@
 .service-card__header h2 {
   font-family: var(--df-font-heading);
   font-size: 19px;
+  font-weight: 400;
   color: var(--df-heading);
   margin: 0;
 }
@@ -172,7 +173,8 @@
 
 .service-row__name {
   flex: 1;
-  font-size: 14.5px;
+  font-size: 15px;
+  font-weight: 400;
   color: var(--df-heading);
 }
 
@@ -245,6 +247,7 @@
 .services-page__helper-text h3 {
   font-family: var(--df-font-heading);
   font-size: 19px;
+  font-weight: 400;
   color: var(--df-heading);
   margin: 0 0 4px;
 }

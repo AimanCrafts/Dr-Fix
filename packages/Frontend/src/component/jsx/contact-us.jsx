@@ -9,7 +9,6 @@ function ContactUs() {
       <Header variant="marketing" />
       <main>
         <section className="df-contact-hero">
-          <p className="df-contact-eyebrow">GET IN TOUCH</p>
           <h1>Contact Us</h1>
           <p>
             Have a question about Dr.-Fix? Reach out through any of the channels

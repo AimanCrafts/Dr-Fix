@@ -8,7 +8,7 @@
 
 .profile-intro {
   color: var(--df-body);
-  font-size: 14px;
+  font-size: 15px;
   margin: 8px 0 25px;
 }
 .profile-success {
@@ -16,7 +16,7 @@
   background: #eaf8ed;
   color: #24733a;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: 14px;
 }
 .profile-card {
@@ -38,7 +38,7 @@
   color: #fff;
   font-family: var(--df-font-heading);
   font-weight: 700;
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 25px;
 }
 .profile-grid {
@@ -49,8 +49,8 @@
 .profile-grid label {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  font-size: 12px;
+  gap: 8px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--df-heading);
 }
@@ -59,7 +59,7 @@
   border-radius: 9px;
   padding: 12px 13px;
   font: inherit;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   outline: none;
 }
@@ -81,18 +81,20 @@
   padding: 18px 0;
 }
 .profile-bottom strong {
-  font-size: 14px;
+  font-size: 16px;
 }
 .profile-bottom p {
   margin: 4px 0 0;
   color: var(--df-body);
-  font-size: 12px;
+  font-size: 14px;
 }
 .profile-toggle {
   border: 1px solid var(--df-border);
   background: #fff;
   border-radius: 999px;
-  padding: 9px 17px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 }
@@ -105,7 +107,9 @@
   border-radius: 999px;
   background: var(--df-orange);
   color: #fff;
-  padding: 12px 21px;
+  padding: 12px 22px;
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
 }
