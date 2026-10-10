@@ -413,3 +413,36 @@
     max-width: none;
   }
 }
+
+
+/* ---------------- Minimal brand bar (replaces the site header) ----------------
+   Logo and name match .site-header__logo / __logo-icon / __wordmark. */
+.focus-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--df-surface);
+  border-bottom: 1px solid var(--df-border);
+}
+.focus-bar__brand {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.focus-bar__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+.focus-bar__name {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--df-heading);
+}

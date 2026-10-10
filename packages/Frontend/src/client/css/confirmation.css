@@ -101,6 +101,46 @@
   text-align: right;
 }
 
+.summary-row--top {
+  align-items: flex-start;
+}
+.summary-row__value--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  min-width: 0;
+}
+.summary-pay-line {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.summary-pill {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+.summary-pill--paid {
+  background: #e8f6ee;
+  color: #1d7a46;
+}
+.summary-pill--due {
+  background: #fff3e6;
+  color: #a8570f;
+}
+.summary-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--df-muted);
+  overflow-wrap: anywhere;
+}
+
 .summary-divider {
   height: 1px;
   background: var(--df-border);
@@ -161,4 +201,36 @@
   }
 }
 
-.confirmed-payment-note{display:flex;flex-direction:column;gap:6px;text-align:left;padding:14px 16px;margin:0 0 22px;border:1px solid #bfe8d2;border-radius:12px;background:#f0fbf5;color:#176b43;font-size:13px}.confirmed-payment-note span{overflow-wrap:anywhere;font-size:12px}.confirmed-payment-note small{color:#60816f;font-size:11px}
+
+
+/* ---------------- Minimal brand bar (replaces the site header) ----------------
+   Logo and name match .site-header__logo / __logo-icon / __wordmark. */
+.focus-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--df-surface);
+  border-bottom: 1px solid var(--df-border);
+}
+.focus-bar__brand {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.focus-bar__logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+.focus-bar__name {
+  font-family: var(--df-font-heading);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--df-heading);
+}

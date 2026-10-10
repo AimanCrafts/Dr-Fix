@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import Header from "../../component/jsx/header.jsx";
 import { getBooking } from "../api/bookings";
+import logo from "../../assets/logo.png";
 import "../css/confirmation.css";
 
 /**
@@ -64,9 +64,29 @@ function BookingConfirmed() {
   const address = booking?.address || "—";
   const status = booking?.status || "pending";
 
+  // Prefer what the server saved on the booking; fall back to the checkout link
+  // only while the booking is still loading or the API doesn't return payment fields.
+  const hasServerPayment = booking && booking.payment_status !== undefined;
+  const isPaid = hasServerPayment
+    ? /^paid/.test(String(booking.payment_status))
+    : paymentStatus === "success";
+  const payProvider =
+    (hasServerPayment && booking.payment_provider) ||
+    paymentMethodLabel ||
+    "Mobile banking";
+  const payReference =
+    (hasServerPayment && booking.payment_transaction_id) ||
+    paymentTransactionId ||
+    "";
+
   return (
     <div className="confirmed-page">
-      <Header variant="app" />
+      <div className="focus-bar">
+        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
+          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
+          <span className="focus-bar__name">Dr.-Fix</span>
+        </Link>
+      </div>
 
       <div className="confirmed-container">
         <div className="success-icon" aria-hidden="true">
@@ -83,19 +103,6 @@ function BookingConfirmed() {
               ? "This service has been completed."
               : "We're matching you with a nearby available technician. This page updates automatically."}
         </p>
-        {paymentStatus === "success" && (
-          <div className="confirmed-payment-note">
-            <strong>Online payment successful · Demo</strong>
-            <span>
-              {paymentMethodLabel || "Mobile banking"} · Ref:{" "}
-              {paymentTransactionId || "Demo transaction"}
-            </span>
-            <small>
-              No real money was charged. This is a simulated payment.
-            </small>
-          </div>
-        )}
-
         <div className="card summary-card">
           <div className="summary-row summary-row--id">
             <span className="summary-row__icon">📅</span>
@@ -129,6 +136,26 @@ function BookingConfirmed() {
             <span className="summary-row__value">
               {booking?.technician?.name || "Finding a technician..."}
             </span>
+          </div>
+          <div className="summary-divider" />
+          <div className="summary-row summary-row--top">
+            <span className="summary-row__icon">💳</span>
+            <span className="summary-row__label">Payment:</span>
+            <div className="summary-row__value summary-row__value--stack">
+              <span className="summary-pay-line">
+                {isPaid ? payProvider : "Cash on service"}
+                <span
+                  className={`summary-pill ${isPaid ? "summary-pill--paid" : "summary-pill--due"}`}
+                >
+                  {isPaid ? "Paid" : "Pay after the job"}
+                </span>
+              </span>
+              {isPaid && payReference && (
+                <span className="summary-sub">
+                  Transaction ID: {payReference}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

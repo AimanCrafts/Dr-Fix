@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   AlertCircle,
   XCircle,
+  Info,
   Lock,
   LockKeyhole,
   Smartphone,
@@ -17,13 +18,28 @@ import nagadLogo from "../../assets/payment/nagad.png";
 import rocketLogo from "../../assets/payment/rocket.png";
 
 const PROVIDERS = [
-  { id: "bkash", name: "bKash", logo: bkashLogo, accent: "#e2136e" },
-  { id: "nagad", name: "Nagad", logo: nagadLogo, accent: "#ee5a24" },
-  { id: "rocket", name: "Rocket", logo: rocketLogo, accent: "#8a2a8f" },
+  { id: "bkash", name: "bKash", logo: bkashLogo, accent: "#e2136e", available: true },
+  { id: "nagad", name: "Nagad", logo: nagadLogo, accent: "#ee5a24", available: false },
+  { id: "rocket", name: "Rocket", logo: rocketLogo, accent: "#8a2a8f", available: false },
 ];
 
-const makeTxn = () =>
-  `DFX-MOCK-${Math.random().toString(36).slice(2, 10).toUpperCase()}`;
+// No live provider API is connected yet, so the sandbox verifies these codes.
+const CODES = {
+  otp: "123456",
+  pinOk: "12345",
+  pinDeclined: "00000",
+  pinNoFunds: "11111",
+};
+
+const OTP_LENGTH = 6;
+const PIN_LENGTH = 5;
+const RESEND_SECONDS = 45;
+
+const makeReference = () =>
+  `DFX-${Date.now().toString(36).toUpperCase()}${Math.random()
+    .toString(36)
+    .slice(2, 5)
+    .toUpperCase()}`;
 
 const formatMoney = (value) =>
   `৳${Number(value || 0).toLocaleString("en-BD")}`;
@@ -31,7 +47,17 @@ const formatMoney = (value) =>
 const maskPhone = (value) =>
   value.length === 11 ? `${value.slice(0, 3)}XXXXX${value.slice(8)}` : value;
 
-/* Large circular code input used for both OTP (6) and PIN (5). */
+const formatDateTime = (date) =>
+  date.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+/* Large circular input shared by the OTP (6) and PIN (5) steps. */
 function CodeCircles({ id, length, value, onChange, secret, onEnter, label }) {
   const inputRef = useRef(null);
 
@@ -56,7 +82,11 @@ function CodeCircles({ id, length, value, onChange, secret, onEnter, label }) {
             key={index}
             className={`df-code-circle ${filled ? "filled" : ""} ${isActive ? "active" : ""}`}
           >
-            {filled ? (secret ? <i className="df-code-dot" /> : value[index]) : ""}
+            {filled ? (
+              secret ? <i className="df-code-dot" /> : value[index]
+            ) : (
+              ""
+            )}
           </span>
         );
       })}
@@ -81,6 +111,28 @@ function CodeCircles({ id, length, value, onChange, secret, onEnter, label }) {
   );
 }
 
+/* Title row with an icon-only back button. */
+function StepHead({ title, subtitle, onBack, center }) {
+  return (
+    <div className={`df-head ${center ? "center" : ""}`}>
+      {onBack && (
+        <button
+          className="df-back"
+          type="button"
+          aria-label="Back"
+          onClick={onBack}
+        >
+          <ArrowLeft size={18} />
+        </button>
+      )}
+      <div className="df-head-text">
+        <h2 id="df-pay-title">{title}</h2>
+        {subtitle && <p className="df-muted">{subtitle}</p>}
+      </div>
+    </div>
+  );
+}
+
 export default function PaymentModal({
   amount,
   serviceName,
@@ -93,18 +145,24 @@ export default function PaymentModal({
   const [otp, setOtp] = useState("");
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [info, setInfo] = useState("");
+  const [resendIn, setResendIn] = useState(0);
   const [txn, setTxn] = useState("");
+  const [paidAt, setPaidAt] = useState("");
   const [confirmationPath, setConfirmationPath] = useState("");
 
   const activeProvider =
     PROVIDERS.find((item) => item.id === provider) || PROVIDERS[0];
+  const fallbackProvider = PROVIDERS.find((item) => item.available);
 
   const lockedStep = step === "processing" || step === "success";
-  const inFlow = step === "confirm" || step === "otp" || step === "pin";
+  const inFlow = step === "otp" || step === "pin";
   const resultStep =
     step === "success" || step === "failed" || step === "cancelled";
+  const showAside = !resultStep && step !== "processing";
 
-  // Closing during an active payment flow is treated as a cancellation.
+  // Closing while a payment is in progress counts as cancelling it.
   const requestClose = () => {
     if (lockedStep) return;
     if (inFlow) {
@@ -129,82 +187,127 @@ export default function PaymentModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, onClose]);
 
+  // Fades the "unavailable" message away.
+  useEffect(() => {
+    if (!notice) return undefined;
+    const timer = setTimeout(() => setNotice(""), 3500);
+    return () => clearTimeout(timer);
+  }, [notice]);
+
+  // Resend countdown on the OTP step.
+  useEffect(() => {
+    if (step !== "otp" || resendIn <= 0) return undefined;
+    const timer = setTimeout(() => setResendIn((s) => s - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [step, resendIn]);
+
   const goBack = () => {
     setError("");
-    setStep(
-      step === "phone"
-        ? "provider"
-        : step === "confirm"
-          ? "phone"
-          : step === "otp"
-            ? "confirm"
-            : step === "pin"
-              ? "otp"
-              : "provider",
-    );
+    setInfo("");
+    setStep(step === "otp" ? "phone" : step === "pin" ? "otp" : "provider");
+  };
+
+  const cancelPayment = () => {
+    setError("");
+    setInfo("");
+    setStep("cancelled");
+  };
+
+  const chooseProvider = (item) => {
+    if (!item.available) {
+      setNotice(
+        `${item.name} is not available right now. Please continue with ${fallbackProvider.name}.`,
+      );
+      return;
+    }
+    setNotice("");
+    setProvider(item.id);
   };
 
   const continuePhone = () => {
     if (!/^01\d{9}$/.test(phone)) {
-      setError("Enter a valid 11-digit Bangladeshi mobile number.");
+      setError("Enter a valid 11-digit mobile number.");
       return;
     }
     setError("");
-    setStep("confirm");
+    setInfo("");
+    setOtp("");
+    setResendIn(RESEND_SECONDS);
+    setStep("otp");
+  };
+
+  const resendCode = () => {
+    if (resendIn > 0) return;
+    setOtp("");
+    setError("");
+    setInfo("A new verification code has been sent.");
+    setResendIn(RESEND_SECONDS);
   };
 
   const verifyOtp = () => {
-    if (otp !== "123456") {
-      setError("The verification code is incorrect. Please try again.");
+    setInfo("");
+    if (otp.length < OTP_LENGTH) {
+      setError("Enter the 6-digit verification code.");
+      return;
+    }
+    if (otp !== CODES.otp) {
+      setError("The verification code you entered is incorrect.");
       return;
     }
     setError("");
+    setPin("");
     setStep("pin");
   };
 
+  const failPayment = (reason) => {
+    setTxn(makeReference());
+    setError(reason);
+    setStep("failed");
+  };
+
   const processPayment = async () => {
-    if (!/^\d{5}$/.test(pin)) {
+    if (pin.length < PIN_LENGTH) {
       setError("Enter your 5-digit PIN.");
       return;
     }
-    if (pin === "00000" || pin === "11111") {
-      setStep("failed");
-      setError(
-        pin === "11111"
-          ? "Transaction declined: insufficient balance."
-          : "Transaction was not completed.",
-      );
+    if (pin === CODES.pinNoFunds) {
+      failPayment("Insufficient balance in your account.");
       return;
     }
-    if (pin !== "12345") {
-      setError("The PIN is incorrect. Please try again.");
+    if (pin === CODES.pinDeclined) {
+      failPayment("The transaction could not be completed.");
+      return;
+    }
+    if (pin !== CODES.pinOk) {
+      setError("Incorrect PIN. Please try again.");
       return;
     }
     setError("");
     setStep("processing");
-    const transactionId = makeTxn();
+    const reference = makeReference();
     try {
       const path = await onPaymentSuccess({
         method: `online_${provider}`,
         provider: activeProvider.name,
-        transactionId,
+        transactionId: reference,
         phone,
       });
-      setTxn(transactionId);
+      setTxn(reference);
+      setPaidAt(formatDateTime(new Date()));
       setConfirmationPath(path || "");
       setStep("success");
     } catch (e) {
-      setTxn(transactionId);
-      setStep("failed");
+      setTxn(reference);
       setError(
         e?.message || "We couldn't complete the payment. Please try again.",
       );
+      setStep("failed");
     }
   };
 
   const errorBlock = error && (
     <p className="df-error" role="alert">
-      <AlertCircle size={15} />
+      <AlertCircle size={16} />
       {error}
     </p>
   );
@@ -227,7 +330,7 @@ export default function PaymentModal({
           <span className="df-pay-brand">Dr.-Fix</span>
           <div className="df-pay-head-right">
             <span className="df-pay-secure">
-              <ShieldCheck size={15} /> Secure Checkout
+              <ShieldCheck size={16} /> Secure Checkout
             </span>
             {!lockedStep && (
               <button
@@ -242,13 +345,12 @@ export default function PaymentModal({
           </div>
         </header>
 
-        <div className={`df-pay-body ${resultStep || step === "processing" ? "single" : ""}`}>
-          {!resultStep && step !== "processing" && (
+        <div className={`df-pay-body ${showAside ? "" : "single"}`}>
+          {showAside && (
             <aside className="df-pay-aside">
               <h3 className="df-aside-title">Secure Online Payment</h3>
               <p className="df-aside-text">
-                Your payment is secured with advanced encryption and fraud
-                protection.
+                Your payment is protected with encryption and fraud monitoring.
               </p>
               <div className="df-summary">
                 <h4>Order Summary</h4>
@@ -267,8 +369,18 @@ export default function PaymentModal({
                       <dd>{activeProvider.name}</dd>
                     </div>
                   )}
+                  {(step === "otp" || step === "pin") && (
+                    <div>
+                      <dt>Account</dt>
+                      <dd>{maskPhone(phone)}</dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt>Transaction fee</dt>
+                    <dd>৳0.00</dd>
+                  </div>
                   <div className="total">
-                    <dt>Amount</dt>
+                    <dt>Total</dt>
                     <dd>{formatMoney(amount)} BDT</dd>
                   </div>
                 </dl>
@@ -279,178 +391,137 @@ export default function PaymentModal({
           <div className="df-pay-main">
             {step === "provider" && (
               <div className="df-step">
-                <h2 id="df-pay-title">Mobile Banking</h2>
-                <p className="df-muted">Select your mobile banking provider.</p>
+                <StepHead
+                  title="Mobile Banking"
+                  subtitle="Select your mobile banking provider."
+                />
                 <div className="df-providers" role="radiogroup">
-                  {PROVIDERS.map((item) => (
-                    <button
-                      type="button"
-                      key={item.id}
-                      role="radio"
-                      aria-checked={provider === item.id}
-                      className={`df-provider ${provider === item.id ? "selected" : ""}`}
-                      onClick={() => setProvider(item.id)}
-                    >
-                      <span className="df-provider-check">
-                        {provider === item.id ? "✓" : ""}
-                      </span>
-                      <img src={item.logo} alt="" />
-                      <span className="df-provider-name">{item.name}</span>
-                    </button>
-                  ))}
+                  {PROVIDERS.map((item) => {
+                    const selected = provider === item.id && item.available;
+                    return (
+                      <button
+                        type="button"
+                        key={item.id}
+                        role="radio"
+                        aria-checked={selected}
+                        aria-disabled={!item.available}
+                        data-tip={item.available ? undefined : "Currently unavailable"}
+                        className={`df-provider ${selected ? "selected" : ""} ${item.available ? "" : "is-unavailable"}`}
+                        onClick={() => chooseProvider(item)}
+                      >
+                        <span className="df-provider-check">
+                          {selected ? "✓" : ""}
+                        </span>
+                        <img src={item.logo} alt="" />
+                        <span className="df-provider-name">{item.name}</span>
+                        {!item.available && (
+                          <span className="df-provider-state">Unavailable</span>
+                        )}
+                      </button>
+                    );
+                  })}
                 </div>
-                <div className="df-amount-bar">
-                  <span>Amount to Pay</span>
-                  <strong>{formatMoney(amount)} BDT</strong>
-                </div>
+                {notice && (
+                  <p className="df-inline-notice" role="status">
+                    <Info size={16} />
+                    {notice}
+                  </p>
+                )}
                 <button
-                  className="df-primary df-primary-blue"
+                  className="df-primary df-primary-accent"
                   type="button"
                   onClick={() => {
                     setError("");
                     setStep("phone");
                   }}
                 >
-                  Continue with {activeProvider.name} <ChevronRight size={18} />
+                  Continue with {activeProvider.name}{" "}
+                  <ChevronRight size={18} />
                 </button>
               </div>
             )}
 
             {step === "phone" && (
               <div className="df-step">
-                <button className="df-back" type="button" onClick={goBack}>
-                  <ArrowLeft size={15} /> Back to Payment Methods
-                </button>
-                <h2 id="df-pay-title">{activeProvider.name}</h2>
-                <p className="df-muted">
-                  Pay with your {activeProvider.name} account.
-                </p>
-                <div className="df-card">
-                  <span className="df-card-label">Payment Amount</span>
-                  <strong className="df-card-amount">
-                    {formatMoney(amount)} BDT
-                  </strong>
-                  <label className="df-label" htmlFor="df-pay-phone">
-                    Mobile Number
-                  </label>
-                  <div className="df-input-wrap">
-                    <Smartphone size={17} />
-                    <input
-                      id="df-pay-phone"
-                      className="df-input"
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={11}
-                      placeholder="01XXXXXXXXX"
-                      value={phone}
-                      onChange={(e) =>
-                        setPhone(e.target.value.replace(/\D/g, ""))
-                      }
-                      onKeyDown={(e) => e.key === "Enter" && continuePhone()}
-                    />
-                  </div>
-                  <p className="df-hint">
-                    Please enter your {activeProvider.name} registered mobile
-                    number.
-                  </p>
-                  {errorBlock}
-                  <button
-                    className="df-primary df-primary-accent"
-                    type="button"
-                    onClick={continuePhone}
-                  >
-                    Continue
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {step === "confirm" && (
-              <div className="df-step">
-                <button className="df-back" type="button" onClick={goBack}>
-                  <ArrowLeft size={15} /> Back
-                </button>
-                <h2 id="df-pay-title">Confirm Payment</h2>
-                <p className="df-muted">
-                  Please review your payment details before proceeding.
-                </p>
-                <div className="df-card df-details">
-                  <div>
-                    <span>Merchant</span>
-                    <strong>Dr.-Fix</strong>
-                  </div>
-                  <div>
-                    <span>Amount</span>
-                    <strong>{formatMoney(amount)} BDT</strong>
-                  </div>
-                  <div>
-                    <span>Payment Method</span>
-                    <strong>{activeProvider.name} (Mobile Banking)</strong>
-                  </div>
-                  <div>
-                    <span>Mobile Number</span>
-                    <strong>{maskPhone(phone)}</strong>
-                  </div>
-                  <div>
-                    <span>Transaction Fee</span>
-                    <strong>৳0.00</strong>
-                  </div>
-                </div>
-                <div className="df-actions">
-                  <button
-                    className="df-outline"
-                    type="button"
-                    onClick={() => {
+                <StepHead
+                  title={activeProvider.name}
+                  subtitle={`Pay with your ${activeProvider.name} account.`}
+                  onBack={goBack}
+                />
+                <label className="df-label" htmlFor="df-pay-phone">
+                  Mobile number
+                </label>
+                <div className="df-input-wrap">
+                  <Smartphone size={18} />
+                  <input
+                    id="df-pay-phone"
+                    className="df-input"
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel"
+                    maxLength={11}
+                    placeholder="01XXXXXXXXX"
+                    value={phone}
+                    onChange={(e) => {
+                      setPhone(e.target.value.replace(/\D/g, ""));
                       setError("");
-                      setStep("cancelled");
                     }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="df-primary df-primary-blue"
-                    type="button"
-                    onClick={() => {
-                      setError("");
-                      setOtp("");
-                      setStep("otp");
-                    }}
-                  >
-                    Confirm Payment
-                  </button>
+                    onKeyDown={(e) => e.key === "Enter" && continuePhone()}
+                    autoFocus
+                  />
                 </div>
+                <p className="df-hint">
+                  Enter the mobile number registered with {activeProvider.name}.
+                </p>
+                {errorBlock}
+                <button
+                  className="df-primary df-primary-accent"
+                  type="button"
+                  onClick={continuePhone}
+                >
+                  Continue
+                </button>
               </div>
             )}
 
             {step === "otp" && (
               <div className="df-step df-step-center">
-                <button className="df-back" type="button" onClick={goBack}>
-                  <ArrowLeft size={15} /> Back
-                </button>
-                <h2 id="df-pay-title">Verify your number</h2>
-                <p className="df-muted">
-                  A 6-digit verification code was sent to {maskPhone(phone)}.
-                </p>
-                <label className="df-label center" htmlFor="df-pay-otp">
-                  Enter verification code
-                </label>
+                <StepHead
+                  center
+                  title="Verify your number"
+                  subtitle={`We sent a 6-digit code to ${maskPhone(phone)}.`}
+                  onBack={goBack}
+                />
                 <CodeCircles
                   id="df-pay-otp"
-                  length={6}
+                  length={OTP_LENGTH}
                   value={otp}
-                  onChange={setOtp}
+                  onChange={(v) => {
+                    setOtp(v);
+                    setError("");
+                  }}
                   onEnter={verifyOtp}
                   label="6-digit verification code"
                 />
                 {errorBlock}
+                {info && !error && <p className="df-info">{info}</p>}
+                <p className="df-resend">
+                  Didn&apos;t receive the code?{" "}
+                  {resendIn > 0 ? (
+                    <span>
+                      Resend in 0:{String(resendIn).padStart(2, "0")}
+                    </span>
+                  ) : (
+                    <button type="button" onClick={resendCode}>
+                      Resend code
+                    </button>
+                  )}
+                </p>
                 <div className="df-actions">
                   <button
                     className="df-outline"
                     type="button"
-                    onClick={() => {
-                      setError("");
-                      setStep("cancelled");
-                    }}
+                    onClick={cancelPayment}
                   >
                     Cancel
                   </button>
@@ -467,22 +538,20 @@ export default function PaymentModal({
 
             {step === "pin" && (
               <div className="df-step df-step-center">
-                <button className="df-back" type="button" onClick={goBack}>
-                  <ArrowLeft size={15} /> Back
-                </button>
-                <h2 id="df-pay-title">Enter your PIN</h2>
-                <p className="df-muted">
-                  Enter your {activeProvider.name} PIN to authorise this
-                  payment.
-                </p>
-                <label className="df-label center" htmlFor="df-pay-pin">
-                  {activeProvider.name} PIN
-                </label>
+                <StepHead
+                  center
+                  title="Enter your PIN"
+                  subtitle={`Enter your ${activeProvider.name} PIN to pay ${formatMoney(amount)} to Dr.-Fix.`}
+                  onBack={goBack}
+                />
                 <CodeCircles
                   id="df-pay-pin"
-                  length={5}
+                  length={PIN_LENGTH}
                   value={pin}
-                  onChange={setPin}
+                  onChange={(v) => {
+                    setPin(v);
+                    setError("");
+                  }}
                   onEnter={processPayment}
                   secret
                   label="5-digit PIN"
@@ -492,10 +561,7 @@ export default function PaymentModal({
                   <button
                     className="df-outline"
                     type="button"
-                    onClick={() => {
-                      setError("");
-                      setStep("cancelled");
-                    }}
+                    onClick={cancelPayment}
                   >
                     Cancel
                   </button>
@@ -527,14 +593,18 @@ export default function PaymentModal({
                 <p className="df-muted">
                   Your payment has been completed successfully.
                 </p>
-                <div className="df-card df-details df-receipt">
+                <div className="df-card df-details">
                   <div>
                     <span>Amount</span>
                     <strong>{formatMoney(amount)} BDT</strong>
                   </div>
                   <div>
-                    <span>Payment Method</span>
+                    <span>Payment method</span>
                     <strong>{activeProvider.name} (Mobile Banking)</strong>
+                  </div>
+                  <div>
+                    <span>Date &amp; time</span>
+                    <strong>{paidAt}</strong>
                   </div>
                   <div>
                     <span>Transaction ID</span>
@@ -552,7 +622,7 @@ export default function PaymentModal({
                 >
                   Return to Dr.-Fix
                 </button>
-                <p className="df-thanks">Thank you for using Dr.-Fix!</p>
+                <p className="df-thanks">Thank you for using Dr.-Fix.</p>
               </div>
             )}
 
@@ -561,28 +631,30 @@ export default function PaymentModal({
                 <span className="df-state-icon failed">
                   <XCircle size={40} />
                 </span>
-                <h2 id="df-pay-title" className="failed-title">
-                  Payment Failed
-                </h2>
+                <h2 id="df-pay-title">Payment Failed</h2>
                 <p className="df-muted">
                   Your payment could not be completed. Please try again or
                   choose another payment method.
                 </p>
-                <div className="df-card df-details df-receipt">
+                <div className="df-card df-details">
                   <div>
                     <span>Reason</span>
-                    <strong>{error || "Transaction was not completed."}</strong>
+                    <strong>{error || "The transaction was not completed."}</strong>
+                  </div>
+                  <div>
+                    <span>Amount</span>
+                    <strong>{formatMoney(amount)} BDT</strong>
                   </div>
                   {txn && (
                     <div>
-                      <span>Transaction ID</span>
+                      <span>Reference</span>
                       <strong>{txn}</strong>
                     </div>
                   )}
                 </div>
                 <div className="df-actions">
                   <button
-                    className="df-primary df-primary-danger"
+                    className="df-primary df-primary-blue"
                     type="button"
                     onClick={() => {
                       setError("");
@@ -597,8 +669,7 @@ export default function PaymentModal({
                   </button>
                 </div>
                 <p className="df-thanks">
-                  If you continue to face issues, please contact our support
-                  team.
+                  If the problem continues, please contact our support team.
                 </p>
               </div>
             )}
@@ -606,7 +677,7 @@ export default function PaymentModal({
             {step === "cancelled" && (
               <div className="df-state">
                 <span className="df-state-icon cancelled">
-                  <AlertCircle size={40} />
+                  <Info size={40} />
                 </span>
                 <h2 id="df-pay-title">Payment Cancelled</h2>
                 <p className="df-muted">Your booking has not been charged.</p>
@@ -629,7 +700,7 @@ export default function PaymentModal({
 
         <footer className="df-pay-footer">
           <span>
-            <Lock size={13} /> Your information is safe and secure
+            <Lock size={14} /> Your information is safe and secure
           </span>
           <span>Powered by Dr.-Fix Payment Gateway</span>
         </footer>

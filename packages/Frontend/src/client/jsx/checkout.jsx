@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
-import Header from "../../component/jsx/header.jsx";
 import { createBooking } from "../api/bookings";
 import PaymentModal from "./PaymentModal.jsx";
 import { getAvailability, listServices } from "../api/services";
 import { listAddresses, createAddress } from "../api/addresses";
+import logo from "../../assets/logo.png";
 import "../css/checkout.css";
 import "../css/checkout-date.css";
 
@@ -214,7 +214,7 @@ function Checkout() {
     } finally { setSubmitting(false); }
   };
 
-  const handleMockPaymentSuccess = async (paymentDetails) => {
+  const handlePaymentSuccess = async (paymentDetails) => {
     try {
       return await createBookingAfterPayment(paymentDetails);
     } catch (err) {
@@ -225,7 +225,12 @@ function Checkout() {
   if (services && !service) {
     return (
       <div className="checkout-page">
-        <Header variant="app" />
+        <div className="focus-bar">
+        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
+          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
+          <span className="focus-bar__name">Dr.-Fix</span>
+        </Link>
+      </div>
         <div className="checkout-container">
           <div className="checkout-main">
             <div className="card selected-service">
@@ -247,7 +252,12 @@ function Checkout() {
 
   return (
     <div className="checkout-page">
-      <Header variant="app" />
+      <div className="focus-bar">
+        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
+          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
+          <span className="focus-bar__name">Dr.-Fix</span>
+        </Link>
+      </div>
 
       <div className="checkout-container">
         <div className="checkout-main">
@@ -478,7 +488,7 @@ function Checkout() {
           amount={price}
           serviceName={serviceName}
           onClose={() => setShowPaymentModal(false)}
-          onPaymentSuccess={handleMockPaymentSuccess}
+          onPaymentSuccess={handlePaymentSuccess}
         />
       )}
     </div>
