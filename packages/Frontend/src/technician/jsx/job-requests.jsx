@@ -5,6 +5,7 @@ import { getCurrentTechnician } from "../api/auth";
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
 import "../css/job-requests.css";
 import "../css/commission.css";
+import "../css/technician-design-system.css";
 
 function JobRequests() {
   const [jobs, setJobs] = useState([]);

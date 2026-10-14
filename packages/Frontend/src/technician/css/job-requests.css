@@ -17,14 +17,6 @@
   padding-bottom: 28px;
   border-bottom: 1px solid var(--df-border);
 }
-.tech-page__eyebrow {
-  margin: 0 0 7px;
-  color: var(--df-orange);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
 .tech-page h1 {
   margin: 0;
   font-family: var(--df-font-heading);

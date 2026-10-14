@@ -3,6 +3,7 @@ import { MessageSquareText, Star } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
 import { getTechnicianReviews } from "../api/reviews-api";
 import "../css/reviews.css";
+import "../css/technician-design-system.css";
 
 function Stars({ value, size = 16 }) {
   return (

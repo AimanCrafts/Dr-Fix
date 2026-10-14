@@ -1,0 +1,241 @@
+/* Shared technician design system: consistent typography, restrained orange,
+   subtle entrance motion, and accessible focus states across all pages. */
+:root {
+  --tech-orange-rgb: 240, 90, 36;
+  --tech-orange-soft: rgba(var(--tech-orange-rgb), 0.10);
+  --tech-orange-wash: rgba(var(--tech-orange-rgb), 0.24);
+  --tech-orange-border: rgba(var(--tech-orange-rgb), 0.28);
+  --tech-heading-font: "Arial Rounded MT Bold", "Arial Rounded MT", "Arial", sans-serif;
+  --tech-body-font: Arial, "Helvetica Neue", sans-serif;
+  --df-font-heading: var(--tech-heading-font);
+  --df-font-body: var(--tech-body-font);
+  --df-bg: #f7f7f5;
+  --df-surface: #ffffff;
+  --df-heading: #222222;
+  --df-body: #626262;
+  --df-muted: #858585;
+  --df-border: #e7e7e3;
+  --df-orange: #e95a2a;
+  --df-orange-hover: #d84d20;
+  --df-orange-tint: var(--tech-orange-soft);
+}
+
+.tech-dashboard,
+.tech-page,
+.login-page,
+.review-page,
+.my-bookings-page {
+  font-family: var(--tech-body-font);
+  color: var(--df-heading, #222222);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tech-dashboard :is(h1, h2, h3, h4),
+.tech-page :is(h1, h2, h3, h4),
+.login-page :is(h1, h2, h3, h4),
+.review-page :is(h1, h2, h3, h4),
+.my-bookings-page :is(h1, h2, h3, h4) {
+  font-family: var(--tech-heading-font);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+/* Keep large orange surfaces translucent; retain solid, high-contrast CTAs. */
+.tech-dashboard .service-icon,
+.tech-dashboard .active-job-card__icon,
+.tech-page .profile-avatar,
+.tech-page .request-card__category,
+.tech-page .schedule-card__status,
+.tech-dashboard .status-pill--accepted,
+.tech-page .booking-status--pending,
+.tech-page .booking-status--accepted {
+  background-color: var(--tech-orange-soft);
+  border-color: var(--tech-orange-border);
+}
+
+.tech-dashboard .service-icon,
+.tech-dashboard .active-job-card__icon,
+.tech-page .profile-avatar,
+.tech-page .schedule-card__status {
+  color: #bd4a24;
+}
+
+.tech-dashboard .availability-control input:checked ~ .availability-control__track {
+  background: rgba(var(--tech-orange-rgb), 0.78);
+}
+
+.tech-dashboard .request-card,
+.tech-dashboard .active-job-card,
+.tech-dashboard .completed-list,
+.tech-page .profile-card,
+.tech-page .request-card,
+.tech-page .schedule-card,
+.tech-page .my-booking-card,
+.tech-page .rv-card,
+.tech-page .rv-summary,
+.tech-page .earnings-table-wrap {
+  box-shadow: 0 7px 24px rgba(31, 35, 32, 0.035);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.tech-dashboard .request-card:hover,
+.tech-dashboard .active-job-card:hover,
+.tech-page .profile-card:hover,
+.tech-page .request-card:hover,
+.tech-page .my-booking-card:hover,
+.tech-page .rv-card:hover {
+  border-color: rgba(var(--tech-orange-rgb), 0.30);
+  box-shadow: 0 12px 30px rgba(31, 35, 32, 0.07);
+}
+
+.tech-dashboard :is(button, a),
+.tech-page :is(button, a),
+.login-page :is(button, a),
+.review-page :is(button, a),
+.my-bookings-page :is(button, a) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tech-dashboard :is(button, a):focus-visible,
+.tech-page :is(button, a):focus-visible,
+.login-page :is(button, a):focus-visible,
+.review-page :is(button, a):focus-visible,
+.my-bookings-page :is(button, a):focus-visible,
+.tech-dashboard input:focus-visible,
+.tech-page input:focus-visible,
+.login-page input:focus-visible {
+  outline: 3px solid rgba(var(--tech-orange-rgb), 0.35);
+  outline-offset: 3px;
+}
+
+/* Login illustration panel uses a translucent orange wash instead of a full orange block. */
+.login-page__right {
+  background-color: rgba(var(--tech-orange-rgb), 0.24);
+}
+.login-page__right-tagline {
+  color: #292929;
+}
+
+/* Dashboard quick navigation */
+.quick-actions {
+  margin: -7px 0 38px;
+}
+.quick-actions__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.quick-actions__heading h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.quick-actions__heading p {
+  margin: 0;
+  color: var(--df-muted);
+  font-size: 12px;
+}
+.quick-actions__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.quick-action-card {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  padding: 15px 14px;
+  color: inherit;
+  text-decoration: none;
+  background: #fff;
+  border: 1px solid var(--df-border);
+  border-radius: 15px;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.quick-action-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--tech-orange-border);
+  box-shadow: 0 10px 24px rgba(31, 35, 32, 0.06);
+}
+.quick-action-card__icon {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--tech-orange-soft);
+  color: #bd4a24;
+}
+.quick-action-card > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.quick-action-card strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+.quick-action-card small {
+  color: var(--df-muted);
+  font-size: 10.5px;
+  line-height: 1.35;
+}
+.quick-action-card__arrow {
+  margin-left: auto;
+  color: rgba(var(--tech-orange-rgb), 0.8);
+  font-size: 17px;
+}
+
+/* Consistent restrained motion across pages; no motion for reduced-motion users. */
+.tech-dashboard__main > *,
+.tech-page__main > *,
+.my-bookings-main > *,
+.login-form-wrap,
+.review-card {
+  animation: technician-enter 420ms ease both;
+}
+.tech-dashboard__main > *:nth-child(2),
+.tech-page__main > *:nth-child(2),
+.my-bookings-main > *:nth-child(2) { animation-delay: 45ms; }
+.tech-dashboard__main > *:nth-child(3),
+.tech-page__main > *:nth-child(3),
+.my-bookings-main > *:nth-child(3) { animation-delay: 85ms; }
+.tech-dashboard .request-card,
+.tech-dashboard .quick-action-card,
+.tech-dashboard .active-job-card {
+  animation: technician-enter 420ms ease both;
+}
+.tech-dashboard .request-card:nth-child(2),
+.tech-dashboard .quick-action-card:nth-child(2),
+.tech-dashboard .active-job-card:nth-child(2) { animation-delay: 55ms; }
+.tech-dashboard .request-card:nth-child(3),
+.tech-dashboard .quick-action-card:nth-child(3),
+.tech-dashboard .active-job-card:nth-child(3) { animation-delay: 100ms; }
+.tech-dashboard .request-card:nth-child(4),
+.tech-dashboard .quick-action-card:nth-child(4) { animation-delay: 145ms; }
+
+@keyframes technician-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .quick-actions__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .quick-actions__heading { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .quick-actions__grid { grid-template-columns: 1fr; }
+  .quick-action-card { padding: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tech-dashboard *, .tech-page *, .login-page *, .review-page *, .my-bookings-page * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

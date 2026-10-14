@@ -3,6 +3,7 @@ import Header from "../../component/jsx/header.jsx";
 import { getTechnicianEarnings } from "../api/technician-dashboard-api";
 import "../css/earnings.css";
 import "../css/commission.css";
+import "../css/technician-design-system.css";
 
 function Earnings() {
   const [data, setData] = useState(null);

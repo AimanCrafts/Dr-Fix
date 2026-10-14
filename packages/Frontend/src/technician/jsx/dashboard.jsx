@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import {
   CheckCircle2,
   Clock3,
+  CalendarDays,
+  ClipboardList,
   MapPin,
+  UserRound,
+  WalletCards,
   Play,
-  RotateCcw,
   Wrench,
 } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
@@ -23,6 +26,7 @@ import {
   updateTechnicianAvailability,
 } from "../api/technician-dashboard-api";
 import "../css/dashboard.css";
+import "../css/technician-design-system.css";
 
 const STATUS_META = {
   accepted: {
@@ -243,6 +247,35 @@ function TechnicianDashboard() {
               </div>
             );
           })}
+        </section>
+
+        <section className="quick-actions" aria-label="Quick actions">
+          <div className="quick-actions__heading">
+            <h2>Quick actions</h2>
+            <p>Jump straight to your next task.</p>
+          </div>
+          <div className="quick-actions__grid">
+            <Link to="/technician/job-requests" className="quick-action-card">
+              <span className="quick-action-card__icon"><ClipboardList size={19} /></span>
+              <span><strong>Job requests</strong><small>Review available work</small></span>
+              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+            </Link>
+            <Link to="/technician/schedule" className="quick-action-card">
+              <span className="quick-action-card__icon"><CalendarDays size={19} /></span>
+              <span><strong>My schedule</strong><small>Check upcoming services</small></span>
+              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+            </Link>
+            <Link to="/technician/earnings" className="quick-action-card">
+              <span className="quick-action-card__icon"><WalletCards size={19} /></span>
+              <span><strong>Earnings</strong><small>View your payment summary</small></span>
+              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+            </Link>
+            <Link to="/technician/profile" className="quick-action-card">
+              <span className="quick-action-card__icon"><UserRound size={19} /></span>
+              <span><strong>My profile</strong><small>Keep details up to date</small></span>
+              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+            </Link>
+          </div>
         </section>
 
         {notice && (

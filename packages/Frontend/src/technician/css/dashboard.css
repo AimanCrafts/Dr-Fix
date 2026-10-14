@@ -35,14 +35,6 @@
   padding-bottom: 30px;
   border-bottom: 1px solid var(--df-border);
 }
-.tech-eyebrow,
-.section-kicker {
-  margin: 0 0 7px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.11em;
-  color: var(--df-orange);
-}
 .tech-welcome h1 {
   margin: 0;
   font-family: var(--df-font-heading);
@@ -50,7 +42,7 @@
   line-height: 1.12;
   letter-spacing: -0.03em;
 }
-.tech-welcome p:not(.tech-eyebrow) {
+.tech-welcome p {
   margin: 9px 0 0;
   color: var(--df-body);
   font-size: 14px;

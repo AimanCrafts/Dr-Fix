@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { listMyJobs } from "../api/bookings";
 import "../css/my-bookings.css";
+import "../css/technician-design-system.css";
 
 // New technician booking flow:
 // pending → accepted → in_progress → completed
@@ -70,8 +71,6 @@ function MyBookings() {
       <Header variant="app" />
 
       <main className="my-bookings-main">
-        <p className="my-bookings-eyebrow">Your jobs</p>
-
         <h1>My Bookings</h1>
 
         <p className="my-bookings-intro">

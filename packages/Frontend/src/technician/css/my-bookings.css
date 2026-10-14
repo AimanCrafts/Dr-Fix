@@ -9,14 +9,6 @@
   margin: 0 auto;
   padding: 42px 24px 80px;
 }
-.my-bookings-eyebrow {
-  margin: 0 0 7px;
-  color: var(--df-orange);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
 .my-bookings-main h1 {
   margin: 0;
   font-family: var(--df-font-heading);

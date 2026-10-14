@@ -6,6 +6,7 @@ import {
 } from "../api/technician-profile-api";
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
 import "../css/profile.css";
+import "../css/technician-design-system.css";
 
 function Profile() {
   const [form, setForm] = useState({

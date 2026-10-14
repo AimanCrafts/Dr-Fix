@@ -5,6 +5,7 @@ import { getTechnicianSchedule } from "../api/technician-dashboard-api";
 import { completeJob, startJob } from "../api/bookings";
 import "../css/schedule.css";
 import "../css/commission.css";
+import "../css/technician-design-system.css";
 
 const statusMeta = {
   accepted: {

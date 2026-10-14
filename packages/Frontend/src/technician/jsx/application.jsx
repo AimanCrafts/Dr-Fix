@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCurrentTechnician, logoutTechnician } from "../api/auth";
 import "../css/application.css";
+import "../css/technician-design-system.css";
 
 /**
  * Application Under Review (technician/jsx/application_under_review.jsx)

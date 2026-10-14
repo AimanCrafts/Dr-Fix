@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { loginTechnician } from "../api/auth";
 import "../css/login.css";
+import "../css/technician-design-system.css";
 
 import loginImg from "../../assets/login1.png";
 

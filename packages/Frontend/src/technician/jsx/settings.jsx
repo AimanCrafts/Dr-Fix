@@ -10,6 +10,7 @@ import {
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
 // Same stylesheet the technician Profile page uses (tech-page layout).
 import "../css/profile.css";
+import "../css/technician-design-system.css";
 
 function readTechnician() {
   try {
@@ -34,7 +35,6 @@ function TechnicianSettings() {
       headerVariant="technician"
       pageClass="tech-page"
       mainClass="tech-page__main"
-      eyebrowClass="tech-page__eyebrow"
       profilePath="/technician/profile"
       displayName={technician.name}
       displayEmail={technician.email}
