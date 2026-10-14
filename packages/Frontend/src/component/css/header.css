@@ -22,17 +22,28 @@
 .site-header__logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-decoration: none;
   margin-right: auto;
 }
 
-.site-header__logo-icon {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  display: block;
+.site-header__logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--df-orange, #f15a24);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(241, 90, 36, 0.22);
+  transform: rotate(-4deg);
   flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.site-header__logo:hover .site-header__logo-mark {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 0 9px 20px rgba(241, 90, 36, 0.3);
 }
 
 /* Marketing header: logo left, nav centered, actions right.
@@ -43,10 +54,16 @@
 }
 
 .site-header__wordmark {
-  font-family: var(--df-font-heading);
+  font-family: var(--df-font-heading, "Plus Jakarta Sans", sans-serif);
   font-weight: 700;
-  font-size: 19px;
-  color: var(--df-heading);
+  font-size: 22px;
+  letter-spacing: -0.05em;
+  color: var(--df-heading, #171923);
+}
+
+.site-header__wordmark b {
+  color: var(--df-orange, #f15a24);
+  font-weight: 800;
 }
 
 /* ---------------- Marketing nav ---------------- */
@@ -59,58 +76,86 @@
 }
 
 .site-header__link {
-  font-family: var(--df-font-body);
+  position: relative;
+  font-family: var(--df-font-body, "Inter", sans-serif);
   font-size: 14.5px;
   font-weight: 500;
-  color: var(--df-body);
+  color: var(--df-body, #666b78);
   text-decoration: none;
   white-space: nowrap;
+  padding: 8px 0;
+  transition: color 0.2s ease;
 }
 
-.site-header__link:hover {
-  color: var(--df-heading);
+.site-header__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: 0px;
+  height: 2px;
+  background: var(--df-orange, #f15a24);
+  transition: right 0.25s ease;
+  border-radius: 2px;
+}
+
+.site-header__link:hover,
+.site-header__link.is-active {
+  color: var(--df-heading, #171923);
+}
+
+.site-header__link:hover::after,
+.site-header__link.is-active::after {
+  right: 0;
 }
 
 /* ---------------- Actions (right side) ---------------- */
 .site-header__actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .site-header__login-link {
-  font-family: var(--df-font-body);
-  font-size: 14.5px;
+  font-family: var(--df-font-body, "Inter", sans-serif);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--df-heading);
+  color: var(--df-heading, #171923);
   text-decoration: none;
   white-space: nowrap;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--df-border, #e8e4de);
+  background: var(--df-surface, #f7f5f1);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
 }
 
 .site-header__login-link:hover {
-  color: var(--df-orange);
+  color: var(--df-orange, #f15a24);
+  border-color: var(--df-orange, #f15a24);
+  background: var(--df-orange-tint, #fff0e8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(241, 90, 36, 0.15);
 }
 
 .site-header__theme-toggle {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  border: 1px solid var(--df-border);
-  background: var(--df-surface);
+  border: 1px solid var(--df-border, #e8e4de);
+  background: var(--df-surface, #f7f5f1);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 15px;
   flex-shrink: 0;
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .site-header__theme-toggle:hover {
-  border-color: var(--df-orange);
-}
-
-.site-header__cta {
-  white-space: nowrap;
+  border-color: var(--df-orange, #f15a24);
+  transform: rotate(15deg);
 }
 
 /* Mobile hamburger — hidden on desktop */

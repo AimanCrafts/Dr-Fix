@@ -10,6 +10,7 @@ import {
   Star,
   UserRound,
   Wallet,
+  Wrench,
 } from "lucide-react";
 import UserMenu from "./user-menu.jsx";
 import NotificationBell from "./notification-bell.jsx";
@@ -141,13 +142,12 @@ function Header({ variant = "marketing" }) {
       <div className="site-header__inner">
         {/* LOGO */}
         <Link to="/" className="site-header__logo" aria-label="Dr.-Fix home">
-          <img
-            src={logo}
-            alt="Dr.-Fix logo"
-            className="site-header__logo-icon"
-          />
-
-          <span className="site-header__wordmark">Dr.-Fix</span>
+          <span className="site-header__logo-mark" aria-hidden="true">
+            <Wrench size={18} strokeWidth={2.4} />
+          </span>
+          <span className="site-header__wordmark">
+            Dr.<b>-Fix</b>
+          </span>
         </Link>
 
         {/* =====================================================
@@ -176,13 +176,6 @@ function Header({ variant = "marketing" }) {
             <div className="site-header__actions">
               <Link to="/login" className="site-header__login-link">
                 Login
-              </Link>
-
-              <Link
-                to="/services"
-                className="btn btn--primary site-header__cta"
-              >
-                Book a Fix
               </Link>
 
               <button

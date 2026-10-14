@@ -375,18 +375,23 @@ function Home() {
           </h2>
 
           <div className="steps-row">
-            {PROCESS_STEPS.map((s, idx) => (
-              <React.Fragment key={s.step}>
-                <div className="step-item">
-                  <div className="step-item__circle">{s.step}</div>
+            {PROCESS_STEPS.map((s, idx) => {
+              const STEP_ICONS = [Calendar, Users, Wrench, Star];
+              const StepIcon = STEP_ICONS[idx] || Wrench;
+
+              return (
+                <article key={s.step} className="step-card">
+                  <span className="step-card__num" aria-hidden="true">
+                    0{s.step}
+                  </span>
+                  <span className="step-card__icon">
+                    <StepIcon size={24} />
+                  </span>
                   <h4>{s.title}</h4>
                   <p>{s.desc}</p>
-                </div>
-                {idx < PROCESS_STEPS.length - 1 && (
-                  <div className="step-connector" />
-                )}
-              </React.Fragment>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

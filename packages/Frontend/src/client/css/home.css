@@ -1,6 +1,41 @@
 /* ==========================================================================
-   Base
+   Dr.-Fix Theme Variables (Signature Redesign)
    ========================================================================== */
+:root {
+  --df-orange: #f15a24;
+  --df-orange-tint: #fff0e8;
+  --df-heading: #171923;
+  --df-body: #666b78;
+  --df-bg: #fffdfa;
+  --df-surface: #f7f5f1;
+  --df-border: #e8e4de;
+  --df-footer-bg: #171923;
+  --df-radius-lg: 22px;
+  --df-radius-pill: 999px;
+  --df-font-heading: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --df-font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+html[data-theme="dark"] {
+  --df-bg: #0f0f14;
+  --df-surface: #17171f;
+  --df-border: #2a2a35;
+  --df-heading: #f5f5f7;
+  --df-body: #a6a6b3;
+  --df-orange-tint: rgba(241, 90, 36, 0.14);
+  --df-footer-bg: #0a0a0f;
+}
+
+/* ==========================================================================
+   Base & Typography
+   ========================================================================== */
+body {
+  background: var(--df-bg);
+  color: var(--df-body);
+  font-family: var(--df-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
 .home-page {
   background: var(--df-bg);
   color: var(--df-body);
@@ -18,15 +53,18 @@
 }
 
 .section-inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
 .section-heading {
-  font-size: 30px;
-  font-weight: 700;
-  margin-bottom: 32px;
+  font-family: var(--df-font-heading);
+  font-size: clamp(27px, 3vw, 40px);
+  letter-spacing: -0.055em;
+  line-height: 1.16;
+  margin-bottom: 35px;
+  color: var(--df-heading);
 }
 
 .section-heading--center {
@@ -35,6 +73,8 @@
 
 .text-accent {
   color: var(--df-orange);
+  position: relative;
+  white-space: nowrap;
 }
 
 .eyebrow {
@@ -53,78 +93,112 @@
   font-size: 14.5px;
   color: var(--df-orange);
   text-decoration: none;
-}
-
-/* Generic image placeholder — swap children for real <img> tags later */
-.image-placeholder {
-  width: 100%;
-  height: 100%;
-  min-height: 180px;
-  border-radius: var(--df-radius-lg);
-  border: 1.5px dashed var(--df-orange);
-  background: var(--df-orange-tint);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--df-orange);
-  font-family: var(--df-font-body);
-  font-size: 13px;
-  font-weight: 600;
+  gap: 8px;
+  transition: gap 0.2s ease;
 }
 
-.image-placeholder--round {
-  border-radius: 50%;
-  width: 76px;
-  height: 76px;
-  min-height: 0;
-}
-
-.image-placeholder--dark {
-  background: rgba(255, 90, 31, 0.12);
-  border-color: rgba(255, 90, 31, 0.5);
-  color: #ff9a6e;
+.link-arrow:hover {
+  gap: 14px;
 }
 
 /* ==========================================================================
-   Hero
+   Hero Section & Orange Shade Background
    ========================================================================== */
 .hero {
-  padding: 72px 0 56px;
+  position: relative;
+  padding: clamp(58px, 7vw, 100px) 0 68px;
+  isolation: isolate;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 540px;
+  height: 540px;
+  right: -150px;
+  top: -130px;
+  border: 1px solid rgba(241, 90, 36, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 42px rgba(241, 90, 36, 0.025), 0 0 0 84px rgba(241, 90, 36, 0.02);
+  pointer-events: none;
 }
 
 .hero__inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 48px;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(34px, 5vw, 64px);
   align-items: center;
 }
 
+.hero__text {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__text::before {
+  content: "YOUR HOME. IN GOOD HANDS.";
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--df-orange);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin-bottom: 22px;
+}
+
+.hero__text::after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 3px;
+  background: var(--df-orange);
+  border-radius: 3px;
+  margin-top: 24px;
+  opacity: 0.7;
+}
+
 .hero__heading {
-  font-size: 52px;
-  line-height: 1.1;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--df-font-heading);
+  font-size: clamp(42px, 5.15vw, 70px);
+  line-height: 1.05;
+  letter-spacing: -0.065em;
   margin-bottom: 18px;
+  color: var(--df-heading);
 }
 
 .hero__subtext {
-  font-size: 17px;
-  color: var(--df-body);
+  font-family: var(--df-font-body);
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.75;
+  color: #686b74;
+  margin-top: 18px;
   margin-bottom: 28px;
+  max-width: 460px;
 }
 
 .hero__search {
   display: flex;
   align-items: center;
   background: var(--df-surface);
-  border: 1px solid var(--df-border);
-  border-radius: var(--df-radius-pill);
-  padding: 6px 6px 6px 22px;
-  max-width: 560px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e9e4dd;
+  border-radius: 16px;
+  padding: 7px 7px 7px 22px;
+  max-width: 530px;
+  box-shadow: 0 12px 34px rgba(30, 27, 22, 0.07);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.hero__search:focus-within {
+  border-color: var(--df-orange);
+  box-shadow: 0 14px 36px rgba(241, 90, 36, 0.14);
+  transform: translateY(-2px);
 }
 
 .hero__search input {
@@ -143,45 +217,80 @@
 }
 
 .hero__search button {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
   border: none;
   background: var(--df-orange);
   color: #fff;
   cursor: pointer;
-  font-size: 16px;
-  flex-shrink: 0;
   display: grid;
   place-items: center;
-  transition: filter 0.15s ease;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .hero__search button:hover {
-  filter: brightness(0.94);
-}
-
-.hero__image {
-  width: 550px;
-  height: auto;
+  transform: scale(1.04);
+  background: #d94714;
 }
 
 .hero__visual {
-  aspect-ratio: 4 / 3;
+  position: relative;
+  padding: 0 8px 18px 0;
 }
 
-.image-placeholder--hero {
-  border-radius: var(--df-radius-lg);
+/* Orange shade background plate from dr-fix-redesign */
+.hero__visual::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 24px -10px -8px 28px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(241, 90, 36, 0.25), #f5e9df);
+  transform: rotate(3deg);
+  transition: transform 0.3s ease;
 }
 
+.hero__image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 550px;
+  height: auto;
+  border-radius: 24px;
+  filter: drop-shadow(0 20px 32px rgba(30, 24, 18, 0.12));
+  display: block;
+}
+
+.hero__visual::after {
+  content: "✓  VERIFIED LOCAL EXPERTS";
+  position: absolute;
+  z-index: 2;
+  left: -20px;
+  bottom: 8px;
+  padding: 13px 18px;
+  border: 1px solid rgba(23, 25, 35, 0.08);
+  border-radius: 14px;
+  background: #fff;
+  color: #252832;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  box-shadow: 0 14px 35px rgba(23, 25, 35, 0.12);
+}
+
+/* ==========================================================================
+   Stats Strip
+   ========================================================================== */
 .stats-strip {
-  border-top: 1px solid var(--df-border);
-  border-bottom: 1px solid var(--df-border);
-  padding: 22px 0;
+  border-block: 1px solid var(--df-border);
+  padding: 24px 0;
+  background: #fff;
 }
 
 .stats-strip__inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -193,251 +302,292 @@
 .stat-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 13px;
+  min-width: 140px;
 }
 
 .stat-item__icon {
-  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
 }
 
 .stat-item__value {
   font-family: var(--df-font-heading);
+  font-size: 19px;
   font-weight: 700;
-  font-size: 16px;
+  letter-spacing: -0.04em;
   color: var(--df-heading);
   margin: 0;
 }
 
 .stat-item__label {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--df-body);
-  margin: 0;
+  margin: 2px 0 0;
 }
 
 /* ==========================================================================
-   Service categories
+   Service Categories (Squircle Icon Boxes)
    ========================================================================== */
 .categories {
-  padding: 72px 0;
+  padding: clamp(60px, 7vw, 96px) 0;
 }
 
 .categories__row {
   display: flex;
-  justify-content: space-between; /* equal gaps across the full width */
-  gap: 12px; /* minimum gap; on small screens the row scrolls */
+  justify-content: flex-start;
+  gap: 16px;
+  margin-bottom: 36px;
   overflow-x: auto;
-  padding-bottom: 12px;
-  margin-bottom: 56px;
+  padding: 6px 2px 18px;
   scrollbar-width: thin;
 }
 
 .category-circle {
+  width: 110px;
+  gap: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
   background: none;
   border: none;
   cursor: pointer;
-  width: 84px;
+  flex-shrink: 0;
 }
 
 .category-circle__icon {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  border: 1.5px solid var(--df-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 26px;
-  background: var(--df-surface);
-  transition:
-    border-color 0.15s ease,
-    transform 0.15s ease;
+  width: 78px;
+  height: 78px;
+  border-radius: 24px;
+  border: 1px solid transparent;
+  background: #f5f2ed;
+  display: grid;
+  place-items: center;
+  color: var(--df-heading);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
 }
 
 .category-circle:hover .category-circle__icon {
-  border-color: var(--df-orange);
+  transform: translateY(-5px) rotate(-3deg);
+  box-shadow: 0 12px 24px rgba(23, 25, 35, 0.08);
 }
 
 .category-circle.is-active .category-circle__icon {
-  border-color: var(--df-orange);
-  border-width: 2px;
   background: var(--df-orange);
   color: #fff;
-}
-
-.category-circle.is-active .category-circle__name {
-  color: var(--df-orange);
+  box-shadow: 0 12px 24px rgba(241, 90, 36, 0.25);
 }
 
 .category-circle__name {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--df-heading);
   text-align: center;
 }
 
 .category-preview {
   display: grid;
-  grid-template-columns: 1fr 1.3fr;
-  gap: 32px;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: clamp(24px, 5vw, 64px);
+  padding: clamp(24px, 4vw, 54px);
+  border-radius: 28px;
+  background: #f5f2ed;
   align-items: center;
-  background: var(--df-surface);
-  border: 1px solid var(--df-border);
-  border-radius: var(--df-radius-lg);
-  padding: 40px;
-}
-
-.category-preview__text h3 {
-  font-size: 24px;
-  margin-bottom: 12px;
-}
-
-.category-preview__text p {
-  font-size: 15px;
-  line-height: 1.6;
-  margin-bottom: 18px;
-}
-
-.category-preview__image {
-  width: 100%;
-  height: 250px;
-  border-radius: 8px;
   overflow: hidden;
 }
 
-.category-preview__image img {
+.category-preview__text h3 {
+  font-family: var(--df-font-heading);
+  font-size: clamp(24px, 3vw, 36px);
+  letter-spacing: -0.05em;
+  margin-bottom: 12px;
+  color: var(--df-heading);
+}
+
+.category-preview__text p {
+  color: #696b72;
+  line-height: 1.8;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.category-preview__image {
+  height: clamp(220px, 26vw, 320px);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 18px 38px rgba(23, 25, 35, 0.12);
+}
+
+.category-preview__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   display: block;
 }
 
-.how-it-works {
-  padding: 72px 0;
-  background: var(--df-surface);
-}
-
-.steps-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0;
-}
-
-.step-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  width: 200px;
-}
-
-.step-item__circle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: var(--df-orange);
-  color: #fff;
-  font-family: var(--df-font-heading);
-  font-weight: 700;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-
-.step-item h4 {
-  font-size: 16px;
-  margin-bottom: 6px;
-}
-
-.step-item p {
-  font-size: 13.5px;
-  line-height: 1.5;
-}
-
-.step-connector {
-  flex: 1;
-  height: 1.5px;
-  background: var(--df-orange);
-  margin-top: 26px;
-  min-width: 24px;
-  opacity: 0.4;
+.category-preview:hover .category-preview__img {
+  transform: scale(1.035);
 }
 
 /* ==========================================================================
-   Case studies
+   How Dr.-Fix Works (Redesign Cards, No Moving Dot, No Mock Badges)
+   ========================================================================== */
+.how-it-works {
+  padding: clamp(60px, 7vw, 96px) 0;
+  background: #f5f2ed;
+}
+
+.steps-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  align-items: stretch;
+}
+
+.step-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  text-align: left;
+  background: var(--df-bg);
+  border: 1px solid var(--df-border);
+  border-radius: 26px;
+  padding: 28px 24px 26px;
+  box-shadow: 0 10px 30px rgba(23, 25, 35, 0.05);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.step-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(241, 90, 36, 0.45);
+  box-shadow: 0 24px 48px rgba(241, 90, 36, 0.15);
+}
+
+.step-card__num {
+  position: absolute;
+  right: 14px;
+  top: 2px;
+  font: 800 86px/1 var(--df-font-heading);
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(241, 90, 36, 0.25);
+  transition: -webkit-text-stroke-color 0.3s;
+  pointer-events: none;
+}
+
+.step-card:hover .step-card__num {
+  -webkit-text-stroke-color: rgba(241, 90, 36, 0.65);
+}
+
+.step-card__icon {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+  border-radius: 19px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff8a55, #f15a24);
+  box-shadow: 0 14px 26px rgba(241, 90, 36, 0.35);
+  transition: transform 0.35s ease;
+}
+
+.step-card:hover .step-card__icon {
+  transform: rotate(-8deg) scale(1.08);
+}
+
+.step-card h4 {
+  font-family: var(--df-font-heading);
+  font-size: 18px;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+  color: var(--df-heading);
+}
+
+.step-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--df-body);
+}
+
+/* ==========================================================================
+   Reviews & Ratings (Redesign Typography & Card Hover)
    ========================================================================== */
 .case-studies {
-  padding: 72px 0;
+  padding: clamp(60px, 7vw, 96px) 0;
 }
 
 .case-studies__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 22px;
 }
 
 .case-card {
-  background: var(--df-surface);
-  border: 1px solid var(--df-border);
-  border-radius: var(--df-radius-lg);
-  padding: 20px;
+  border-radius: 20px;
+  padding: 26px;
+  border: 1px solid #ebe6df;
+  background: var(--df-bg);
+  box-shadow: 0 5px 18px rgba(23, 25, 35, 0.025);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.case-card h4 {
-  font-size: 17px;
-  margin-bottom: 10px;
+.case-card:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 18px 40px rgba(23, 25, 35, 0.08);
+  border-color: #f1c2ad;
 }
 
-.case-card p {
-  font-size: 13.5px;
-  line-height: 1.6;
-  margin: 0 0 6px;
+.review-card__text {
+  color: #4d5059;
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  flex: 1;
 }
 
 .case-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--df-border);
+  padding: 12px 0 10px;
+  border-top: 1px solid #eee9e3;
+  margin-bottom: 8px;
 }
 
 .stars {
-  color: var(--df-orange);
-  font-size: 14px;
+  color: #ffb400;
+  letter-spacing: 2px;
+  font-size: 15px;
 }
 
-.case-card__customer {
-  font-size: 12.5px;
-  color: var(--df-body);
-}
-
-.review-card__text {
-  min-height: 86px;
-  font-size: 15px !important;
-  line-height: 1.7 !important;
+.case-card__footer strong {
+  font-size: 13.5px;
   color: var(--df-heading);
 }
 
 .review-card__technician {
-  margin: 14px 0 4px !important;
-  font-size: 14px !important;
   font-weight: 700;
+  font-size: 14px;
   color: var(--df-heading);
+  margin: 0 0 2px;
 }
 
 .review-card__address {
-  margin: 0 !important;
-  font-size: 12.5px !important;
+  font-size: 12px;
   color: var(--df-body);
+  margin: 0;
 }
 
 .home-data-empty {
@@ -450,7 +600,7 @@
 }
 
 /* ==========================================================================
-   Technicians
+   Our Verified Technicians (Kept Same As Before per Point 7)
    ========================================================================== */
 .technicians {
   padding: 72px 0;
@@ -469,6 +619,12 @@
   padding: 20px;
   text-align: center;
   background: var(--df-bg);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.technician-card:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
 }
 
 .technician-card__photo {
@@ -535,123 +691,186 @@
 }
 
 /* ==========================================================================
-   Trust strip
+   Trust & Safety Strip (Redesign Style)
    ========================================================================== */
 .trust-strip {
-  padding: 48px 0;
+  position: relative;
+  overflow: hidden;
+  padding: 64px 0;
+  background: linear-gradient(135deg, #14161f, #252838);
 }
 
 .trust-strip__inner {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 18px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 .trust-item {
+  position: relative;
+  overflow: hidden;
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.trust-item:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(241, 90, 36, 0.7);
 }
 
 .trust-item__icon {
-  font-size: 22px;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
+  border-radius: 15px;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #ff8a55, #f15a24);
+  box-shadow: 0 10px 22px rgba(241, 90, 36, 0.35);
 }
 
 .trust-item__label {
+  color: #fff;
   font-weight: 700;
   font-size: 14px;
-  color: var(--df-heading);
   margin: 0 0 2px;
 }
 
 .trust-item__sub {
-  font-size: 12.5px;
+  color: #aab0c0;
+  font-size: 12px;
   margin: 0;
 }
 
 /* ==========================================================================
-   Become a provider
+   Become a Provider (Redesign Polish)
    ========================================================================== */
 .provider-cta {
-  padding: 24px 0 72px;
+  padding: 24px 0 78px;
 }
 
 .provider-cta__inner {
-  background: var(--df-footer-bg);
-  border-radius: var(--df-radius-lg);
-  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: clamp(32px, 4vw, 56px);
+  background: #191b25;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
   gap: 32px;
 }
 
-.provider-cta__image {
-  width: 160px;
-  height: 120px;
+.provider-cta__inner::after {
+  content: "";
+  position: absolute;
+  right: -95px;
+  top: -150px;
+  width: 350px;
+  height: 350px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 35px rgba(255, 255, 255, 0.025), 0 0 0 70px rgba(255, 255, 255, 0.02);
+  pointer-events: none;
 }
 
 .provider-cta__text h3 {
   color: #fff;
-  font-size: 24px;
-  margin-bottom: 8px;
+  font-family: var(--df-font-heading);
+  font-size: clamp(24px, 3vw, 36px);
+  letter-spacing: -0.05em;
+  margin-bottom: 10px;
 }
 
 .provider-cta__desc {
-  color: #b0b0b0;
-  font-size: 14px;
-  line-height: 1.6;
-  max-width: 480px;
+  color: #bfc0c7;
+  font-size: 14.5px;
+  line-height: 1.65;
+  max-width: 500px;
   margin: 0;
 }
 
 .provider-cta__actions {
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* both buttons get the same width */
   gap: 12px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Shared look for both provider buttons. Two-class selector so it wins
-   over the generic .btn / .btn--primary rules from other CSS files. */
 .provider-cta__actions .provider-cta__btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 28px;
-  font-size: 15px;
+  padding: 13px 26px;
+  font-size: 14.5px;
   font-weight: 600;
   line-height: 1.2;
   white-space: nowrap;
   text-decoration: none;
   text-align: center;
   border: 1.5px solid var(--df-orange);
-  border-radius: var(--df-radius-pill);
+  border-radius: 12px;
   cursor: pointer;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-/* "Already a provider? Login" — outlined version of the same button */
+.provider-cta__btn.btn--primary {
+  background: var(--df-orange);
+  color: #fff;
+}
+
+.provider-cta__btn.btn--primary:hover {
+  background: #d94714;
+  border-color: #d94714;
+  transform: translateY(-2px);
+}
+
 .provider-cta__actions .provider-cta__btn--outline {
   background: transparent;
   color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .provider-cta__actions .provider-cta__btn--outline:hover {
   background: var(--df-orange);
   border-color: var(--df-orange);
   color: #fff;
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   Final CTA banner
+   Final CTA Banner
    ========================================================================== */
 .cta-banner {
   background: var(--df-orange);
-  padding: 48px 0;
+  padding: clamp(38px, 5vw, 60px) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-banner::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: -80px;
+  top: -170px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  box-shadow: 0 0 0 32px rgba(255, 255, 255, 0.06), 0 0 0 64px rgba(255, 255, 255, 0.04);
 }
 
 .cta-banner__inner {
@@ -660,26 +879,38 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .cta-banner h3 {
   color: #fff;
-  font-size: 26px;
+  font-family: var(--df-font-heading);
+  font-size: clamp(26px, 3.4vw, 40px);
+  letter-spacing: -0.05em;
   margin-bottom: 6px;
 }
 
 .cta-banner p {
   color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  font-size: 15px;
 }
 
 .btn--light {
   background: #fff;
   color: var(--df-orange);
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(90, 35, 15, 0.14);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .btn--light:hover {
   background: #fff3ee;
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
@@ -688,53 +919,65 @@
 @media (max-width: 960px) {
   .hero__inner {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
 
-  .hero__heading {
-    font-size: 38px;
+  .steps-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .case-studies__grid,
+  .technicians__grid,
+  .trust-strip__inner {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .category-preview {
     grid-template-columns: 1fr;
   }
 
-  .technicians__grid,
-  .case-studies__grid,
-  .trust-strip__inner {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .steps-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .step-connector {
-    display: none;
-  }
-
   .provider-cta__inner {
     grid-template-columns: 1fr;
-    text-align: center;
+    text-align: left;
   }
 
   .provider-cta__actions {
     width: 100%;
     max-width: 320px;
-    margin: 0 auto;
   }
 }
 
-@media (max-width: 560px) {
-  .technicians__grid,
+@media (max-width: 640px) {
+  .hero__heading {
+    font-size: clamp(38px, 10vw, 50px);
+  }
+
+  .stats-strip__inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 12px;
+  }
+
+  .steps-row,
   .case-studies__grid,
+  .technicians__grid,
   .trust-strip__inner {
     grid-template-columns: 1fr;
   }
 
+  .category-circle {
+    width: 88px;
+  }
+
+  .category-circle__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+  }
+
   .cta-banner__inner {
     flex-direction: column;
-    text-align: center;
+    text-align: left;
+    align-items: flex-start;
   }
 }
