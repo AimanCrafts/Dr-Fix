@@ -1,21 +1,15 @@
-.tech-page__main > h1 {
-  margin: 0;
-  color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  line-height: 1.15;
-}
-
-.schedule-intro {
+.tech-schedule .schedule-intro {
   color: var(--df-body);
-  font-size: 14px;
+  font-size: var(--df-fs-body);
   margin: 8px 0 28px;
 }
-.schedule-list-page {
+
+.tech-schedule .schedule-list-page {
   margin-top: 28px;
   border-top: 1px solid var(--df-border);
 }
-.schedule-card {
+
+.tech-schedule .schedule-card {
   display: grid;
   grid-template-columns: 120px 1fr auto;
   gap: 24px;
@@ -23,40 +17,47 @@
   padding: 22px 0;
   border-bottom: 1px solid var(--df-border);
 }
-.schedule-card__time {
+
+.tech-schedule .schedule-card__time {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
-.schedule-card__time strong {
-  font-family: var(--df-font-heading);
+
+.tech-schedule .schedule-card__time strong {
+  font-family: var(--df-font-rounded);
   color: var(--df-orange);
   font-size: 15px;
 }
-.schedule-card__time span {
-  font-size: 12px;
+
+.tech-schedule .schedule-card__time span {
+  font-size: 13px;
   color: var(--df-body);
 }
-.schedule-card__status {
+
+.tech-schedule .schedule-card__status {
   display: inline-block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--df-orange);
   background: #fff1eb;
   border-radius: 999px;
   padding: 4px 9px;
 }
-.schedule-card h2 {
+
+.tech-schedule .schedule-card h2 {
   margin: 8px 0 5px;
-  font-family: var(--df-font-heading);
-  font-size: 18px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
 }
-.schedule-card p {
+
+.tech-schedule .schedule-card p {
   margin: 3px 0;
   color: var(--df-body);
   font-size: 13px;
 }
-.schedule-card__action button {
+
+.tech-schedule .schedule-card__action button {
   border: 1px solid var(--df-orange);
   background: #fff;
   color: var(--df-orange);
@@ -66,14 +67,17 @@
   cursor: pointer;
   white-space: nowrap;
 }
-.schedule-card__action button:disabled {
+
+.tech-schedule .schedule-card__action button:disabled {
   opacity: 0.6;
 }
+
 @media (max-width: 700px) {
-  .schedule-card {
-    grid-template-columns: 1fr;
-  }
-  .schedule-card__action button {
-    width: 100%;
-  }
+.tech-schedule .schedule-card {
+      grid-template-columns: 1fr;
+    }
+
+.tech-schedule .schedule-card__action button {
+      width: 100%;
+    }
 }

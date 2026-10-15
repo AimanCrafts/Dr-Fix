@@ -63,7 +63,7 @@ function Profile() {
   };
   if (loading)
     return (
-      <div className="tech-page">
+      <div className="tech-page tech-profile">
         <Header variant="technician" />
         <main className="tech-page__main">
           <div className="tech-empty">
@@ -73,7 +73,7 @@ function Profile() {
       </div>
     );
   return (
-    <div className="tech-page">
+    <div className="tech-page tech-profile">
       <Header variant="technician" />
       <main className="tech-page__main">
         <h1>Profile</h1>
@@ -83,8 +83,8 @@ function Profile() {
         </p>
         {message && <div className="profile-success">{message}</div>}
         {error && <div className="tech-message">{error}</div>}
-        <form className="profile-card" onSubmit={save}>
-          <div className="profile-avatar">
+        <form className="tech-profile-card" onSubmit={save}>
+          <div className="tech-profile-avatar">
             {form.name?.charAt(0)?.toUpperCase() || "T"}
           </div>
           <div className="profile-grid">

@@ -25,7 +25,11 @@
 .addresses-heading h1 {
   margin: 0 0 8px;
   color: var(--df-heading, #222);
-  font-size: 32px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .addresses-heading p {
@@ -55,7 +59,11 @@
 .addresses-list h2 {
   margin: 0 0 20px;
   color: var(--df-heading, #222);
-  font-size: 20px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .addresses-form {
@@ -160,8 +168,12 @@
 
 .address-item__top h3 {
   margin: 0;
-  font-size: 16px;
   color: var(--df-heading, #222);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .address-item__content p {
@@ -177,7 +189,7 @@
   border-radius: 20px;
   background: #fff0eb;
   color: var(--df-orange, #e2532e);
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -209,20 +221,16 @@
 }
 
 @media (max-width: 700px) {
-  .addresses-main {
+.addresses-main {
     padding: 32px 16px 60px;
   }
 
-  .addresses-heading h1 {
-    font-size: 28px;
-  }
-
-  .address-item {
+.address-item {
     align-items: flex-start;
     flex-direction: column;
   }
 
-  .address-item__actions {
+.address-item__actions {
     width: 100%;
   }
 }

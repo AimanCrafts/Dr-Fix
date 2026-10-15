@@ -55,15 +55,15 @@
 
 .site-header__wordmark {
   font-family: var(--df-font-heading, "Plus Jakarta Sans", sans-serif);
-  font-weight: 700;
+  font-weight: 400;
   font-size: 22px;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
   color: var(--df-heading, #171923);
 }
 
 .site-header__wordmark b {
   color: var(--df-orange, #f15a24);
-  font-weight: 800;
+  font-weight: 400;
 }
 
 /* ---------------- Marketing nav ---------------- */
@@ -136,6 +136,27 @@
   background: var(--df-orange-tint, #fff0e8);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(241, 90, 36, 0.15);
+}
+
+.site-header__signup-link {
+  font-family: var(--df-font-body, "Inter", sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid var(--df-orange, #f15a24);
+  background: var(--df-orange, #f15a24);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.site-header__signup-link:hover {
+  background: #d94714;
+  border-color: #d94714;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(241, 90, 36, 0.3);
 }
 
 .site-header__theme-toggle {
@@ -329,6 +350,7 @@
   }
 
   .site-header__login-link,
+  .site-header__signup-link,
   .site-header__cta {
     display: none;
   }

@@ -81,7 +81,7 @@ function JobRequests() {
   };
 
   return (
-    <div className="tech-page">
+    <div className="tech-page tech-jobs">
       <Header variant="technician" />
       <main className="tech-page__main">
         <div className="tech-page__topline">

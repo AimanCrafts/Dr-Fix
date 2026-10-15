@@ -41,7 +41,7 @@ function TechnicianReviews() {
   const maxCount = data ? Math.max(1, ...Object.values(data.distribution)) : 1;
 
   return (
-    <div className="tech-page">
+    <div className="tech-page tech-reviews">
       <Header variant="technician" />
 
       <main className="tech-page__main rv-page">

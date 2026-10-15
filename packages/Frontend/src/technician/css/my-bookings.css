@@ -1,33 +1,39 @@
-.my-bookings-page {
+.tech-bookings-page {
   min-height: 100vh;
   background: #fafafa;
   color: var(--df-heading);
   font-family: var(--df-font-body);
 }
-.my-bookings-main {
+
+.tech-bookings-page .tech-bookings-main {
   max-width: 1050px;
   margin: 0 auto;
   padding: 42px 24px 80px;
 }
-.my-bookings-main h1 {
+
+.tech-bookings-page .tech-bookings-main h1 {
   margin: 0;
-  font-family: var(--df-font-heading);
-  font-size: 32px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
 }
-.my-bookings-intro {
+
+.tech-bookings-page .tech-bookings-intro {
   color: var(--df-body);
-  font-size: 14px;
+  font-size: var(--df-fs-body);
   margin: 8px 0 34px;
 }
-.my-bookings-main section {
+
+.tech-bookings-page .tech-bookings-main section {
   margin-top: 35px;
 }
-.my-bookings-main section > h2 {
-  font-family: var(--df-font-heading);
-  font-size: 19px;
+
+.tech-bookings-page .tech-bookings-main section > h2 {
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
   margin: 0 0 14px;
 }
-.my-booking-card {
+
+.tech-bookings-page .tech-booking-card {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 20px;
@@ -38,52 +44,60 @@
   padding: 20px;
   margin-bottom: 12px;
 }
-.booking-status {
+
+.tech-bookings-page .tech-booking-status {
   display: inline-block;
   padding: 4px 9px;
   border-radius: 999px;
   background: #f1f1f1;
   color: #555;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: capitalize;
 }
-.booking-status--accepted,
-.booking-status--on_the_way,
-.booking-status--arrived,
-.booking-status--in_progress {
+
+.tech-bookings-page .tech-booking-status--accepted,
+.tech-bookings-page .tech-booking-status--on_the_way,
+.tech-bookings-page .tech-booking-status--arrived,
+.tech-bookings-page .tech-booking-status--in_progress {
   background: #fff1eb;
   color: var(--df-orange);
 }
-.my-booking-card h2 {
+
+.tech-bookings-page .tech-booking-card h2 {
   margin: 9px 0 5px;
-  font-family: var(--df-font-heading);
-  font-size: 18px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
 }
-.my-booking-card p {
+
+.tech-bookings-page .tech-booking-card p {
   margin: 3px 0;
   color: var(--df-body);
   font-size: 13px;
 }
-.my-booking-card__side {
+
+.tech-bookings-page .tech-booking-card__side {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 9px;
 }
-.my-booking-card__side strong {
-  font-family: var(--df-font-heading);
+
+.tech-bookings-page .tech-booking-card__side strong {
+  font-family: var(--df-font-rounded);
   color: var(--df-orange);
   font-size: 20px;
 }
-.my-booking-card__side a {
+
+.tech-bookings-page .tech-booking-card__side a {
   color: var(--df-orange);
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
 }
-.my-bookings-empty,
-.my-bookings-error {
+
+.tech-bookings-page .tech-bookings-empty,
+.tech-bookings-page .tech-bookings-error {
   padding: 22px;
   background: #fff;
   border: 1px solid var(--df-border);
@@ -91,15 +105,18 @@
   color: var(--df-body);
   font-size: 13px;
 }
-.my-bookings-error {
+
+.tech-bookings-page .tech-bookings-error {
   background: #fff4e5;
   color: #9a6100;
 }
+
 @media (max-width: 600px) {
-  .my-booking-card {
-    grid-template-columns: 1fr;
-  }
-  .my-booking-card__side {
-    align-items: flex-start;
-  }
+.tech-bookings-page .tech-booking-card {
+      grid-template-columns: 1fr;
+    }
+
+.tech-bookings-page .tech-booking-card__side {
+      align-items: flex-start;
+    }
 }

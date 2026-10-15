@@ -1,17 +1,10 @@
-.tech-page__main > h1 {
-  margin: 0;
-  color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  line-height: 1.15;
-}
-
-.profile-intro {
+.tech-profile .profile-intro {
   color: var(--df-body);
   font-size: 15px;
   margin: 8px 0 25px;
 }
-.profile-success {
+
+.tech-profile .profile-success {
   padding: 12px 15px;
   background: #eaf8ed;
   color: #24733a;
@@ -19,7 +12,8 @@
   font-size: 14px;
   margin-bottom: 14px;
 }
-.profile-card {
+
+.tech-profile .tech-profile-card {
   max-width: 900px;
   background: #fff;
   border: 1px solid var(--df-border);
@@ -27,7 +21,8 @@
   padding: 28px;
   margin-top: 26px;
 }
-.profile-avatar {
+
+.tech-profile .tech-profile-avatar {
   width: 58px;
   height: 58px;
   border-radius: 50%;
@@ -36,17 +31,19 @@
   justify-content: center;
   background: var(--df-orange);
   color: #fff;
-  font-family: var(--df-font-heading);
+  font-family: var(--df-font-rounded);
   font-weight: 700;
   font-size: 24px;
   margin-bottom: 25px;
 }
-.profile-grid {
+
+.tech-profile .profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px 22px;
 }
-.profile-grid label {
+
+.tech-profile .profile-grid label {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -54,7 +51,8 @@
   font-weight: 700;
   color: var(--df-heading);
 }
-.profile-grid input {
+
+.tech-profile .profile-grid input {
   border: 1px solid var(--df-border);
   border-radius: 9px;
   padding: 12px 13px;
@@ -63,14 +61,17 @@
   font-weight: 400;
   outline: none;
 }
-.profile-grid input:focus {
+
+.tech-profile .profile-grid input:focus {
   border-color: var(--df-orange);
 }
-.profile-grid input[readonly] {
+
+.tech-profile .profile-grid input[readonly] {
   background: #f6f6f6;
   color: #888;
 }
-.profile-bottom {
+
+.tech-profile .profile-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -80,15 +81,18 @@
   margin: 25px 0;
   padding: 18px 0;
 }
-.profile-bottom strong {
+
+.tech-profile .profile-bottom strong {
   font-size: 16px;
 }
-.profile-bottom p {
+
+.tech-profile .profile-bottom p {
   margin: 4px 0 0;
   color: var(--df-body);
   font-size: 14px;
 }
-.profile-toggle {
+
+.tech-profile .profile-toggle {
   border: 1px solid var(--df-border);
   background: #fff;
   border-radius: 999px;
@@ -98,11 +102,13 @@
   font-weight: 700;
   cursor: pointer;
 }
-.profile-toggle.is-on {
+
+.tech-profile .profile-toggle.is-on {
   border-color: #2e9e4f;
   color: #24733a;
 }
-.profile-save {
+
+.tech-profile .profile-save {
   border: 0;
   border-radius: 999px;
   background: var(--df-orange);
@@ -113,15 +119,18 @@
   font-weight: 700;
   cursor: pointer;
 }
-.profile-save:disabled {
+
+.tech-profile .profile-save:disabled {
   opacity: 0.6;
 }
+
 @media (max-width: 650px) {
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-  .profile-bottom {
-    align-items: flex-start;
-    flex-direction: column;
-  }
+.tech-profile .profile-grid {
+      grid-template-columns: 1fr;
+    }
+
+.tech-profile .profile-bottom {
+      align-items: flex-start;
+      flex-direction: column;
+    }
 }

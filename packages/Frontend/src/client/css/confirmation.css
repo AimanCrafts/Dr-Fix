@@ -30,11 +30,13 @@
 }
 
 .confirmed-container h1 {
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  font-weight: 700;
   color: var(--df-heading);
   margin: 0 0 12px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .confirmed-subtext {
@@ -104,6 +106,7 @@
 .summary-row--top {
   align-items: flex-start;
 }
+
 .summary-row__value--stack {
   display: flex;
   flex-direction: column;
@@ -111,6 +114,7 @@
   gap: 6px;
   min-width: 0;
 }
+
 .summary-pay-line {
   display: flex;
   align-items: center;
@@ -118,6 +122,7 @@
   flex-wrap: wrap;
   gap: 8px;
 }
+
 .summary-pill {
   padding: 2px 10px;
   border-radius: 999px;
@@ -126,16 +131,19 @@
   line-height: 1.6;
   white-space: nowrap;
 }
+
 .summary-pill--paid {
   background: #e8f6ee;
   color: #1d7a46;
 }
+
 .summary-pill--due {
   background: #fff3e6;
   color: #a8570f;
 }
+
 .summary-sub {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--df-muted);
   overflow-wrap: anywhere;
@@ -196,15 +204,14 @@
 }
 
 @media (max-width: 480px) {
-  .confirmed-actions {
+.confirmed-actions {
     flex-direction: column;
   }
 }
 
-
-
 /* ---------------- Minimal brand bar (replaces the site header) ----------------
    Logo and name match .site-header__logo / __logo-icon / __wordmark. */
+
 .focus-bar {
   position: sticky;
   top: 0;
@@ -212,6 +219,7 @@
   background: var(--df-surface);
   border-bottom: 1px solid var(--df-border);
 }
+
 .focus-bar__brand {
   max-width: 1200px;
   margin: 0 auto;
@@ -221,6 +229,7 @@
   gap: 8px;
   text-decoration: none;
 }
+
 .focus-bar__logo {
   width: 40px;
   height: 40px;
@@ -228,6 +237,7 @@
   display: block;
   flex-shrink: 0;
 }
+
 .focus-bar__name {
   font-family: var(--df-font-heading);
   font-weight: 700;

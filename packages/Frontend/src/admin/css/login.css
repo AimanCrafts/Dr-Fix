@@ -1,6 +1,6 @@
 /* Assumes shared tokens (--df-*) already loaded globally from the client
    header.css. Re-declared minimally here so this page also works standalone. */
-:root {
+.admin-login-page {
   --df-bg: #fafafa;
   --df-surface: #ffffff;
   --df-orange: #ff5a1f;

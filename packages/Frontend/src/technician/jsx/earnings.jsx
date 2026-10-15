@@ -18,7 +18,7 @@ function Earnings() {
   }, []);
 
   return (
-    <div className="tech-page">
+    <div className="tech-page tech-earnings">
       <Header variant="technician" />
       <main className="tech-page__main earnings-page">
         <h1>Earnings</h1>

@@ -22,12 +22,13 @@
 }
 
 .greeting h1 {
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  font-weight: 700;
   color: var(--df-heading);
-  line-height: 1.2;
   margin: 0;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .quick-actions {
@@ -62,10 +63,13 @@
 }
 
 .action-card h3 {
-  font-family: var(--df-font-heading);
-  font-size: 15.5px;
   color: var(--df-heading);
   margin: 0 0 4px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .action-card p {
@@ -113,8 +117,11 @@
 .rate-service h2,
 .address-summary h2,
 .addresses h2 {
-  font-family: var(--df-font-heading);
-  font-size: 18px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
   color: var(--df-heading);
   margin: 0;
 }
@@ -155,7 +162,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-size: 12.5px;
+  font-size: 13px;
   margin: 2px 0;
 }
 
@@ -197,7 +204,7 @@
 }
 
 .progress-step__label {
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--df-heading);
   margin: 0;
@@ -236,9 +243,9 @@
   gap: 16px;
 }
 
-.eyebrow {
+.client-dashboard .eyebrow {
   color: var(--df-orange);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   margin: 0 0 5px;
@@ -314,7 +321,7 @@
 
 .default-address-content p {
   margin: 3px 0 0;
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.45;
 }
 
@@ -377,14 +384,14 @@
 }
 
 .recent-service-card__meta {
-  font-size: 12.5px;
+  font-size: 13px;
   margin: 0;
 }
 
 .status-badge {
   display: inline-block;
   width: fit-content;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   padding: 4px 10px;
   border-radius: var(--df-radius-pill);
@@ -412,8 +419,12 @@
 
 .empty-card h3 {
   color: var(--df-heading);
-  font-size: 16px;
   margin: 0;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .empty-card p {
@@ -475,11 +486,11 @@
   margin-left: 8px;
   font-weight: 600;
   color: var(--df-orange);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .address-chip__detail {
-  font-size: 12.5px;
+  font-size: 13px;
   margin: 3px 0 0;
   line-height: 1.4;
 }
@@ -494,7 +505,7 @@
 }
 
 .address-chip__action {
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .address-chip__action:hover,
@@ -601,7 +612,7 @@
   font-size: 13px;
 }
 
-.btn--outline-sm {
+.client-dashboard .btn--outline-sm {
   border: 1px solid var(--df-orange);
   color: var(--df-orange);
   background: transparent;
@@ -610,7 +621,7 @@
   margin-top: 7px;
 }
 
-.btn--outline-sm:hover {
+.client-dashboard .btn--outline-sm:hover {
   background: var(--df-orange);
   color: #fff;
 }
@@ -638,9 +649,10 @@
 }
 
 .rating-modal__header h2 {
-  font-family: var(--df-font-heading);
+  font-family: var(--df-font-rounded);
+  font-weight: 800;
   color: var(--df-heading);
-  font-size: 22px;
+  font-size: var(--df-fs-section-title);
   margin: 0;
 }
 
@@ -692,7 +704,7 @@
 
 .rating-modal__service p {
   margin: 3px 0 0;
-  font-size: 12.5px;
+  font-size: 13px;
 }
 
 .rating-control {
@@ -770,13 +782,13 @@
   display: block;
   text-align: right;
   margin-top: 5px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--df-body);
 }
 
 .rating-form-error,
 .rating-form-success {
-  font-size: 12.5px;
+  font-size: 13px;
   margin: 10px 0 0;
 }
 
@@ -795,50 +807,46 @@
 }
 
 @media (max-width: 960px) {
-  .quick-actions,
+.quick-actions,
   .dashboard-feature-grid,
   .recent-services-grid {
     grid-template-columns: 1fr;
   }
 
-  .active-booking__row {
+.active-booking__row {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-  .dashboard-container {
+.dashboard-container {
     padding: 28px 16px 60px;
     gap: 20px;
   }
 
-  .greeting h1 {
-    font-size: 27px;
-  }
-
-  .card,
+.card,
   .action-card {
     padding: 18px;
   }
 
-  .progress-steps {
+.progress-steps {
     overflow-x: auto;
     padding-bottom: 4px;
   }
 
-  .progress-step {
+.progress-step {
     min-width: 92px;
   }
 
-  .address-chip__action {
+.address-chip__action {
     display: none;
   }
 
-  .rating-modal {
+.rating-modal {
     padding: 20px;
   }
 
-  .rating-stars {
+.rating-stars {
     gap: 2px;
   }
 }

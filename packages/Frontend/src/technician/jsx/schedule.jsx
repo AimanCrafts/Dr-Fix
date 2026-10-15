@@ -56,7 +56,7 @@ function Schedule() {
   };
 
   return (
-    <div className="tech-page">
+    <div className="tech-page tech-schedule">
       <Header variant="technician" />
       <main className="tech-page__main">
         <h1>Schedule</h1>

@@ -1,20 +1,4 @@
-:root {
-  --df-bg: #fafafa;
-  --df-surface: #ffffff;
-  --df-orange: #ff5a1f;
-  --df-orange-hover: #e64e15;
-  --df-orange-tint: #fff1eb;
-  --df-heading: #1a1a1a;
-  --df-body: #4a4a4a;
-  --df-border: #ececec;
-  --df-font-heading:
-    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
-  --df-font-body: "Inter", -apple-system, sans-serif;
-  --df-radius-lg: 20px;
-  --df-radius-pill: 999px;
-}
-
-.review-page {
+.tech-review-page {
   min-height: 100vh;
   background: var(--df-bg);
   display: flex;
@@ -24,7 +8,7 @@
   font-family: var(--df-font-body);
 }
 
-.review-card {
+.tech-review-card {
   width: 100%;
   max-width: 460px;
   background: var(--df-surface);
@@ -34,7 +18,7 @@
   text-align: center;
 }
 
-.review-icon-placeholder {
+.tech-review-icon-placeholder {
   width: 64px;
   height: 64px;
   border-radius: 50%;
@@ -43,22 +27,22 @@
   margin: 0 auto 24px;
 }
 
-.review-card h1 {
-  font-family: var(--df-font-heading);
-  font-size: 32px;
+.tech-review-card h1 {
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
   font-weight: 700;
   color: var(--df-heading);
   margin: 0 0 14px;
 }
 
-.review-subtext {
+.tech-review-subtext {
   font-size: 14px;
   line-height: 1.7;
   color: var(--df-body);
   margin: 0 0 20px;
 }
 
-.review-note {
+.tech-review-note {
   font-size: 13px;
   font-weight: 600;
   border-radius: 12px;
@@ -66,17 +50,17 @@
   margin: 0 0 18px;
 }
 
-.review-note--pending {
+.tech-review-note--pending {
   background: #fff6e5;
   color: #b67b00;
 }
 
-.review-note--rejected {
+.tech-review-note--rejected {
   background: #fdeeee;
   color: #c62828;
 }
 
-.review-btn {
+.tech-review-btn {
   width: 100%;
   border-radius: var(--df-radius-pill);
   padding: 14px;
@@ -87,21 +71,21 @@
   border: none;
 }
 
-.review-btn--primary {
+.tech-review-btn--primary {
   background: var(--df-orange);
   color: #fff;
 }
 
-.review-btn--primary:hover {
+.tech-review-btn--primary:hover {
   background: var(--df-orange-hover);
 }
 
-.review-btn--primary:disabled {
+.tech-review-btn--primary:disabled {
   opacity: 0.6;
   cursor: default;
 }
 
-.review-links {
+.tech-review-links {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,14 +93,14 @@
   margin-top: 22px;
 }
 
-.review-links a {
+.tech-review-links a {
   font-size: 13px;
   font-weight: 600;
   color: var(--df-body);
   text-decoration: underline;
 }
 
-.review-links__logout {
+.tech-review-links__logout {
   background: none;
   border: none;
   font-size: 13px;
@@ -127,7 +111,7 @@
   font-family: inherit;
 }
 
-.review-links a:hover,
-.review-links__logout:hover {
+.tech-review-links a:hover,
+.tech-review-links__logout:hover {
   color: var(--df-orange);
 }

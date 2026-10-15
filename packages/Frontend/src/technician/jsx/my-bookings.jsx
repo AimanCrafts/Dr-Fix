@@ -39,9 +39,9 @@ function MyBookings() {
   );
 
   const card = (booking) => (
-    <article className="my-booking-card" key={booking.id}>
+    <article className="tech-booking-card" key={booking.id}>
       <div>
-        <span className={`booking-status booking-status--${booking.status}`}>
+        <span className={`tech-booking-status tech-booking-status--${booking.status}`}>
           {String(booking.status || "").replaceAll("_", " ")}
         </span>
 
@@ -54,33 +54,31 @@ function MyBookings() {
         <p>{booking.address}</p>
       </div>
 
-      <div className="my-booking-card__side">
+      <div className="tech-booking-card__side">
         <strong>৳{Number(booking.price || 0).toLocaleString()}</strong>
 
         {activeStatuses.includes(booking.status) && (
-          <Link to={`/booking-tracking?bookingId=${booking.id}`}>
-            View Booking
-          </Link>
+          <Link to="/technician/schedule">View in Schedule</Link>
         )}
       </div>
     </article>
   );
 
   return (
-    <div className="my-bookings-page">
-      <Header variant="app" />
+    <div className="tech-bookings-page">
+      <Header variant="technician" />
 
-      <main className="my-bookings-main">
+      <main className="tech-bookings-main">
         <h1>My Bookings</h1>
 
-        <p className="my-bookings-intro">
+        <p className="tech-bookings-intro">
           View your accepted jobs and completed service history.
         </p>
 
-        {error && <div className="my-bookings-error">{error}</div>}
+        {error && <div className="tech-bookings-error">{error}</div>}
 
         {loading ? (
-          <div className="my-bookings-empty">Loading bookings...</div>
+          <div className="tech-bookings-empty">Loading bookings...</div>
         ) : (
           <>
             {/* ACTIVE BOOKINGS */}
@@ -90,7 +88,7 @@ function MyBookings() {
               {active.length > 0 ? (
                 active.map(card)
               ) : (
-                <div className="my-bookings-empty">
+                <div className="tech-bookings-empty">
                   No active bookings right now.
                 </div>
               )}
@@ -103,7 +101,7 @@ function MyBookings() {
               {history.length > 0 ? (
                 history.map(card)
               ) : (
-                <div className="my-bookings-empty">
+                <div className="tech-bookings-empty">
                   No previous bookings yet.
                 </div>
               )}

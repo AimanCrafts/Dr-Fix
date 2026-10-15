@@ -3,14 +3,15 @@
 .rv-page h1 {
   margin: 0 0 4px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 32px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
   line-height: 1.15;
 }
 
 .rv-intro {
-  margin: 0 0 24px;
-  color: #7a808c;
+  margin: 8px 0 24px;
+  font-size: var(--df-fs-body);
+  color: var(--df-body);
 }
 
 .rv-summary {
@@ -157,7 +158,7 @@
 }
 
 @media (max-width: 720px) {
-  .rv-summary {
+.rv-summary {
     grid-template-columns: 1fr;
     gap: 20px;
   }

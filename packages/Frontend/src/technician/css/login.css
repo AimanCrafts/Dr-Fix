@@ -6,7 +6,7 @@
    already defined globally (see component/css/header.css).
    ========================================================================== */
 
-.login-page {
+.tech-login-page {
   display: flex;
   width: 100vw;
   min-height: 100vh;
@@ -18,7 +18,7 @@
 /* ==========================================================================
    Left side — form
    ========================================================================== */
-.login-page__left {
+.tech-login-page__left {
   flex: 1;
   display: flex;
   align-items: center;
@@ -27,26 +27,28 @@
   background-color: #ffffff;
 }
 
-.login-form-wrap {
+.tech-login-form-wrap {
   width: 100%;
   max-width: 420px;
 }
 
-.login-heading {
-  font-family: var(--df-font-heading);
+.tech-login-heading {
   color: var(--df-heading);
-  font-size: 40px;
-  font-weight: 700;
   margin: 0 0 8px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
-.login-subtext {
+.tech-login-subtext {
   color: var(--df-body);
   font-size: 15px;
   margin: 0 0 32px;
 }
 
-.login-error {
+.tech-login-error {
   background: #fdeeee;
   color: #c62828;
   font-size: 13px;
@@ -56,25 +58,25 @@
   margin: 0 0 20px;
 }
 
-.login-form {
+.tech-login-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.login-field {
+.tech-login-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.login-field__label {
+.tech-login-field__label {
   font-size: 14px;
   font-weight: 600;
   color: var(--df-heading);
 }
 
-.login-field input {
+.tech-login-field input {
   width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--df-border);
@@ -88,25 +90,25 @@
   transition: border-color 0.15s ease;
 }
 
-.login-field input::placeholder {
+.tech-login-field input::placeholder {
   color: #9a9a9a;
 }
 
-.login-field input:focus {
+.tech-login-field input:focus {
   border-color: var(--df-orange);
 }
 
-.login-field__password {
+.tech-login-field__password {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.login-field__password input {
+.tech-login-field__password input {
   padding-right: 44px;
 }
 
-.login-field__toggle {
+.tech-login-field__toggle {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -123,11 +125,11 @@
   padding: 0;
 }
 
-.login-field__toggle:hover {
+.tech-login-field__toggle:hover {
   background: var(--df-orange-tint);
 }
 
-.login-forgot {
+.tech-login-forgot {
   align-self: flex-end;
   font-size: 13.5px;
   font-weight: 600;
@@ -136,11 +138,11 @@
   margin-top: -8px;
 }
 
-.login-forgot:hover {
+.tech-login-forgot:hover {
   text-decoration: underline;
 }
 
-.login-submit {
+.tech-login-submit {
   margin-top: 4px;
   width: 100%;
   border: none;
@@ -155,46 +157,46 @@
   transition: background 0.15s ease;
 }
 
-.login-submit:hover {
+.tech-login-submit:hover {
   background: var(--df-orange-hover);
 }
 
-.login-submit:disabled {
+.tech-login-submit:disabled {
   opacity: 0.6;
   cursor: default;
 }
 
-.login-signup-hint {
+.tech-login-signup-hint {
   margin: 24px 0 0;
   text-align: center;
   font-size: 14px;
   color: var(--df-body);
 }
 
-.login-signup-hint a {
+.tech-login-signup-hint a {
   color: var(--df-orange);
   font-weight: 600;
   text-decoration: none;
 }
 
-.login-signup-hint a:hover {
+.tech-login-signup-hint a:hover {
   text-decoration: underline;
 }
 
-.login-divider {
+.tech-login-divider {
   height: 1px;
   background: var(--df-border);
   margin: 22px 0 16px;
 }
 
-.login-crosslink {
+.tech-login-crosslink {
   text-align: center;
   font-size: 12.5px;
   color: #9a9a9a;
   margin: 0;
 }
 
-.login-crosslink a {
+.tech-login-crosslink a {
   color: var(--df-body);
   font-weight: 600;
   text-decoration: underline;
@@ -203,7 +205,7 @@
 /* ==========================================================================
    Right side — solid orange panel + illustration + tagline
    ========================================================================== */
-.login-page__right {
+.tech-login-page__right {
   flex: 1;
   background-color: var(--df-orange, #ff5a1f);
   display: flex;
@@ -215,15 +217,15 @@
   gap: 32px;
 }
 
-.login-hero-img {
+.tech-login-hero-img {
   max-width: 78%;
   max-height: 63vh;
   object-fit: contain;
   display: block;
 }
 
-.login-page__right-tagline {
-  font-family: var(--df-font-heading);
+.tech-login-page__right-tagline {
+  font-family: var(--df-font-rounded);
   color: #fff;
   font-size: 32px;
   font-weight: 700;
@@ -236,15 +238,15 @@
    Responsive
    ========================================================================== */
 @media (max-width: 860px) {
-  .login-page {
+  .tech-login-page {
     flex-direction: column;
   }
 
-  .login-page__right {
+  .tech-login-page__right {
     display: none;
   }
 
-  .login-page__left {
+  .tech-login-page__left {
     padding: 40px 20px;
   }
 }

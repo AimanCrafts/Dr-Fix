@@ -6,7 +6,7 @@
 .df-about-hero {
   max-width: 900px;
   margin: 0 auto;
-  padding: 90px 24px 65px;
+  padding: 88px 24px 56px;
   text-align: center;
 }
 .df-about-eyebrow {
@@ -19,13 +19,15 @@
 .df-about-hero h1 {
   margin: 0 0 10px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: clamp(40px, 5vw, 58px);
-  line-height: 1.05;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 .df-about-hero > p:last-child {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
 }
 .df-about-content {
   max-width: 980px;
@@ -47,8 +49,11 @@
 .df-about-block h2 {
   margin: 0 0 9px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 24px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 .df-about-block p {
   margin: 0;
@@ -70,8 +75,11 @@
 .df-about-bottom h2 {
   margin: 0;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 23px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 .df-about-bottom a {
   padding: 11px 20px;

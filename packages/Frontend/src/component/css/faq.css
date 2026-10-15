@@ -6,7 +6,7 @@
 .df-faq-hero {
   max-width: 850px;
   margin: 0 auto;
-  padding: 88px 24px 58px;
+  padding: 88px 24px 56px;
   text-align: center;
 }
 .df-faq-eyebrow {
@@ -19,9 +19,11 @@
 .df-faq-hero h1 {
   margin: 0 0 13px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: clamp(40px, 5vw, 58px);
-  line-height: 1.08;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 .df-faq-hero > p:last-child {
   margin: 0;

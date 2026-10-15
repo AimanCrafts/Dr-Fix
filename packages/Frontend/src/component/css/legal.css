@@ -17,10 +17,12 @@
 
 .lg-hero h1 {
   margin: 0 0 8px;
-  font-family: var(--df-font-heading);
-  font-size: 36px;
-  font-weight: 500;
   color: var(--df-heading);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .lg-hero__updated {
@@ -64,10 +66,12 @@
 
 .lg-section h2 {
   margin: 0 0 12px;
-  font-family: var(--df-font-heading);
-  font-size: 1.25rem;
-  font-weight: 500;
   color: var(--df-heading);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .lg-section p,

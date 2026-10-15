@@ -249,31 +249,31 @@ function TechnicianDashboard() {
           })}
         </section>
 
-        <section className="quick-actions" aria-label="Quick actions">
-          <div className="quick-actions__heading">
+        <section className="tech-quick-actions" aria-label="Quick actions">
+          <div className="tech-quick-actions__heading">
             <h2>Quick actions</h2>
             <p>Jump straight to your next task.</p>
           </div>
-          <div className="quick-actions__grid">
-            <Link to="/technician/job-requests" className="quick-action-card">
-              <span className="quick-action-card__icon"><ClipboardList size={19} /></span>
+          <div className="tech-quick-actions__grid">
+            <Link to="/technician/job-requests" className="tech-quick-action-card">
+              <span className="tech-quick-action-card__icon"><ClipboardList size={19} /></span>
               <span><strong>Job requests</strong><small>Review available work</small></span>
-              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+              <span className="tech-quick-action-card__arrow" aria-hidden="true">↗</span>
             </Link>
-            <Link to="/technician/schedule" className="quick-action-card">
-              <span className="quick-action-card__icon"><CalendarDays size={19} /></span>
+            <Link to="/technician/schedule" className="tech-quick-action-card">
+              <span className="tech-quick-action-card__icon"><CalendarDays size={19} /></span>
               <span><strong>My schedule</strong><small>Check upcoming services</small></span>
-              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+              <span className="tech-quick-action-card__arrow" aria-hidden="true">↗</span>
             </Link>
-            <Link to="/technician/earnings" className="quick-action-card">
-              <span className="quick-action-card__icon"><WalletCards size={19} /></span>
+            <Link to="/technician/earnings" className="tech-quick-action-card">
+              <span className="tech-quick-action-card__icon"><WalletCards size={19} /></span>
               <span><strong>Earnings</strong><small>View your payment summary</small></span>
-              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+              <span className="tech-quick-action-card__arrow" aria-hidden="true">↗</span>
             </Link>
-            <Link to="/technician/profile" className="quick-action-card">
-              <span className="quick-action-card__icon"><UserRound size={19} /></span>
+            <Link to="/technician/profile" className="tech-quick-action-card">
+              <span className="tech-quick-action-card__icon"><UserRound size={19} /></span>
               <span><strong>My profile</strong><small>Keep details up to date</small></span>
-              <span className="quick-action-card__arrow" aria-hidden="true">↗</span>
+              <span className="tech-quick-action-card__arrow" aria-hidden="true">↗</span>
             </Link>
           </div>
         </section>
@@ -292,7 +292,7 @@ function TechnicianDashboard() {
         )}
 
         <section className="dashboard-section">
-          <div className="section-heading">
+          <div className="tech-section-heading">
             <div>
               <h2>Incoming job requests</h2>
             </div>
@@ -320,7 +320,7 @@ function TechnicianDashboard() {
               {incomingJobs.map((job) => (
                 <article key={job.id} className="request-card">
                   <div className="request-card__top">
-                    <div className="service-icon">
+                    <div className="tech-service-icon">
                       <Wrench size={19} />
                     </div>
                     <span className="request-badge">New request</span>
@@ -366,7 +366,7 @@ function TechnicianDashboard() {
         </section>
 
         <section className="dashboard-section">
-          <div className="section-heading">
+          <div className="tech-section-heading">
             <div>
               <h2>Active services</h2>
             </div>
@@ -398,7 +398,7 @@ function TechnicianDashboard() {
                         <div className="active-job-card__title-row">
                           <h3>{job.service_name}</h3>
                           <span
-                            className={`status-pill status-pill--${job.status}`}
+                            className={`tech-status-pill tech-status-pill--${job.status}`}
                           >
                             {meta.label}
                           </span>
@@ -447,7 +447,7 @@ function TechnicianDashboard() {
         </section>
 
         <section className="dashboard-section dashboard-section--last">
-          <div className="section-heading">
+          <div className="tech-section-heading">
             <div>
               <h2>Recently completed</h2>
             </div>
@@ -477,7 +477,7 @@ function TechnicianDashboard() {
                       </strong>
                       <span>{job.date_label}</span>
                     </div>
-                    <span className="status-pill status-pill--completed">
+                    <span className="tech-status-pill tech-status-pill--completed">
                       Completed
                     </span>
                   </div>

@@ -1,17 +1,10 @@
-.tech-page__main > h1 {
-  margin: 0;
-  color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  line-height: 1.15;
-}
-
-.earnings-intro {
+.tech-earnings .earnings-intro {
   color: var(--df-body);
-  font-size: 14px;
+  font-size: var(--df-fs-body);
   margin: 8px 0 28px;
 }
-.earnings-stats {
+
+.tech-earnings .earnings-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
@@ -19,34 +12,41 @@
   border: 1px solid var(--df-border);
   margin: 28px 0 42px;
 }
-.earnings-stats div {
+
+.tech-earnings .earnings-stats div {
   background: #fff;
   padding: 24px;
 }
-.earnings-stats span {
+
+.tech-earnings .earnings-stats span {
   display: block;
   color: var(--df-body);
-  font-size: 12px;
+  font-size: 13px;
   margin-bottom: 8px;
 }
-.earnings-stats strong {
-  font-family: var(--df-font-heading);
+
+.tech-earnings .earnings-stats strong {
+  font-family: var(--df-font-rounded);
   font-size: 25px;
   color: var(--df-orange);
 }
-.earnings-table-wrap {
+
+.tech-earnings .earnings-table-wrap {
   border-top: 1px solid var(--df-border);
   padding-top: 26px;
 }
-.earnings-table-wrap h2 {
-  font-family: var(--df-font-heading);
-  font-size: 20px;
+
+.tech-earnings .earnings-table-wrap h2 {
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
   margin: 0 0 18px;
 }
-.earnings-table {
+
+.tech-earnings .earnings-table {
   border-top: 1px solid var(--df-border);
 }
-.earnings-row {
+
+.tech-earnings .earnings-row {
   display: grid;
   grid-template-columns: 1fr 150px 120px;
   gap: 20px;
@@ -55,35 +55,43 @@
   border-bottom: 1px solid var(--df-border);
   font-size: 13px;
 }
-.earnings-row div {
+
+.tech-earnings .earnings-row div {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
-.earnings-row div span {
+
+.tech-earnings .earnings-row div span {
   color: var(--df-body);
 }
-.earnings-row > span {
+
+.tech-earnings .earnings-row > span {
   color: var(--df-body);
 }
-.earnings-row > strong {
+
+.tech-earnings .earnings-row > strong {
   color: var(--df-orange);
   text-align: right;
 }
-.earnings-empty {
+
+.tech-earnings .earnings-empty {
   color: var(--df-body);
   font-size: 14px;
 }
+
 @media (max-width: 760px) {
-  .earnings-stats {
-    grid-template-columns: 1fr 1fr;
-  }
-  .earnings-row {
-    grid-template-columns: 1fr 100px;
-  }
-  .earnings-row > strong {
-    grid-column: 2;
-    grid-row: 1;
-    text-align: right;
-  }
+.tech-earnings .earnings-stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+.tech-earnings .earnings-row {
+      grid-template-columns: 1fr 100px;
+    }
+
+.tech-earnings .earnings-row > strong {
+      grid-column: 2;
+      grid-row: 1;
+      text-align: right;
+    }
 }

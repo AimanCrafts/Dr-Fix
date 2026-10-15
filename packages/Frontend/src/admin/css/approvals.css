@@ -108,7 +108,7 @@
   font-size: 13px;
 }
 
-.status-pill {
+.admin-dashboard .status-pill {
   padding: 4px 12px;
   border-radius: var(--df-radius-pill);
   font-size: 12px;
@@ -117,17 +117,17 @@
   justify-self: start;
 }
 
-.status-pill--pending {
+.admin-dashboard .status-pill--pending {
   background: #fff4e5;
   color: #b96e00;
 }
 
-.status-pill--approved {
+.admin-dashboard .status-pill--approved {
   background: #e7f7ec;
   color: #1e8a3d;
 }
 
-.status-pill--rejected {
+.admin-dashboard .status-pill--rejected {
   background: #fdecea;
   color: #c0392b;
 }

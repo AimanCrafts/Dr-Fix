@@ -11,6 +11,18 @@
   --df-footer-bg: #1a1a1a;
   --df-font-body: system-ui, "Segoe UI", Roboto, sans-serif;
   --df-font-heading: system-ui, "Segoe UI", Roboto, sans-serif;
+  --df-font-rounded: "Nunito", "Varela Round", "Segoe UI", system-ui, sans-serif;
+  /* ---- Shared type scale (use these everywhere so pages match) ---- */
+  --df-fs-page-title: clamp(28px, 3.4vw, 36px); /* main page title (h1) */
+  --df-fs-section-title: 22px; /* section / card-group heading (h2) */
+  --df-fs-card-title: 17px; /* card title (h3) */
+  --df-fs-body: 15px; /* normal body text */
+  --df-fs-small: 13.5px; /* secondary text, meta, labels */
+  --df-muted: #7b7f8c; /* readable muted text (>= 4.5:1 on white) */
+  --df-green: #1f7a45;
+  --df-green-bg: #e8f6ee;
+  --df-blue: #245eb4;
+  --df-blue-bg: #edf4ff;
   --df-radius-sm: 6px;
   --df-radius-md: 12px;
   --df-radius-lg: 20px;

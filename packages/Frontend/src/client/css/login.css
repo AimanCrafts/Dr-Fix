@@ -31,11 +31,13 @@
 }
 
 .login-heading {
-  font-family: var(--df-font-heading);
   color: var(--df-heading);
-  font-size: 40px;
-  font-weight: 700;
   margin: 0 0 8px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .login-subtext {

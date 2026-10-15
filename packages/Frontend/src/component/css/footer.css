@@ -137,7 +137,7 @@
   display: block;
 }
 
-.site-footer__col h4 {
+.site-footer .site-footer__col h4 {
   font-family: var(--df-font-heading);
   font-size: 15px;
   color: #ffffff;

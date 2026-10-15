@@ -2,7 +2,7 @@
 
 .fee-note {
   display: block;
-  font-size: 0.78rem;
+  font-size: 13px;
   line-height: 1.35;
   color: #7a808c;
 }
@@ -36,7 +36,7 @@
 }
 
 .fee-breakdown span {
-  font-size: 0.8rem;
+  font-size: 13px;
   color: #7a808c;
 }
 
@@ -52,6 +52,7 @@
 }
 
 /* the Rating card on the dashboard is a link to the Reviews page */
+
 .stat-card--link {
   display: block;
   color: inherit;
@@ -64,16 +65,16 @@
 }
 
 @media (max-width: 640px) {
-  .fee-breakdown {
+.fee-breakdown {
     grid-template-columns: 1fr;
   }
 
-  .fee-breakdown > div {
+.fee-breakdown > div {
     border-right: 0;
     border-bottom: 1px solid #ececf0;
   }
 
-  .fee-breakdown > div:last-child {
+.fee-breakdown > div:last-child {
     border-bottom: 0;
   }
 }

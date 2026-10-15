@@ -16,12 +16,14 @@
 }
 
 /* ---- title ---- */
+
 .st-title h1 {
   margin: 4px 0 6px;
-  font-family: var(--df-font-heading, inherit);
-  font-size: 32px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
   line-height: 1.15;
-  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .st-title p:last-child {
@@ -39,6 +41,7 @@
 }
 
 /* ---- cards ---- */
+
 .st-card {
   background: var(--color-surface, #ffffff);
   border: 1px solid var(--color-border, #ececf0);
@@ -58,10 +61,12 @@
 
 .st-card__head h2 {
   margin: 4px 0 0;
-  font-family: var(--df-font-heading, inherit);
-  font-size: 19px;
-  font-weight: 700;
   color: var(--color-text, #1f2430);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .st-loading {
@@ -70,6 +75,7 @@
 }
 
 /* ---- identity strip ---- */
+
 .st-identity {
   display: flex;
   align-items: center;
@@ -110,6 +116,7 @@
 }
 
 /* ---- two-column grid ---- */
+
 .st-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -118,6 +125,7 @@
 }
 
 /* ---- forms ---- */
+
 .st-form {
   display: flex;
   flex-direction: column;
@@ -184,6 +192,7 @@
 }
 
 /* ---- buttons ---- */
+
 .st-btn {
   display: inline-flex;
   align-items: center;
@@ -241,6 +250,7 @@
 }
 
 /* ---- messages ---- */
+
 .st-msg {
   display: flex;
   align-items: center;
@@ -268,6 +278,7 @@
 }
 
 /* ---- toggle rows ---- */
+
 .st-row {
   display: flex;
   align-items: center;
@@ -331,6 +342,7 @@
 }
 
 /* ---- facts (label / value pairs) ---- */
+
 .st-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -360,6 +372,7 @@
 }
 
 /* ---- account card ---- */
+
 .st-account {
   display: flex;
   align-items: flex-end;
@@ -416,45 +429,43 @@
 }
 
 /* ---- responsive ---- */
+
 @media (max-width: 900px) {
-  .st-grid {
+.st-grid {
     grid-template-columns: 1fr;
   }
 
-  .st-account,
+.st-account,
   .st-danger__head {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .st-facts--stacked {
+.st-facts--stacked {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 560px) {
-  .st-card {
+.st-card {
     padding: 20px;
   }
 
-  .st-identity {
+.st-identity {
     flex-wrap: wrap;
   }
 
-  .st-title h1 {
-    font-size: 26px;
-  }
-
-  .st-row {
+.st-row {
     align-items: flex-start;
   }
 
-  .st-facts {
+.st-facts {
     grid-template-columns: 1fr;
   }
 }
 
 /* ---- dark mode (follows the app's html[data-theme="dark"] switch) ---- */
+
 html[data-theme="dark"] .st-card {
   background: var(--color-surface, #1c2030);
   border-color: var(--color-border, #2d3348);

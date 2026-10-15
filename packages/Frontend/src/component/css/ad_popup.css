@@ -1,7 +1,7 @@
 /* Assumes shared tokens (--df-*) already loaded globally from the client
    header.css. Re-declared minimally here so this component also works
    standalone if imported on a page that hasn't loaded those tokens yet. */
-:root {
+.ad-popup-backdrop {
   --df-orange: #ff5a1f;
   --df-orange-hover: #e64e15;
   --df-orange-tint: #fff1eb;

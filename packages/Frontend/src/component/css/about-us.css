@@ -7,7 +7,7 @@
 .df-info-hero {
   max-width: 900px;
   margin: 0 auto;
-  padding: 82px 24px 54px;
+  padding: 88px 24px 56px;
   text-align: center;
 }
 
@@ -22,9 +22,11 @@
 .df-info-hero h1 {
   margin: 0 0 12px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: clamp(40px, 5vw, 58px);
-  line-height: 1.08;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .df-info-hero > p:last-child {
@@ -87,8 +89,11 @@
 .df-team-card h2 {
   margin: 0 0 7px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 20px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .df-team-card p {

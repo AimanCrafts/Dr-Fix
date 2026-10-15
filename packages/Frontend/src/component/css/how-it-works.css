@@ -7,7 +7,7 @@
 .df-how-hero {
   max-width: 900px;
   margin: 0 auto;
-  padding: 86px 24px 58px;
+  padding: 88px 24px 56px;
   text-align: center;
 }
 
@@ -23,9 +23,11 @@
 .df-how-hero h1 {
   margin: 0 0 14px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: clamp(40px, 5vw, 58px);
-  line-height: 1.08;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .df-how-hero > p:last-child {
@@ -68,8 +70,11 @@
 .df-how-step h2 {
   margin: 3px 0 7px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 21px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
 
 .df-how-step p {
@@ -93,8 +98,11 @@
 .df-how-cta h2 {
   margin: 0 0 5px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: 24px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 .df-how-cta p:last-child {

@@ -63,20 +63,20 @@ function TechnicianLogin() {
   };
 
   return (
-    <div className="login-page">
+    <div className="tech-login-page">
       {/* Left Side: Form */}
-      <div className="login-page__left">
-        <div className="login-form-wrap">
-          <h1 className="login-heading">Welcome Back, Pro</h1>
-          <p className="login-subtext">
+      <div className="tech-login-page__left">
+        <div className="tech-login-form-wrap">
+          <h1 className="tech-login-heading">Welcome Back, Pro</h1>
+          <p className="tech-login-subtext">
             Login to manage your jobs and earnings
           </p>
 
-          {error && <p className="login-error">{error}</p>}
+          {error && <p className="tech-login-error">{error}</p>}
 
-          <form className="login-form" onSubmit={handleSubmit}>
-            <label className="login-field">
-              <span className="login-field__label">Email or Phone</span>
+          <form className="tech-login-form" onSubmit={handleSubmit}>
+            <label className="tech-login-field">
+              <span className="tech-login-field__label">Email or Phone</span>
               <input
                 type="text"
                 placeholder="Enter your email or phone number"
@@ -86,9 +86,9 @@ function TechnicianLogin() {
               />
             </label>
 
-            <label className="login-field">
-              <span className="login-field__label">Password</span>
-              <div className="login-field__password">
+            <label className="tech-login-field">
+              <span className="tech-login-field__label">Password</span>
+              <div className="tech-login-field__password">
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
@@ -98,7 +98,7 @@ function TechnicianLogin() {
                 />
                 <button
                   type="button"
-                  className="login-field__toggle"
+                  className="tech-login-field__toggle"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
@@ -107,27 +107,27 @@ function TechnicianLogin() {
               </div>
             </label>
 
-            <a href="/forgot-password" className="login-forgot">
+            <a href="/forgot-password" className="tech-login-forgot">
               Forgot Password?
             </a>
 
             <button
               type="submit"
-              className="login-submit"
+              className="tech-login-submit"
               disabled={submitting}
             >
               {submitting ? "Logging in..." : "Login"}
             </button>
           </form>
 
-          <p className="login-signup-hint">
+          <p className="tech-login-signup-hint">
             New here?{" "}
             <Link to="/signup?role=provider">Register as Provider</Link>
           </p>
 
-          <div className="login-divider" />
+          <div className="tech-login-divider" />
 
-          <p className="login-crosslink">
+          <p className="tech-login-crosslink">
             Looking to book a service instead?{" "}
             <Link to="/login">Customer Login</Link>
           </p>
@@ -135,13 +135,13 @@ function TechnicianLogin() {
       </div>
 
       {/* Right Side: Orange Background + Illustration + Headline */}
-      <div className="login-page__right">
+      <div className="tech-login-page__right">
         <img
           src={loginImg}
           alt="Technician illustration"
-          className="login-hero-img"
+          className="tech-login-hero-img"
         />
-        <p className="login-page__right-tagline">
+        <p className="tech-login-page__right-tagline">
           Steady Work,
           <br />
           Fair Pay,

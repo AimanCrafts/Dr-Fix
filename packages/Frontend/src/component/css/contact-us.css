@@ -19,9 +19,11 @@
 .df-contact-hero h1 {
   margin: 0 0 13px;
   color: var(--df-heading);
-  font-family: var(--df-font-heading);
-  font-size: clamp(40px, 5vw, 58px);
-  line-height: 1.06;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 .df-contact-hero > p:last-child {
   margin: 0;

@@ -178,6 +178,10 @@ function Header({ variant = "marketing" }) {
                 Login
               </Link>
 
+              <Link to="/signup" className="site-header__signup-link">
+                Sign Up
+              </Link>
+
               <button
                 type="button"
                 className="site-header__menu-btn"
