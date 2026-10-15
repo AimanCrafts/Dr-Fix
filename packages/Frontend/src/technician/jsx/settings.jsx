@@ -6,7 +6,9 @@ import {
   getTechnicianSettings,
   changeTechnicianPassword,
   deactivateTechnicianAccount,
+  deleteTechnicianAccount,
 } from "../api/settings-api";
+import DeleteAccountCard from "./delete-account.jsx";
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
 // Same stylesheet the technician Profile page uses (tech-page layout).
 import "../css/profile.css";
@@ -45,13 +47,19 @@ function TechnicianSettings() {
       }}
       onSignOut={signOut}
       renderSideCard={(settings, patchSettings) => (
-        <JobPreferencesCard
-          settings={settings}
-          onToggleAvailability={async (next) => {
-            await updateTechnicianAvailability(next);
-            patchSettings({ is_available: next });
-          }}
-        />
+        <>
+          <JobPreferencesCard
+            settings={settings}
+            onToggleAvailability={async (next) => {
+              await updateTechnicianAvailability(next);
+              patchSettings({ is_available: next });
+            }}
+          />
+          <DeleteAccountCard
+            deleteAccount={deleteTechnicianAccount}
+            onDeleted={signOut}
+          />
+        </>
       )}
     />
   );

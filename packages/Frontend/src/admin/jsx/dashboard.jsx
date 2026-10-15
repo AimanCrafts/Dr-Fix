@@ -80,7 +80,6 @@ function AdminDashboard() {
       <main className="admin-main">
         <div className="admin-page-header">
           <div>
-            <p className="admin-page-eyebrow">ADMINISTRATION</p>
             <h1>Dashboard</h1>
             <p>Live overview of bookings, technicians, revenue, and approvals.</p>
           </div>
@@ -139,7 +138,6 @@ function AdminDashboard() {
             <section className="card approvals-card">
               <div className="approvals-card__header">
                 <div>
-                  <p className="admin-section-eyebrow">TECHNICIAN MANAGEMENT</p>
                   <h2>Pending Provider Approvals</h2>
                 </div>
                 <Link to="/admin/approvals">View All</Link>

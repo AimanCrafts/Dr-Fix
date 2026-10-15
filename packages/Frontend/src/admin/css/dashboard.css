@@ -1,20 +1,4 @@
 .admin-dashboard {
-  /* tokens scoped to admin pages only (were leaking site-wide via :root) */
-  --df-bg: #fafafa;
-  --df-surface: #ffffff;
-  --df-orange: #ff5a1f;
-  --df-orange-tint: #fff1eb;
-  --df-heading: #1a1a1a;
-  --df-body: #4a4a4a;
-  --df-muted: #777;
-  --df-border: #ececec;
-  --df-font-heading: "Space Grotesk", "Clash Display", -apple-system, sans-serif;
-  --df-font-body: "Inter", -apple-system, sans-serif;
-  --df-radius-md: 14px;
-  --df-radius-lg: 18px;
-}
-
-.admin-dashboard {
   display: flex;
   min-height: 100vh;
   background: var(--df-bg);
@@ -43,24 +27,17 @@
   margin-bottom: 24px;
 }
 
-.admin-page-eyebrow,
-.admin-section-eyebrow {
-  margin: 0 0 6px;
-  color: var(--df-orange);
-  font-size: 10.5px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-}
-
 .admin-page-header h1 {
   margin: 0;
-  font-family: var(--df-font-heading);
-  font-size: 32px;
-  line-height: 1.1;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-page-title);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
   color: var(--df-heading);
 }
 
-.admin-page-header p:not(.admin-page-eyebrow) {
+.admin-page-header p {
   margin: 8px 0 0;
   color: var(--df-body);
   font-size: 13px;
@@ -144,8 +121,8 @@
 }
 
 .kpi-card__value {
-  font-family: var(--df-font-heading);
-  font-weight: 700;
+  font-family: var(--df-font-rounded);
+  font-weight: 800;
   font-size: 25px;
   color: var(--df-heading);
   margin: 0 0 7px;
@@ -175,8 +152,10 @@
 }
 
 .approvals-card__header h2 {
-  font-family: var(--df-font-heading);
-  font-size: 18px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  letter-spacing: -0.015em;
   color: var(--df-heading);
   margin: 0;
 }

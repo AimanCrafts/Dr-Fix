@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
@@ -152,5 +153,64 @@ class SettingsController extends Controller
         ])->save();
 
         return response()->json(['message' => 'Your account has been deactivated.']);
+    }
+
+    /**
+     * POST .../settings/delete-account
+     *
+     * "Delete my account". The person must type their own email AND password.
+     * If either is wrong nothing happens. Bookings/reviews are kept for the
+     * other party's history (hard-deleting the user row would cascade-delete
+     * them), so the account is closed instead: personal data is removed, the
+     * email is freed up so it can be registered again, and the account can
+     * never log in again (old tokens are rejected by JwtAuth).
+     */
+    public function deleteAccount(Request $request)
+    {
+        $user = $this->currentUser($request);
+
+        $validator = Validator::make($request->all(), [
+            'email'    => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationError($validator);
+        }
+
+        $emailOk = strtolower(trim($request->email)) === strtolower(trim((string) $user->email));
+
+        if (! $emailOk || ! Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Email or password is incorrect.',
+            ], 422);
+        }
+
+        $isProvider = $user->role === 'provider';
+
+        $hasActiveJobs = $isProvider
+            ? Booking::where('technician_id', $user->id)
+                ->whereIn('status', ['accepted', 'in_progress'])->exists()
+            : Booking::where('customer_id', $user->id)
+                ->whereIn('status', ['pending', 'accepted', 'in_progress'])->exists();
+
+        if ($hasActiveJobs) {
+            return response()->json([
+                'message' => 'You still have active bookings. Please finish or cancel them before deleting your account.',
+            ], 422);
+        }
+
+        DB::transaction(function () use ($user) {
+            DB::table('addresses')->where('user_id', $user->id)->delete();
+            DB::table('user_notifications')->where('user_id', $user->id)->delete();
+
+            $user->forceFill([
+                'email'          => 'deleted_' . $user->id . '_' . time() . '@deleted.invalid',
+                'deactivated_at' => now(),
+                'is_available'   => false,
+            ])->save();
+        });
+
+        return response()->json(['message' => 'Your account has been deleted.']);
     }
 }

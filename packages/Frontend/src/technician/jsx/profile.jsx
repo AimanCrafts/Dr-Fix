@@ -5,10 +5,14 @@ import {
   updateTechnicianProfile,
 } from "../api/technician-profile-api";
 import { updateTechnicianAvailability } from "../api/technician-dashboard-api";
+import { useNavigate } from "react-router-dom";
+import { deleteTechnicianAccount } from "../api/settings-api";
+import DeleteAccountCard from "./delete-account.jsx";
 import "../css/profile.css";
 import "../css/technician-design-system.css";
 
 function Profile() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -153,6 +157,15 @@ function Profile() {
             {saving ? "Saving..." : "Save changes"}
           </button>
         </form>
+
+        <DeleteAccountCard
+          deleteAccount={deleteTechnicianAccount}
+          onDeleted={() => {
+            localStorage.removeItem("technician_token");
+            localStorage.removeItem("technician_user");
+            navigate("/technician/login");
+          }}
+        />
       </main>
     </div>
   );

@@ -1,22 +1,3 @@
-/* Assumes shared tokens (--df-*) already loaded globally from the client
-   header.css. Re-declared minimally here so this page also works standalone. */
-.admin-login-page {
-  --df-bg: #fafafa;
-  --df-surface: #ffffff;
-  --df-orange: #ff5a1f;
-  --df-orange-hover: #e64e15;
-  --df-orange-tint: #fff1eb;
-  --df-heading: #1a1a1a;
-  --df-body: #4a4a4a;
-  --df-border: #ececec;
-  --df-font-heading:
-    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
-  --df-font-body: "Inter", -apple-system, sans-serif;
-  --df-radius-md: 14px;
-  --df-radius-lg: 20px;
-  --df-radius-pill: 999px;
-}
-
 .admin-login-page {
   min-height: 100vh;
   background: var(--df-bg);
@@ -53,8 +34,8 @@
 }
 
 .admin-login-card__logo span {
-  font-family: var(--df-font-heading);
-  font-weight: 700;
+  font-family: var(--df-font-rounded);
+  font-weight: 800;
   font-size: 18px;
   color: var(--df-heading);
 }
@@ -67,9 +48,10 @@
 }
 
 .admin-login-card h1 {
-  font-family: var(--df-font-heading);
+  font-family: var(--df-font-rounded);
   font-size: 30px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   color: var(--df-heading);
   margin: 0 0 24px;
 }

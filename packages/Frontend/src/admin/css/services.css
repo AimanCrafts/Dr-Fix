@@ -16,7 +16,10 @@
 .svc-commission h2,
 .svc-group h2 {
   margin: 0 0 4px;
-  font-size: 17px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-card-title);
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 
 .svc-commission p {

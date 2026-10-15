@@ -8,7 +8,9 @@ import {
   changePassword,
   updateNotifications,
   deactivateAccount,
+  deleteAccount,
 } from "../api/settings";
+import DeleteAccountCard from "./delete-account.jsx";
 // Same stylesheet the Profile page uses, so this page gets exactly the same
 // page width / height rules (profile-page + profile-container).
 import "../css/profile.css";
@@ -38,13 +40,19 @@ function Settings() {
       }}
       onSignOut={signOut}
       renderSideCard={(settings, patchSettings) => (
-        <NotificationsCard
-          settings={settings}
-          onSave={async (next) => {
-            await updateNotifications(next);
-            patchSettings({ email_notifications: next });
-          }}
-        />
+        <>
+          <NotificationsCard
+            settings={settings}
+            onSave={async (next) => {
+              await updateNotifications(next);
+              patchSettings({ email_notifications: next });
+            }}
+          />
+          <DeleteAccountCard
+            deleteAccount={deleteAccount}
+            onDeleted={signOut}
+          />
+        </>
       )}
     />
   );

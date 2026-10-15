@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { Check, Mail, Phone, UserRound } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 import { getCurrentUser, updateProfile } from "../api/auth";
+import { deleteAccount } from "../api/settings";
+import DeleteAccountCard from "./delete-account.jsx";
 import "../css/profile.css";
 
 function Profile() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -155,6 +161,14 @@ function Profile() {
             </section>
           </div>
         )}
+
+        <DeleteAccountCard
+          deleteAccount={deleteAccount}
+          onDeleted={() => {
+            logout();
+            navigate("/login");
+          }}
+        />
       </main>
     </div>
   );

@@ -1,15 +1,23 @@
 /* cancel-booking.css - used on My Bookings and the tracking page */
 
 .cancel-booking__link {
-  padding: 0;
-  border: 0;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 13px;
+  border: 1px solid #d92d20;
+  border-radius: 999px;
+  background: transparent;
   color: #d92d20;
   font: inherit;
-  font-size: 0.9rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
+}
+
+.cancel-booking__link:hover {
+  background: #d92d20;
+  color: #fff;
 }
 
 .cancel-booking__confirm {

@@ -19,3 +19,7 @@ export const updateNotifications = (emailNotifications) =>
 
 export const deactivateAccount = (payload) =>
   api.post("/settings/deactivate", payload);
+
+// Permanently close the account. Needs { email, password }.
+export const deleteAccount = (payload) =>
+  api.post("/settings/delete-account", payload);

@@ -11,3 +11,7 @@ export const changeTechnicianPassword = (payload) =>
 
 export const deactivateTechnicianAccount = (payload) =>
   api.post("/technician/settings/deactivate", payload);
+
+// Permanently close the account. Needs { email, password }.
+export const deleteTechnicianAccount = (payload) =>
+  api.post("/technician/settings/delete-account", payload);

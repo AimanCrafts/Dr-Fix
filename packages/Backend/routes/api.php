@@ -36,6 +36,7 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::put('/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
     Route::put('/settings/notifications', [SettingsController::class, 'updateNotifications']);
     Route::post('/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
+    Route::post('/settings/delete-account', [SettingsController::class, 'deleteAccount'])->middleware('throttle:6,1');
 
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
@@ -114,6 +115,7 @@ Route::middleware('jwt.auth:provider')->group(function () {
     Route::get('/technician/settings', [SettingsController::class, 'show']);
     Route::put('/technician/settings/password', [SettingsController::class, 'changePassword'])->middleware('throttle:6,1');
     Route::post('/technician/settings/deactivate', [SettingsController::class, 'deactivate'])->middleware('throttle:6,1');
+    Route::post('/technician/settings/delete-account', [SettingsController::class, 'deleteAccount'])->middleware('throttle:6,1');
 
     Route::get('/technician/reviews', [TechnicianReviewController::class, 'index']);
 
