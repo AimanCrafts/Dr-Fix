@@ -82,16 +82,16 @@
 /* ---------------- Category chips ---------------- */
 
 .category-chips {
-  position: sticky;
-  top: 68px;
-  z-index: 40;
+  /* scrolls away with the page (no longer sticks under the header) */
+  position: static;
   max-width: 1200px;
   margin: 0 auto;
   padding: 8px 24px 20px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  background: var(--df-bg);
+  background: transparent;
+  border: 0;
 }
 
 .category-chip {

@@ -132,3 +132,63 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* ==========================================================================
+   Page entrance animation for logged-in client pages (matches technician).
+   "backwards" fill = no leftover transform after it finishes.
+   ========================================================================== */
+@keyframes df-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-container > *,
+.my-bookings-container > *,
+.addresses-main > *,
+.profile-container > *,
+.confirmed-container,
+.checkout-container > *,
+.st-page > * {
+  animation: df-page-enter 0.45s ease backwards;
+}
+
+.dashboard-container > *:nth-child(2),
+.my-bookings-container > *:nth-child(2),
+.addresses-main > *:nth-child(2),
+.profile-container > *:nth-child(2),
+.checkout-container > *:nth-child(2),
+.st-page > *:nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.dashboard-container > *:nth-child(3),
+.my-bookings-container > *:nth-child(3),
+.addresses-main > *:nth-child(3),
+.profile-container > *:nth-child(3),
+.st-page > *:nth-child(3) {
+  animation-delay: 110ms;
+}
+
+.dashboard-container > *:nth-child(n + 4),
+.my-bookings-container > *:nth-child(n + 4),
+.addresses-main > *:nth-child(n + 4) {
+  animation-delay: 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-container > *,
+  .my-bookings-container > *,
+  .addresses-main > *,
+  .profile-container > *,
+  .confirmed-container,
+  .checkout-container > *,
+  .st-page > * {
+    animation: none;
+  }
+}

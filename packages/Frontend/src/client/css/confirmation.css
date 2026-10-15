@@ -161,7 +161,7 @@
   margin-bottom: 24px;
 }
 
-.btn {
+.confirmed-page .btn {
   flex: 1;
   font-family: var(--df-font-body);
   font-weight: 600;
@@ -176,16 +176,16 @@
   cursor: pointer;
 }
 
-.btn--primary {
+.confirmed-page .btn--primary {
   background: var(--df-orange);
   color: #fff;
 }
 
-.btn--primary:hover {
+.confirmed-page .btn--primary:hover {
   background: var(--df-orange-hover);
 }
 
-.btn--outline {
+.confirmed-page .btn--outline {
   background: transparent;
   border: 1.5px solid var(--df-orange);
   color: var(--df-orange);

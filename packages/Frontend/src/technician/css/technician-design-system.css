@@ -128,12 +128,16 @@
 .tech-page :is(button, a):focus-visible,
 .tech-bookings-page :is(button, a):focus-visible,
 .tech-login-page :is(button, a):focus-visible,
-.tech-review-page :is(button, a):focus-visible,
-.tech-dashboard input:focus-visible,
-.tech-page input:focus-visible,
-.tech-login-page input:focus-visible {
+.tech-review-page :is(button, a):focus-visible {
   outline: 3px solid rgba(var(--tech-orange-rgb), 0.35);
   outline-offset: 3px;
+}
+
+/* inputs already show an orange border on focus - no extra outer outline */
+.tech-dashboard input:focus,
+.tech-page input:focus,
+.tech-login-page input:focus {
+  outline: none;
 }
 
 /* ---------- Login: solid orange right-hand panel (same as client login) ---------- */
@@ -233,7 +237,7 @@
 .tech-bookings-main > *,
 .tech-login-form-wrap,
 .tech-review-card {
-  animation: technician-enter 420ms ease both;
+  animation: technician-enter 420ms ease backwards;
 }
 
 @keyframes technician-enter {

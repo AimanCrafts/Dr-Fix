@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getBooking } from "../api/bookings";
-import logo from "../../assets/logo.png";
+import Header from "../../component/jsx/header.jsx";
 import "../css/confirmation.css";
 
 /**
@@ -81,12 +81,7 @@ function BookingConfirmed() {
 
   return (
     <div className="confirmed-page">
-      <div className="focus-bar">
-        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
-          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
-          <span className="focus-bar__name">Dr.-Fix</span>
-        </Link>
-      </div>
+      <Header variant="client" />
 
       <div className="confirmed-container">
         <div className="success-icon" aria-hidden="true">

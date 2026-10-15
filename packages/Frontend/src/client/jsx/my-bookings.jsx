@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { CalendarDays, MapPin, Wrench } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
 import { listMyBookings } from "../api/bookings";
 import CancelBooking from "./cancel-booking.jsx";
@@ -42,40 +43,65 @@ function MyBookings() {
     [bookings],
   );
 
+  const statusClass = (status) =>
+    ["accepted", "in_progress"].includes(status) ? "active" : status;
+
   const renderBookingCard = (booking) => (
-    <article className="my-booking-card" key={booking.id}>
-      <div>
-        <span className={`booking-status booking-status--${booking.status}`}>
+    <article
+      className={`booking-card ${
+        activeStatuses.includes(booking.status) ? "booking-card--active" : ""
+      }`}
+      key={booking.id}
+    >
+      <div className="booking-card__top">
+        <span className="booking-card__icon" aria-hidden="true">
+          <Wrench size={17} />
+        </span>
+        <span
+          className={`booking-status booking-status--${statusClass(booking.status)}`}
+        >
           {String(booking.status || "")
             .replaceAll("_", " ")
             .replace(/\b\w/g, (letter) => letter.toUpperCase())}
         </span>
-
-        <h2>{booking.service_name}</h2>
-
-        <p>
-          {booking.date_label} · {booking.time_slot}
-        </p>
-
-        <p>{booking.address}</p>
       </div>
 
-      <div className="my-booking-card__side">
+      <h3>{booking.service_name}</h3>
+      <p className="booking-card__id">Booking #{booking.id}</p>
+
+      <div className="booking-card__details">
+        <span>
+          <CalendarDays size={15} /> {booking.date_label} · {booking.time_slot}
+        </span>
+        <span>
+          <MapPin size={15} /> {booking.address}
+        </span>
+      </div>
+
+      <div className="booking-card__footer">
         <strong>৳{Number(booking.price || 0).toLocaleString()}</strong>
 
-        {activeStatuses.includes(booking.status) && (
-          <Link to={`/booking-tracking?bookingId=${booking.id}`}>
-            Track Service
-          </Link>
-        )}
+        <div className="booking-card__actions">
+          {activeStatuses.includes(booking.status) && (
+            <Link
+              className="booking-card__action"
+              to={`/booking-tracking?bookingId=${booking.id}`}
+            >
+              Track Service
+            </Link>
+          )}
 
-        {booking.status === "completed" && (
-          <Link to={`/booking-tracking?bookingId=${booking.id}`}>
-            View Details
-          </Link>
-        )}
+          {booking.status === "completed" && (
+            <Link
+              className="booking-card__action"
+              to={`/booking-tracking?bookingId=${booking.id}`}
+            >
+              View Details
+            </Link>
+          )}
 
-        <CancelBooking booking={booking} onCancelled={handleCancelled} />
+          <CancelBooking booking={booking} onCancelled={handleCancelled} />
+        </div>
       </div>
     </article>
   );
@@ -84,41 +110,55 @@ function MyBookings() {
     <div className="my-bookings-page">
       <Header variant="client" />
 
-      <main className="my-bookings-main">
-        
+      <main className="my-bookings-container">
+        <div className="my-bookings-heading">
+          <div>
+            <h1>My Bookings</h1>
+            <p>Track your current services and review your previous bookings.</p>
+          </div>
+          <Link to="/services" className="my-bookings-book-btn">
+            Book a New Fix
+          </Link>
+        </div>
 
-        <h1>My Bookings</h1>
-
-        <p className="my-bookings-intro">
-          Track your current services and review your previous bookings.
-        </p>
-
-        {error && <div className="my-bookings-error">{error}</div>}
+        {error && <div className="my-bookings-empty my-bookings-empty--compact">{error}</div>}
 
         {loading ? (
-          <div className="my-bookings-empty">Loading bookings...</div>
+          <div className="my-bookings-empty my-bookings-empty--compact">
+            <p>Loading bookings...</p>
+          </div>
         ) : (
           <>
-            <section>
-              <h2>Active Bookings</h2>
+            <section className="my-bookings-section">
+              <div className="my-bookings-section__heading">
+                <h2>Active Bookings</h2>
+                <span>{active.length}</span>
+              </div>
 
               {active.length > 0 ? (
-                active.map(renderBookingCard)
+                <div className="my-bookings-grid">
+                  {active.map(renderBookingCard)}
+                </div>
               ) : (
-                <div className="my-bookings-empty">
-                  No active bookings right now.
+                <div className="my-bookings-empty my-bookings-empty--compact">
+                  <p>No active bookings right now.</p>
                 </div>
               )}
             </section>
 
-            <section>
-              <h2>Booking History</h2>
+            <section className="my-bookings-section">
+              <div className="my-bookings-section__heading">
+                <h2>Booking History</h2>
+                <span>{history.length}</span>
+              </div>
 
               {history.length > 0 ? (
-                history.map(renderBookingCard)
+                <div className="my-bookings-grid">
+                  {history.map(renderBookingCard)}
+                </div>
               ) : (
-                <div className="my-bookings-empty">
-                  No previous bookings yet.
+                <div className="my-bookings-empty my-bookings-empty--compact">
+                  <p>No previous bookings yet.</p>
                 </div>
               )}
             </section>

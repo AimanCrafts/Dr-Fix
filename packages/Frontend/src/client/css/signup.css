@@ -306,3 +306,45 @@
   color: var(--df-body, #4a4a4a);
   margin: 4px 0 0;
 }
+
+/* ---------- Professional "Choose file" button ---------- */
+.signup-field input[type="file"],
+.signup-form__provider-fields input[type="file"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  border: 1.5px dashed var(--df-border, #e2ddd6);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--df-body, #666b78);
+  font-family: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.signup-field input[type="file"]:hover,
+.signup-form__provider-fields input[type="file"]:hover {
+  border-color: var(--df-orange, #f15a24);
+  background: var(--df-orange-tint, #fff0e8);
+}
+
+.signup-field input[type="file"]::file-selector-button,
+.signup-form__provider-fields input[type="file"]::file-selector-button {
+  margin-right: 14px;
+  padding: 9px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--df-orange, #f15a24);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.signup-field input[type="file"]::file-selector-button:hover,
+.signup-form__provider-fields input[type="file"]::file-selector-button:hover {
+  background: #d94714;
+}

@@ -4,7 +4,7 @@ import { createBooking } from "../api/bookings";
 import PaymentModal from "./PaymentModal.jsx";
 import { getAvailability, listServices } from "../api/services";
 import { listAddresses, createAddress } from "../api/addresses";
-import logo from "../../assets/logo.png";
+import Header from "../../component/jsx/header.jsx";
 import "../css/checkout.css";
 import "../css/checkout-date.css";
 
@@ -225,12 +225,7 @@ function Checkout() {
   if (services && !service) {
     return (
       <div className="checkout-page">
-        <div className="focus-bar">
-        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
-          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
-          <span className="focus-bar__name">Dr.-Fix</span>
-        </Link>
-      </div>
+        <Header variant="client" />
         <div className="checkout-container">
           <div className="checkout-main">
             <div className="card selected-service">
@@ -252,12 +247,7 @@ function Checkout() {
 
   return (
     <div className="checkout-page">
-      <div className="focus-bar">
-        <Link to="/" className="focus-bar__brand" aria-label="Dr.-Fix home">
-          <img src={logo} alt="Dr.-Fix logo" className="focus-bar__logo" />
-          <span className="focus-bar__name">Dr.-Fix</span>
-        </Link>
-      </div>
+      <Header variant="client" />
 
       <div className="checkout-container">
         <div className="checkout-main">
