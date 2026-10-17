@@ -17,6 +17,11 @@ class ReviewController extends Controller
             'booking:id,address',
         ])
             ->whereNotNull('technician_id')
+            ->whereHas('technician', function ($q) {
+                $q->where('role', 'provider')
+                    ->where('approval_status', 'approved')
+                    ->whereNull('deactivated_at');
+            })
             ->latest()
             ->limit(6)
             ->get([

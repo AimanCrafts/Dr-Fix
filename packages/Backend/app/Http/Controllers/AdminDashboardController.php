@@ -19,6 +19,7 @@ class AdminDashboardController extends Controller
         $completedRevenue = Booking::where('status', 'completed')->sum('price');
         $approvedTechnicians = User::where('role', 'provider')
             ->where('approval_status', 'approved')
+            ->whereNull('deactivated_at')
             ->count();
         $pendingApprovals = User::where('role', 'provider')
             ->where('approval_status', 'pending')

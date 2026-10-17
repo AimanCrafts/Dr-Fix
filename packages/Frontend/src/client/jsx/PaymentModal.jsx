@@ -15,6 +15,8 @@ import {
   Check,
   Copy,
   Download,
+  User,
+  CalendarDays,
 } from "lucide-react";
 import "../css/payment-modal.css";
 import bkashLogo from "../../assets/payment/bkash.png";
@@ -37,7 +39,7 @@ const METHODS = [
     short: "Card payment",
     desc: "Visa, Mastercard, American Express",
     icon: CreditCard,
-    available: false,
+    available: true,
   },
   {
     id: "netbank",
@@ -49,48 +51,97 @@ const METHODS = [
   },
 ];
 
-/* Step 2: which mobile banking provider. */
+/* Step 2 (mobile banking only): which provider.
+   No live provider API is connected yet, so the sandbox verifies the codes below. */
 const PROVIDERS = [
   {
     id: "bkash",
     name: "bKash",
     logo: bkashLogo,
     accent: "#e2136e",
+    accent2: "#ea3684",
     available: true,
+    otpLength: 6,
+    pinLength: 5,
+    codes: {
+      otp: "123456",
+      pinOk: "12345",
+      pinDeclined: "00000",
+      pinNoFunds: "11111",
+    },
   },
   {
     id: "nagad",
     name: "Nagad",
     logo: nagadLogo,
     accent: "#ee5a24",
-    available: false,
+    accent2: "#f58a3a",
+    available: true,
+    otpLength: 6,
+    pinLength: 4,
+    codes: {
+      otp: "123456",
+      pinOk: "1234",
+      pinDeclined: "0000",
+      pinNoFunds: "1111",
+    },
   },
   {
     id: "rocket",
     name: "Rocket",
     logo: rocketLogo,
     accent: "#8a2a8f",
-    available: false,
+    accent2: "#ab4bb0",
+    available: true,
+    otpLength: 6,
+    pinLength: 4,
+    codes: {
+      otp: "123456",
+      pinOk: "1234",
+      pinDeclined: "0000",
+      pinNoFunds: "1111",
+    },
   },
 ];
 
-// No live provider API is connected yet, so the sandbox verifies these codes.
-const CODES = {
+/* Card sandbox: any Luhn-valid Visa / Mastercard / Amex number succeeds,
+   except these two special numbers. The bank code is always 123456. */
+const CARD_TEST = {
   otp: "123456",
-  pinOk: "12345",
-  pinDeclined: "00000",
-  pinNoFunds: "11111",
+  declined: "4000000000000002",
+  noFunds: "4000000000009995",
 };
 
-const OTP_LENGTH = 6;
-const PIN_LENGTH = 5;
+const CARD_BRANDS = {
+  visa: { id: "visa", name: "Visa", cvv: 3, max: 16, groups: [4, 4, 4, 4] },
+  mastercard: {
+    id: "mastercard",
+    name: "Mastercard",
+    cvv: 3,
+    max: 16,
+    groups: [4, 4, 4, 4],
+  },
+  amex: {
+    id: "amex",
+    name: "American Express",
+    cvv: 4,
+    max: 15,
+    groups: [4, 6, 5],
+  },
+};
+const DEFAULT_GROUPS = [4, 4, 4, 4];
+
 const RESEND_SECONDS = 45;
 const PROCESS_MS = 5000;
 
-const FLOW_STEPS = [
+const MOBILE_STEPS = [
   { id: "phone", label: "Account" },
   { id: "otp", label: "Verify" },
   { id: "pin", label: "PIN" },
+];
+const CARD_STEPS = [
+  { id: "card", label: "Card details" },
+  { id: "cardOtp", label: "Bank verification" },
 ];
 
 const CONFETTI = [
@@ -139,6 +190,66 @@ const esc = (value) =>
     (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c],
   );
 
+/* ---------------- Card helpers ---------------- */
+const detectBrand = (digits) => {
+  if (/^4/.test(digits)) return CARD_BRANDS.visa;
+  if (/^(5[1-5]|222[1-9]|22[3-9]\d|2[3-6]\d\d|27[01]\d|2720)/.test(digits))
+    return CARD_BRANDS.mastercard;
+  if (/^3[47]/.test(digits)) return CARD_BRANDS.amex;
+  return null;
+};
+
+const groupDigits = (value, groups) => {
+  const parts = [];
+  let index = 0;
+  for (const size of groups) {
+    if (index >= value.length) break;
+    parts.push(value.slice(index, index + size));
+    index += size;
+  }
+  return parts.join(" ");
+};
+
+const formatCardNumber = (digits, brand) =>
+  groupDigits(digits, (brand || { groups: DEFAULT_GROUPS }).groups);
+
+const luhn = (num) => {
+  let sum = 0;
+  let alt = false;
+  for (let i = num.length - 1; i >= 0; i -= 1) {
+    let n = Number(num[i]);
+    if (alt) {
+      n *= 2;
+      if (n > 9) n -= 9;
+    }
+    sum += n;
+    alt = !alt;
+  }
+  return sum % 10 === 0;
+};
+
+const formatExpiry = (raw) => {
+  let d = raw.replace(/\D/g, "");
+  if (d.length >= 1 && d[0] > "1") d = `0${d}`;
+  d = d.slice(0, 4);
+  return d.length <= 2 ? d : `${d.slice(0, 2)}/${d.slice(2)}`;
+};
+
+const checkExpiry = (value) => {
+  const d = value.replace(/\D/g, "");
+  if (d.length < 4) return "Enter a valid expiry date.";
+  const month = Number(d.slice(0, 2));
+  const year = 2000 + Number(d.slice(2));
+  if (month < 1 || month > 12) return "Enter a valid expiry date.";
+  const now = new Date();
+  const thisYear = now.getFullYear();
+  const thisMonth = now.getMonth() + 1;
+  if (year < thisYear || (year === thisYear && month < thisMonth))
+    return "This card has expired.";
+  if (year > thisYear + 20) return "Enter a valid expiry date.";
+  return "";
+};
+
 /* Saves a small standalone receipt the customer can keep or print. */
 const downloadReceipt = ({ rows, amount, txn }) => {
   const body = rows
@@ -165,7 +276,7 @@ td:last-child{text-align:right;font-weight:500}
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
-/* Large circular input shared by the OTP (6) and PIN (5) steps. */
+/* Large circular input shared by the OTP and PIN steps. */
 function CodeCircles({
   id,
   length,
@@ -277,11 +388,32 @@ function BrandBar({ provider, amount }) {
   );
 }
 
-function FlowSteps({ current }) {
-  const index = FLOW_STEPS.findIndex((s) => s.id === current);
+/* Same banner for the card flow, with the card shown masked. */
+function CardBar({ brand, last4, amount }) {
+  return (
+    <div className="df-brandbar df-cardbar">
+      <span className="df-brandbar-logo">
+        <CreditCard size={24} />
+      </span>
+      <div className="df-brandbar-text">
+        <strong>Card Payment</strong>
+        <span>
+          {brand ? brand.name : "Card"} •••• {last4}
+        </span>
+      </div>
+      <div className="df-brandbar-amt">
+        <small>Amount</small>
+        <strong>{formatMoney(amount)}</strong>
+      </div>
+    </div>
+  );
+}
+
+function FlowSteps({ steps = MOBILE_STEPS, current }) {
+  const index = steps.findIndex((s) => s.id === current);
   return (
     <ol className="df-flow" aria-label="Payment progress">
-      {FLOW_STEPS.map((s, i) => (
+      {steps.map((s, i) => (
         <li
           key={s.id}
           className={i < index ? "done" : i === index ? "active" : ""}
@@ -294,6 +426,53 @@ function FlowSteps({ current }) {
         </li>
       ))}
     </ol>
+  );
+}
+
+/* Drawn with CSS and text only, so no brand images are needed. */
+function BrandMark({ brand, light }) {
+  if (!brand) return null;
+  const cls = `df-bm ${brand.id} ${light ? "light" : ""}`;
+  if (brand.id === "mastercard")
+    return (
+      <span className={cls} role="img" aria-label="Mastercard">
+        <i />
+        <i />
+      </span>
+    );
+  return (
+    <span className={cls} role="img" aria-label={brand.name}>
+      {brand.id === "visa" ? "VISA" : "AMEX"}
+    </span>
+  );
+}
+
+/* Live card that fills in as the customer types. */
+function CardPreview({ brand, digits, name, expiry }) {
+  const groups = (brand || { groups: DEFAULT_GROUPS }).groups;
+  const max = brand ? brand.max : 16;
+  const number = groupDigits(digits.padEnd(max, "•"), groups);
+  return (
+    <div
+      className={`df-ccard ${brand ? `brand-${brand.id}` : ""}`}
+      aria-hidden="true"
+    >
+      <div className="df-ccard-top">
+        <span className="df-emv" />
+        <BrandMark brand={brand} />
+      </div>
+      <div className="df-ccard-number">{number}</div>
+      <div className="df-ccard-bottom">
+        <div>
+          <small>Card holder</small>
+          <span>{name.trim() ? name.toUpperCase() : "YOUR NAME"}</span>
+        </div>
+        <div>
+          <small>Expires</small>
+          <span>{expiry || "MM/YY"}</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -310,6 +489,11 @@ export default function PaymentModal({
   const [agree, setAgree] = useState(true);
   const [otp, setOtp] = useState("");
   const [pin, setPin] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardName, setCardName] = useState("");
+  const [cardExp, setCardExp] = useState("");
+  const [cardCvv, setCardCvv] = useState("");
+  const [cardErr, setCardErr] = useState({});
   const [error, setError] = useState("");
   const [tick, setTick] = useState(0);
   const [notice, setNotice] = useState("");
@@ -317,32 +501,55 @@ export default function PaymentModal({
   const [resendIn, setResendIn] = useState(0);
   const [stage, setStage] = useState(0);
   const [txn, setTxn] = useState("");
+  const [authCode, setAuthCode] = useState("");
   const [paidAt, setPaidAt] = useState("");
   const [copied, setCopied] = useState(false);
   const [confirmationPath, setConfirmationPath] = useState("");
   const mounted = useRef(true);
+  const busy = useRef(false);
 
   const activeProvider =
     PROVIDERS.find((item) => item.id === provider) || PROVIDERS[0];
   const fallbackProvider = PROVIDERS.find((item) => item.available);
   const fallbackMethod = METHODS.find((item) => item.available);
+  const { otpLength, pinLength, codes } = activeProvider;
+
+  const isCard = method === "card";
+  const cardDigits = cardNumber.replace(/\D/g, "");
+  const cardBrand = detectBrand(cardDigits);
+  const cardLast4 = cardDigits.slice(-4);
+  const cardComplete =
+    !!cardBrand && cardDigits.length === cardBrand.max && luhn(cardDigits);
 
   const lockedStep = step === "processing" || step === "success";
-  const inFlow = step === "otp" || step === "pin";
+  const inFlow = step === "otp" || step === "pin" || step === "cardOtp";
   const brandStep = step === "phone" || step === "otp" || step === "pin";
   const resultStep =
     step === "success" || step === "failed" || step === "cancelled";
   const showAside = !resultStep && step !== "processing";
   const phoneValid = /^01\d{9}$/.test(phone);
-  const accent = step === "method" ? "#0b63e5" : activeProvider.accent;
+  const useBlue = step === "method" || isCard;
+  const accent = useBlue ? "#0b63e5" : activeProvider.accent;
+  const accent2 = useBlue ? "#3b8bff" : activeProvider.accent2;
   const bodyClass = step === "success" ? "success" : showAside ? "" : "single";
 
-  const stages = [
-    "Verifying your PIN...",
-    `Contacting ${activeProvider.name}...`,
-    "Confirming your transaction...",
-    "Almost done...",
-  ];
+  const paidWithText = isCard
+    ? `${cardBrand ? cardBrand.name : "Card"} •••• ${cardLast4}`
+    : `${activeProvider.name} · ${maskPhone(phone)}`;
+
+  const stages = isCard
+    ? [
+        "Verifying your code...",
+        "Contacting your bank...",
+        "Confirming your transaction...",
+        "Almost done...",
+      ]
+    : [
+        "Verifying your PIN...",
+        `Contacting ${activeProvider.name}...`,
+        "Confirming your transaction...",
+        "Almost done...",
+      ];
 
   useEffect(() => {
     mounted.current = true;
@@ -383,9 +590,10 @@ export default function PaymentModal({
     return () => clearTimeout(timer);
   }, [notice]);
 
-  // Resend countdown on the OTP step.
+  // Resend countdown on the OTP steps.
   useEffect(() => {
-    if (step !== "otp" || resendIn <= 0) return undefined;
+    if ((step !== "otp" && step !== "cardOtp") || resendIn <= 0)
+      return undefined;
     const timer = setTimeout(() => setResendIn((s) => s - 1), 1000);
     return () => clearTimeout(timer);
   }, [step, resendIn]);
@@ -415,6 +623,8 @@ export default function PaymentModal({
       phone: "provider",
       otp: "phone",
       pin: "otp",
+      card: "method",
+      cardOtp: "card",
     };
     setStep(previous[step] || "method");
   };
@@ -447,6 +657,14 @@ export default function PaymentModal({
     setProvider(item.id);
   };
 
+  const continueMethod = () => {
+    setNotice("");
+    setError("");
+    setCardErr({});
+    setStep(method === "card" ? "card" : "provider");
+  };
+
+  /* ---------------- Mobile banking ---------------- */
   const continuePhone = () => {
     if (!phoneValid) {
       setError("Enter a valid 11-digit mobile number.");
@@ -473,11 +691,11 @@ export default function PaymentModal({
 
   const verifyOtp = () => {
     setInfo("");
-    if (otp.length < OTP_LENGTH) {
-      setError("Enter the 6-digit verification code.");
+    if (otp.length < otpLength) {
+      setError(`Enter the ${otpLength}-digit verification code.`);
       return;
     }
-    if (otp !== CODES.otp) {
+    if (otp !== codes.otp) {
       setOtp("");
       raise("The verification code you entered is incorrect.");
       return;
@@ -487,65 +705,143 @@ export default function PaymentModal({
     setStep("pin");
   };
 
-  const processPayment = async () => {
-    if (step !== "pin") return;
-    if (pin.length < PIN_LENGTH) {
-      setError("Enter your 5-digit PIN.");
-      return;
-    }
-    if (![CODES.pinOk, CODES.pinNoFunds, CODES.pinDeclined].includes(pin)) {
-      setPin("");
-      raise("Incorrect PIN. Please try again.");
-      return;
-    }
+  /* Shared by mobile banking and card: 5 second processing screen, then result. */
+  const startProcessing = async ({ payload, failReason }) => {
+    if (busy.current) return;
+    busy.current = true;
 
     const reference = makeReference();
     setError("");
     setTxn(reference);
     setStep("processing");
 
-    let request;
-    if (pin === CODES.pinOk) {
-      request = Promise.resolve()
-        .then(() =>
-          onPaymentSuccess({
-            method: `online_${provider}`,
-            provider: activeProvider.name,
-            transactionId: reference,
-            phone,
-          }),
-        )
-        .then(
-          (path) => ({ ok: true, path: path || "" }),
-          (e) => ({
-            ok: false,
-            reason:
-              e?.message ||
-              "We couldn't complete the payment. Please try again.",
-          }),
-        );
-    } else {
-      request = Promise.resolve({
-        ok: false,
-        reason:
-          pin === CODES.pinNoFunds
-            ? "Insufficient balance in your account."
-            : "The transaction could not be completed.",
-      });
-    }
+    const request = failReason
+      ? Promise.resolve({ ok: false, reason: failReason })
+      : Promise.resolve()
+          .then(() =>
+            onPaymentSuccess({ ...payload, transactionId: reference }),
+          )
+          .then(
+            (path) => ({ ok: true, path: path || "" }),
+            (e) => ({
+              ok: false,
+              reason:
+                e?.message ||
+                "We couldn't complete the payment. Please try again.",
+            }),
+          );
 
     // Always show the processing screen for the full 5 seconds.
     const [result] = await Promise.all([request, wait(PROCESS_MS)]);
+    busy.current = false;
     if (!mounted.current) return;
 
     if (result.ok) {
       setPaidAt(formatDateTime(new Date()));
+      setAuthCode(String(Math.floor(100000 + Math.random() * 900000)));
       setConfirmationPath(result.path);
       setStep("success");
     } else {
       setError(result.reason);
       setStep("failed");
     }
+  };
+
+  const processPayment = () => {
+    if (step !== "pin") return;
+    if (pin.length < pinLength) {
+      setError(`Enter your ${pinLength}-digit PIN.`);
+      return;
+    }
+    if (![codes.pinOk, codes.pinNoFunds, codes.pinDeclined].includes(pin)) {
+      setPin("");
+      raise("Incorrect PIN. Please try again.");
+      return;
+    }
+    const failReason =
+      pin === codes.pinNoFunds
+        ? "Insufficient balance in your account."
+        : pin === codes.pinDeclined
+          ? "The transaction could not be completed."
+          : "";
+    startProcessing({
+      failReason,
+      payload: {
+        method: `online_${provider}`,
+        provider: activeProvider.name,
+        phone,
+      },
+    });
+  };
+
+  /* ---------------- Card ---------------- */
+  const clearCardErr = (key) =>
+    setCardErr((prev) => (prev[key] ? { ...prev, [key]: "" } : prev));
+
+  const changeCardNumber = (value) => {
+    let digits = value.replace(/\D/g, "").slice(0, 19);
+    const brand = detectBrand(digits);
+    digits = digits.slice(0, brand ? brand.max : 16);
+    setCardNumber(formatCardNumber(digits, brand));
+    setCardCvv((v) => v.slice(0, brand ? brand.cvv : 3));
+    clearCardErr("number");
+  };
+
+  const submitCard = () => {
+    const errs = {};
+    if (cardDigits.length === 0) errs.number = "Enter your card number.";
+    else if (!cardBrand)
+      errs.number = "We accept Visa, Mastercard and American Express.";
+    else if (cardDigits.length !== cardBrand.max || !luhn(cardDigits))
+      errs.number = "Enter a valid card number.";
+
+    if (!/^[\p{L}][\p{L} .'-]+$/u.test(cardName.trim()))
+      errs.name = "Enter the name as shown on your card.";
+
+    const expiryProblem = checkExpiry(cardExp);
+    if (expiryProblem) errs.expiry = expiryProblem;
+
+    const cvvLength = cardBrand ? cardBrand.cvv : 3;
+    if (cardCvv.length !== cvvLength)
+      errs.cvv = `Enter the ${cvvLength}-digit security code.`;
+
+    setCardErr(errs);
+    if (Object.keys(errs).length) return;
+
+    setError("");
+    setInfo("");
+    setOtp("");
+    setResendIn(RESEND_SECONDS);
+    setStep("cardOtp");
+  };
+
+  const verifyCardOtp = () => {
+    if (step !== "cardOtp") return;
+    setInfo("");
+    if (otp.length < 6) {
+      setError("Enter the 6-digit verification code.");
+      return;
+    }
+    if (otp !== CARD_TEST.otp) {
+      setOtp("");
+      raise("The verification code you entered is incorrect.");
+      return;
+    }
+    const failReason =
+      cardDigits === CARD_TEST.noFunds
+        ? "Insufficient funds on this card."
+        : cardDigits === CARD_TEST.declined
+          ? "Your card was declined by the issuing bank."
+          : "";
+    startProcessing({
+      failReason,
+      payload: {
+        method: "online_card",
+        provider: cardBrand ? cardBrand.name : "Card",
+        phone: "",
+        cardLast4,
+      },
+    });
   };
 
   const copyTxn = async () => {
@@ -566,9 +862,10 @@ export default function PaymentModal({
         ["Status", "Completed"],
         ["Service", serviceName],
         ["Merchant", "Dr.-Fix"],
-        ["Paid with", `${activeProvider.name} (${maskPhone(phone)})`],
+        ["Paid with", paidWithText],
         ["Date & time", paidAt],
         ["Transaction ID", txn],
+        ...(isCard && authCode ? [["Authorization code", authCode]] : []),
       ],
     });
 
@@ -586,6 +883,13 @@ export default function PaymentModal({
     </p>
   );
 
+  const fieldError = (key) =>
+    cardErr[key] ? (
+      <p className="df-field-error" role="alert">
+        {cardErr[key]}
+      </p>
+    ) : null;
+
   return (
     <div
       className="df-pay-backdrop"
@@ -598,7 +902,7 @@ export default function PaymentModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="df-pay-title"
-        style={{ "--accent": accent }}
+        style={{ "--accent": accent, "--accent-2": accent2 }}
       >
         <header className="df-pay-header">
           <span className="df-pay-brand">Dr.-Fix</span>
@@ -674,9 +978,11 @@ export default function PaymentModal({
                     <div>
                       <dt>Method</dt>
                       <dd>
-                        {step === "provider"
-                          ? "Mobile Banking"
-                          : activeProvider.name}
+                        {isCard
+                          ? "Credit / Debit Card"
+                          : step === "provider"
+                            ? "Mobile Banking"
+                            : activeProvider.name}
                       </dd>
                     </div>
                   )}
@@ -684,6 +990,14 @@ export default function PaymentModal({
                     <div>
                       <dt>Account</dt>
                       <dd>{maskPhone(phone)}</dd>
+                    </div>
+                  )}
+                  {step === "cardOtp" && (
+                    <div>
+                      <dt>Card</dt>
+                      <dd>
+                        {cardBrand ? cardBrand.name : "Card"} •••• {cardLast4}
+                      </dd>
                     </div>
                   )}
                   <div>
@@ -700,7 +1014,7 @@ export default function PaymentModal({
           )}
 
           <div
-            className={`df-pay-main ${step === "success" ? "df-receipt-main" : ""}`}
+            className={`df-pay-main ${step === "success" ? "df-receipt-main" : ""} ${step === "card" ? "is-card" : ""}`}
           >
             {step === "method" && (
               <div className="df-step">
@@ -748,10 +1062,7 @@ export default function PaymentModal({
                 <button
                   className="df-primary df-primary-accent"
                   type="button"
-                  onClick={() => {
-                    setNotice("");
-                    setStep("provider");
-                  }}
+                  onClick={continueMethod}
                 >
                   Continue <ChevronRight size={18} />
                 </button>
@@ -881,22 +1192,22 @@ export default function PaymentModal({
                 <StepHead
                   center
                   title="Verification code"
-                  subtitle={`A 6-digit code has been sent to ${maskPhone(phone)}.`}
+                  subtitle={`A ${otpLength}-digit code has been sent to ${maskPhone(phone)}.`}
                   onBack={goBack}
                 />
                 <CodeCircles
                   id="df-pay-otp"
-                  length={OTP_LENGTH}
+                  length={otpLength}
                   value={otp}
                   onChange={(v) => {
                     setOtp(v);
                     setError("");
                   }}
                   onEnter={verifyOtp}
-                  label="6-digit verification code"
+                  label={`${otpLength}-digit verification code`}
                   invalid={!!error}
                   shakeKey={tick}
-                  grouped
+                  grouped={otpLength === 6}
                 />
                 {errorBlock}
                 {info && !error && <p className="df-info">{info}</p>}
@@ -941,7 +1252,7 @@ export default function PaymentModal({
                 />
                 <CodeCircles
                   id="df-pay-pin"
-                  length={PIN_LENGTH}
+                  length={pinLength}
                   value={pin}
                   onChange={(v) => {
                     setPin(v);
@@ -949,7 +1260,7 @@ export default function PaymentModal({
                   }}
                   onEnter={processPayment}
                   secret
-                  label="5-digit PIN"
+                  label={`${pinLength}-digit PIN`}
                   invalid={!!error}
                   shakeKey={tick}
                 />
@@ -973,11 +1284,202 @@ export default function PaymentModal({
               </div>
             )}
 
+            {step === "card" && (
+              <div className="df-step df-step-card">
+                <FlowSteps steps={CARD_STEPS} current="card" />
+                <StepHead title="Card details" onBack={goBack} />
+                <CardPreview
+                  brand={cardBrand}
+                  digits={cardDigits}
+                  name={cardName}
+                  expiry={cardExp}
+                />
+
+                <div className="df-field">
+                  <label className="df-label" htmlFor="df-card-number">
+                    Card number
+                  </label>
+                  <div
+                    className={`df-input-wrap ${cardErr.number ? "invalid" : ""}`}
+                  >
+                    <CreditCard size={18} />
+                    <input
+                      id="df-card-number"
+                      className="df-input"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="cc-number"
+                      placeholder="1234 5678 9012 3456"
+                      value={cardNumber}
+                      onChange={(e) => changeCardNumber(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && submitCard()}
+                      autoFocus
+                    />
+                    <BrandMark brand={cardBrand} light />
+                    {cardComplete && (
+                      <Check className="df-input-ok" size={18} />
+                    )}
+                  </div>
+                  {fieldError("number")}
+                </div>
+
+                <div className="df-field">
+                  <label className="df-label" htmlFor="df-card-name">
+                    Name on card
+                  </label>
+                  <div
+                    className={`df-input-wrap ${cardErr.name ? "invalid" : ""}`}
+                  >
+                    <User size={18} />
+                    <input
+                      id="df-card-name"
+                      className="df-input df-input-text"
+                      type="text"
+                      autoComplete="cc-name"
+                      placeholder="Full name"
+                      maxLength={40}
+                      value={cardName}
+                      onChange={(e) => {
+                        setCardName(e.target.value);
+                        clearCardErr("name");
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && submitCard()}
+                    />
+                  </div>
+                  {fieldError("name")}
+                </div>
+
+                <div className="df-row2">
+                  <div className="df-field">
+                    <label className="df-label" htmlFor="df-card-exp">
+                      Expiry date
+                    </label>
+                    <div
+                      className={`df-input-wrap ${cardErr.expiry ? "invalid" : ""}`}
+                    >
+                      <CalendarDays size={18} />
+                      <input
+                        id="df-card-exp"
+                        className="df-input"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="cc-exp"
+                        placeholder="MM/YY"
+                        value={cardExp}
+                        onChange={(e) => {
+                          setCardExp(formatExpiry(e.target.value));
+                          clearCardErr("expiry");
+                        }}
+                        onKeyDown={(e) => e.key === "Enter" && submitCard()}
+                      />
+                    </div>
+                    {fieldError("expiry")}
+                  </div>
+                  <div className="df-field">
+                    <label className="df-label" htmlFor="df-card-cvv">
+                      Security code
+                    </label>
+                    <div
+                      className={`df-input-wrap ${cardErr.cvv ? "invalid" : ""}`}
+                    >
+                      <LockKeyhole size={18} />
+                      <input
+                        id="df-card-cvv"
+                        className="df-input"
+                        type="password"
+                        inputMode="numeric"
+                        autoComplete="cc-csc"
+                        placeholder={
+                          cardBrand && cardBrand.cvv === 4 ? "••••" : "•••"
+                        }
+                        maxLength={cardBrand ? cardBrand.cvv : 3}
+                        value={cardCvv}
+                        onChange={(e) => {
+                          setCardCvv(e.target.value.replace(/\D/g, ""));
+                          clearCardErr("cvv");
+                        }}
+                        onKeyDown={(e) => e.key === "Enter" && submitCard()}
+                      />
+                    </div>
+                    {fieldError("cvv")}
+                  </div>
+                </div>
+
+                <button
+                  className="df-primary df-primary-accent"
+                  type="button"
+                  onClick={submitCard}
+                >
+                  Continue <ChevronRight size={18} />
+                </button>
+              </div>
+            )}
+
+            {step === "cardOtp" && (
+              <div className="df-step df-step-center">
+                <CardBar brand={cardBrand} last4={cardLast4} amount={amount} />
+                <FlowSteps steps={CARD_STEPS} current="cardOtp" />
+                <StepHead
+                  center
+                  title="Bank verification"
+                  subtitle="Enter the 6-digit code your bank sent to the mobile number linked with this card."
+                  onBack={goBack}
+                />
+                <CodeCircles
+                  id="df-pay-card-otp"
+                  length={6}
+                  value={otp}
+                  onChange={(v) => {
+                    setOtp(v);
+                    setError("");
+                  }}
+                  onEnter={verifyCardOtp}
+                  label="6-digit verification code"
+                  invalid={!!error}
+                  shakeKey={tick}
+                  grouped
+                />
+                {errorBlock}
+                {info && !error && <p className="df-info">{info}</p>}
+                <p className="df-resend">
+                  Didn&apos;t receive the code?{" "}
+                  {resendIn > 0 ? (
+                    <span>Resend in 0:{String(resendIn).padStart(2, "0")}</span>
+                  ) : (
+                    <button type="button" onClick={resendCode}>
+                      Resend code
+                    </button>
+                  )}
+                </p>
+                <div className="df-actions">
+                  <button
+                    className="df-outline"
+                    type="button"
+                    onClick={cancelPayment}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="df-primary df-primary-accent"
+                    type="button"
+                    onClick={verifyCardOtp}
+                  >
+                    <LockKeyhole size={16} /> Verify &amp; pay{" "}
+                    {formatMoney(amount)}
+                  </button>
+                </div>
+              </div>
+            )}
+
             {step === "processing" && (
               <div className="df-state df-processing">
                 <div className="df-orb">
                   <span className="df-orb-logo">
-                    <img src={activeProvider.logo} alt="" />
+                    {isCard ? (
+                      <CreditCard size={28} />
+                    ) : (
+                      <img src={activeProvider.logo} alt="" />
+                    )}
                   </span>
                 </div>
                 <h2 id="df-pay-title">Processing your payment</h2>
@@ -1014,9 +1516,13 @@ export default function PaymentModal({
                     <dt>Paid with</dt>
                     <dd className="df-paidwith">
                       <span className="df-mini-logo">
-                        <img src={activeProvider.logo} alt="" />
+                        {isCard ? (
+                          <CreditCard size={14} />
+                        ) : (
+                          <img src={activeProvider.logo} alt="" />
+                        )}
                       </span>
-                      {activeProvider.name} · {maskPhone(phone)}
+                      {paidWithText}
                     </dd>
                   </div>
                   <div>
@@ -1037,6 +1543,12 @@ export default function PaymentModal({
                       </button>
                     </dd>
                   </div>
+                  {isCard && authCode && (
+                    <div>
+                      <dt>Authorization code</dt>
+                      <dd>{authCode}</dd>
+                    </div>
+                  )}
                   <div className="df-receipt-total">
                     <dt>Total paid</dt>
                     <dd>{formatMoney(amount)} BDT</dd>
@@ -1103,7 +1615,9 @@ export default function PaymentModal({
                     onClick={() => {
                       setError("");
                       setPin("");
-                      setStep("pin");
+                      setOtp("");
+                      setCardErr({});
+                      setStep(isCard ? "card" : "pin");
                     }}
                   >
                     Try Again
@@ -1116,6 +1630,7 @@ export default function PaymentModal({
                       setPin("");
                       setOtp("");
                       setNotice("");
+                      setCardErr({});
                       setStep("method");
                     }}
                   >

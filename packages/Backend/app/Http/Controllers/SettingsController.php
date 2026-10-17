@@ -6,6 +6,7 @@ use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
@@ -156,35 +157,19 @@ class SettingsController extends Controller
     }
 
     /**
-     * POST .../settings/delete-account
+     * POST /api/settings/delete-account  |  POST /api/technician/settings/delete-account
      *
-     * "Delete my account". The person must type their own email AND password.
-     * If either is wrong nothing happens. Bookings/reviews are kept for the
-     * other party's history (hard-deleting the user row would cascade-delete
-     * them), so the account is closed instead: personal data is removed, the
-     * email is freed up so it can be registered again, and the account can
-     * never log in again (old tokens are rejected by JwtAuth).
+     * Permanently deletes the logged-in account. No email/password is asked
+     * - the request is already authenticated by jwt.auth. The user row is
+     * really removed; the foreign keys in the migrations clean up the rest:
+     *   - addresses, user_notifications, technician_booking_rejections: deleted
+     *   - a customer's bookings (and their reviews): deleted
+     *   - a technician's bookings / reviews: technician_id becomes NULL
+     *     (customers keep their history, home page hides NULL-technician reviews)
      */
     public function deleteAccount(Request $request)
     {
         $user = $this->currentUser($request);
-
-        $validator = Validator::make($request->all(), [
-            'email'    => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->validationError($validator);
-        }
-
-        $emailOk = strtolower(trim($request->email)) === strtolower(trim((string) $user->email));
-
-        if (! $emailOk || ! Hash::check($request->password, $user->password)) {
-            return response()->json([
-                'message' => 'Email or password is incorrect.',
-            ], 422);
-        }
 
         $isProvider = $user->role === 'provider';
 
@@ -200,16 +185,19 @@ class SettingsController extends Controller
             ], 422);
         }
 
-        DB::transaction(function () use ($user) {
-            DB::table('addresses')->where('user_id', $user->id)->delete();
-            DB::table('user_notifications')->where('user_id', $user->id)->delete();
+        $nidPath = $user->nid_path;
 
-            $user->forceFill([
-                'email'          => 'deleted_' . $user->id . '_' . time() . '@deleted.invalid',
-                'deactivated_at' => now(),
-                'is_available'   => false,
-            ])->save();
+        DB::transaction(function () use ($user) {
+            // OTP rows are keyed by email, not by a foreign key.
+            DB::table('otps')->where('email', $user->email)->delete();
+
+            $user->delete();
         });
+
+        // Remove the uploaded NID image too (technicians only).
+        if ($nidPath) {
+            Storage::disk('public')->delete($nidPath);
+        }
 
         return response()->json(['message' => 'Your account has been deleted.']);
     }

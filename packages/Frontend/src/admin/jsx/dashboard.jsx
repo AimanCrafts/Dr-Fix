@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CalendarDays, CheckCircle2, Clock3, Users } from "lucide-react";
 import Sidebar from "./sidebar";
+import TrendChart from "./TrendChart";
 import { getAdminDashboardSummary } from "../api/dashboard";
 import "../css/dashboard.css";
 
@@ -32,12 +33,11 @@ function AdminDashboard() {
     setError("");
 
     try {
-      const { data } = await getAdminDashboardSummary();
+      // The API helper already returns the parsed JSON body (no { data } wrapper).
+      const data = await getAdminDashboardSummary();
       setSummary(data);
     } catch (err) {
-      setError(
-        err.message || "Could not load the admin dashboard.",
-      );
+      setError(err.message || "Could not load the admin dashboard.");
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,9 @@ function AdminDashboard() {
         <div className="admin-page-header">
           <div>
             <h1>Dashboard</h1>
-            <p>Live overview of bookings, technicians, revenue, and approvals.</p>
+            <p>
+              Live overview of bookings, technicians, revenue, and approvals.
+            </p>
           </div>
 
           <button
@@ -135,6 +137,8 @@ function AdminDashboard() {
               })}
             </div>
 
+            <TrendChart />
+
             <section className="card approvals-card">
               <div className="approvals-card__header">
                 <div>
@@ -153,10 +157,7 @@ function AdminDashboard() {
                   </div>
 
                   {summary.pending_providers.map((provider) => (
-                    <div
-                      key={provider.id}
-                      className="approvals-table__row"
-                    >
+                    <div key={provider.id} className="approvals-table__row">
                       <span className="applicant">
                         <span
                           className="avatar-placeholder avatar-placeholder--sm"
@@ -166,10 +167,7 @@ function AdminDashboard() {
                       </span>
                       <span>{provider.service_category || "—"}</span>
                       <span>{formatDate(provider.created_at)}</span>
-                      <Link
-                        to="/admin/approvals"
-                        className="btn-review"
-                      >
+                      <Link to="/admin/approvals" className="btn-review">
                         Review
                       </Link>
                     </div>
@@ -190,7 +188,8 @@ function AdminDashboard() {
               <strong>Dashboard data is live.</strong>
               <span>
                 Booking totals and revenue come from the bookings table, while
-                technician counts and approval status come from provider accounts.
+                technician counts and approval status come from provider
+                accounts.
               </span>
             </section>
           </>

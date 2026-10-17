@@ -128,7 +128,9 @@ body {
   top: -130px;
   border: 1px solid rgba(241, 90, 36, 0.12);
   border-radius: 50%;
-  box-shadow: 0 0 0 42px rgba(241, 90, 36, 0.025), 0 0 0 84px rgba(241, 90, 36, 0.02);
+  box-shadow:
+    0 0 0 42px rgba(241, 90, 36, 0.025),
+    0 0 0 84px rgba(241, 90, 36, 0.02);
   pointer-events: none;
 }
 
@@ -160,7 +162,7 @@ body {
 
 .home-page .hero__heading {
   font-family: var(--df-font-rounded);
-  font-weight: 900;
+  font-weight: 400;
   font-size: clamp(42px, 5.15vw, 70px);
   line-height: 1.08;
   letter-spacing: -0.035em;
@@ -187,7 +189,10 @@ body {
   padding: 7px 7px 7px 22px;
   max-width: 530px;
   box-shadow: 0 12px 34px rgba(30, 27, 22, 0.07);
-  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  transition:
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
 }
 
 .hero__search:focus-within {
@@ -222,7 +227,9 @@ body {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .hero__search button:hover {
@@ -348,7 +355,11 @@ body {
   display: grid;
   place-items: center;
   color: var(--df-heading);
-  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.28s ease, color 0.28s ease, box-shadow 0.28s ease;
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background 0.28s ease,
+    color 0.28s ease,
+    box-shadow 0.28s ease;
 }
 
 /* orange line that appears on the side of the icon box on hover */
@@ -363,7 +374,9 @@ body {
   background: var(--df-orange);
   opacity: 0;
   transform: scaleY(0.4);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .category-circle:hover .category-circle__icon::before,
@@ -463,7 +476,10 @@ body {
   border-radius: 26px;
   padding: 28px 24px 26px;
   box-shadow: 0 10px 30px rgba(23, 25, 35, 0.05);
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
 }
 
 .step-card:hover {
@@ -538,7 +554,10 @@ body {
   border: 1px solid #ebe6df;
   background: var(--df-bg);
   box-shadow: 0 5px 18px rgba(23, 25, 35, 0.025);
-  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease;
   display: flex;
   flex-direction: column;
 }
@@ -619,7 +638,9 @@ body {
   padding: 20px;
   text-align: center;
   background: var(--df-bg);
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
 .technician-card:hover {
@@ -719,7 +740,10 @@ body {
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.055);
   border: 1px solid rgba(255, 255, 255, 0.11);
-  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
 }
 
 .trust-item:hover {
@@ -782,7 +806,9 @@ body {
   height: 350px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50%;
-  box-shadow: 0 0 0 35px rgba(255, 255, 255, 0.025), 0 0 0 70px rgba(255, 255, 255, 0.02);
+  box-shadow:
+    0 0 0 35px rgba(255, 255, 255, 0.025),
+    0 0 0 70px rgba(255, 255, 255, 0.02);
   pointer-events: none;
 }
 
@@ -824,7 +850,11 @@ body {
   border: 1.5px solid var(--df-orange);
   border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .provider-cta__btn.btn--primary {
@@ -870,7 +900,9 @@ body {
   top: -170px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 50%;
-  box-shadow: 0 0 0 32px rgba(255, 255, 255, 0.06), 0 0 0 64px rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 0 0 32px rgba(255, 255, 255, 0.06),
+    0 0 0 64px rgba(255, 255, 255, 0.04);
 }
 
 .cta-banner__inner {
@@ -905,7 +937,9 @@ body {
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 8px 20px rgba(90, 35, 15, 0.14);
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .btn--light:hover {
