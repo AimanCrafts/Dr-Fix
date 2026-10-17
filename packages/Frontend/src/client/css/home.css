@@ -162,7 +162,7 @@ body {
 
 .home-page .hero__heading {
   font-family: var(--df-font-rounded);
-  font-weight: 400;
+  font-weight: 800;
   font-size: clamp(42px, 5.15vw, 70px);
   line-height: 1.08;
   letter-spacing: -0.035em;
