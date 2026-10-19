@@ -852,87 +852,26 @@
   color: var(--ink);
 }
 
-/* ---------------- OTP / PIN circles ---------------- */
+/* ---------------- OTP / PIN single input box ---------------- */
 .df-code {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 12px;
   width: 100%;
-  max-width: 480px;
+  max-width: 360px;
   margin: 4px auto 0;
-  cursor: text;
 }
-.df-code.grouped .df-code-circle:nth-child(3) {
-  margin-right: 12px;
-}
-.df-code-circle {
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 64px;
-  aspect-ratio: 1 / 1;
-  display: grid;
-  place-items: center;
-  border: 2px solid #d3dbe7;
-  border-radius: 50%;
-  background: #fbfcfe;
-  box-shadow: 0 1px 2px rgba(15, 28, 51, 0.05);
-  font-size: 24px;
-  font-weight: 500;
-  color: var(--ink);
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s,
-    background 0.15s;
-}
-.df-code-circle.active {
-  border-color: var(--accent);
-  background: #fff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 16%, transparent);
-}
-.df-code-circle.active:not(.filled)::after {
-  content: "";
-  width: 2px;
-  height: 28px;
-  border-radius: 2px;
-  background: var(--accent);
-  animation: dfCaret 1s steps(1) infinite;
-}
-.df-code-circle.filled {
-  border-color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 7%, #fff);
-  animation: dfPop 0.16s ease-out;
-}
-.df-code-dot {
-  width: 32%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  background: var(--accent);
-  display: block;
+.df-code .df-input-wrap {
+  justify-content: center;
 }
 .df-code-input {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: text;
-  font-size: 16px;
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 6px;
+}
+.df-code-input::placeholder {
+  font-size: 15px;
+  letter-spacing: 0.4px;
 }
 .df-code.invalid {
   animation: dfShake 0.4s ease-in-out;
-}
-.df-code.invalid .df-code-circle {
-  border-color: #e05252;
-  background: #fff6f6;
-  box-shadow: none;
-}
-.df-code.invalid .df-code-circle.active {
-  box-shadow: 0 0 0 4px rgba(224, 82, 82, 0.15);
-}
-.df-code.invalid .df-code-dot {
-  background: #e05252;
 }
 
 /* ---------------- Processing ---------------- */
@@ -1695,15 +1634,6 @@
   .df-flow li:not(.active) .df-flow-label {
     display: none;
   }
-  .df-code {
-    gap: 8px;
-  }
-  .df-code.grouped .df-code-circle:nth-child(3) {
-    margin-right: 6px;
-  }
-  .df-code-circle {
-    font-size: 20px;
-  }
   .df-head.center .df-head-text {
     padding: 0 48px;
   }
@@ -1725,7 +1655,6 @@
   .df-spinner,
   .df-inline-notice,
   .df-code,
-  .df-code-circle,
   .df-check-bg,
   .df-check-wrap::before,
   .df-confetti i {
@@ -1738,35 +1667,4 @@
   .df-confetti {
     display: none;
   }
-  .df-code-circle.active:not(.filled)::after {
-    animation: none;
-  }
-}
-
-/* Test-mode banner (shown on every step of the demo gateway) */
-.df-test-banner {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 8px 20px;
-  background: #fff7e6;
-  border-bottom: 1px solid #ffe2a8;
-  color: #7a4b00;
-  font-size: 12.5px;
-  line-height: 1.4;
-}
-
-.df-test-banner strong {
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: #ffb020;
-  color: #3d2600;
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.df-test-banner {
-  flex-shrink: 0;
 }

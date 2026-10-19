@@ -276,7 +276,7 @@ td:last-child{text-align:right;font-weight:500}
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
 
-/* Large circular input shared by the OTP and PIN steps. */
+/* Single input box shared by the OTP and PIN steps. */
 function CodeCircles({
   id,
   length,
@@ -287,62 +287,42 @@ function CodeCircles({
   label,
   invalid,
   shakeKey,
-  grouped,
+  placeholder,
 }) {
   const inputRef = useRef(null);
 
-  // Runs on first render and again after a wrong code remounts the row.
+  // Runs on first render and again after a wrong code remounts the box.
   useEffect(() => {
     inputRef.current?.focus();
   }, [shakeKey]);
 
-  const active = Math.min(value.length, length - 1);
-
   return (
     <div
       key={shakeKey}
-      className={`df-code ${grouped ? "grouped" : ""} ${invalid ? "invalid" : ""}`}
-      onClick={() => inputRef.current?.focus()}
+      className={`df-code ${invalid ? "invalid" : ""}`}
       role="group"
       aria-label={label}
     >
-      {Array.from({ length }).map((_, index) => {
-        const filled = index < value.length;
-        const isActive = index === active && value.length < length;
-        return (
-          <span
-            key={index}
-            className={`df-code-circle ${filled ? "filled" : ""} ${isActive ? "active" : ""}`}
-          >
-            {filled ? (
-              secret ? (
-                <i className="df-code-dot" />
-              ) : (
-                value[index]
-              )
-            ) : (
-              ""
-            )}
-          </span>
-        );
-      })}
-      <input
-        ref={inputRef}
-        id={id}
-        className="df-code-input"
-        type="text"
-        inputMode="numeric"
-        autoComplete="one-time-code"
-        maxLength={length}
-        value={value}
-        aria-label={label}
-        onChange={(e) =>
-          onChange(e.target.value.replace(/\D/g, "").slice(0, length))
-        }
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onEnter?.();
-        }}
-      />
+      <div className={`df-input-wrap ${invalid ? "invalid" : ""}`}>
+        <input
+          ref={inputRef}
+          id={id}
+          className="df-input df-code-input"
+          type={secret ? "password" : "text"}
+          inputMode="numeric"
+          autoComplete={secret ? "off" : "one-time-code"}
+          maxLength={length}
+          value={value}
+          placeholder={placeholder}
+          aria-label={label}
+          onChange={(e) =>
+            onChange(e.target.value.replace(/\D/g, "").slice(0, length))
+          }
+          onKeyDown={(e) => {
+            if (e.key === "Enter") onEnter?.();
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -930,23 +910,6 @@ export default function PaymentModal({
           </div>
         </header>
 
-        {/* Honest label: nothing here moves real money. Shows the test codes
-            for the step the person is on so the demo never gets stuck. */}
-        <div className="df-test-banner" role="note">
-          <strong>Test mode</strong>
-          <span>
-            {step === "otp"
-              ? `No real money is charged. Demo code: ${codes.otp}`
-              : step === "pin"
-                ? `No real money is charged. Demo PIN: ${codes.pinOk}`
-                : step === "cardOtp"
-                  ? `No real money is charged. Demo code: ${CARD_TEST.otp}`
-                  : step === "card"
-                    ? "No real money is charged. Use any valid test card number."
-                    : "No real money is charged. This is a demonstration payment."}
-          </span>
-        </div>
-
         <div className={`df-pay-body ${bodyClass}`}>
           {step === "success" && (
             <div className="df-success-side">
@@ -1231,7 +1194,7 @@ export default function PaymentModal({
                   label={`${otpLength}-digit verification code`}
                   invalid={!!error}
                   shakeKey={tick}
-                  grouped={otpLength === 6}
+                  placeholder={`Enter ${otpLength}-digit code`}
                 />
                 {errorBlock}
                 {info && !error && <p className="df-info">{info}</p>}
@@ -1287,6 +1250,7 @@ export default function PaymentModal({
                   label={`${pinLength}-digit PIN`}
                   invalid={!!error}
                   shakeKey={tick}
+                  placeholder="Enter your PIN"
                 />
                 {errorBlock}
                 <div className="df-actions">
@@ -1461,7 +1425,7 @@ export default function PaymentModal({
                   label="6-digit verification code"
                   invalid={!!error}
                   shakeKey={tick}
-                  grouped
+                  placeholder="Enter 6-digit code"
                 />
                 {errorBlock}
                 {info && !error && <p className="df-info">{info}</p>}

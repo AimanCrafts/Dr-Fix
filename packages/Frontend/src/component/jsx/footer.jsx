@@ -42,9 +42,7 @@ function Footer({ size = "full" }) {
 
     const ember = (x, y, burst) => {
       const a = Math.random() * 6.283;
-      const v = burst
-        ? 1.5 + Math.random() * 3.5
-        : 0.3 + Math.random() * 0.9;
+      const v = burst ? 1.5 + Math.random() * 3.5 : 0.3 + Math.random() * 0.9;
       parts.push({
         x,
         y,
@@ -206,22 +204,6 @@ function Footer({ size = "full" }) {
               </a>
             ))}
           </div>
-
-          <div className="site-footer__apps">
-            <h4>Download our app</h4>
-            <div className="site-footer__app-links">
-              {appLinks.map(([label, badge, to]) => (
-                <Link
-                  key={label}
-                  to={to}
-                  className="app-badge"
-                  aria-label={label}
-                >
-                  <img src={badge} alt={label} className="app-badge__image" />
-                </Link>
-              ))}
-            </div>
-          </div>
         </div>
 
         {linkColumns.map((column) => (
@@ -242,6 +224,22 @@ function Footer({ size = "full" }) {
           <a href={`tel:${CONTACT.phone}`} className="btn btn--outline-footer">
             📞 Call Now
           </a>
+
+          <div className="site-footer__apps">
+            <h4>Download our app</h4>
+            <div className="site-footer__app-links">
+              {appLinks.map(([label, badge, to]) => (
+                <Link
+                  key={label}
+                  to={to}
+                  className="app-badge"
+                  aria-label={label}
+                >
+                  <img src={badge} alt={label} className="app-badge__image" />
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

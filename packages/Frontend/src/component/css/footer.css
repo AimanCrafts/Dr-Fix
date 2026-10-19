@@ -146,7 +146,13 @@
   display: block;
 }
 
-/* Download our app */
+/* Facebook logo is 3px bigger than the other icons */
+.social-icon[aria-label="Facebook"] .social-icon__image {
+  width: 29px;
+  height: 29px;
+}
+
+/* Download our app (now under the Call Now button) */
 .site-footer .site-footer__apps h4 {
   font-family: var(--df-font-heading);
   font-size: 15px;
