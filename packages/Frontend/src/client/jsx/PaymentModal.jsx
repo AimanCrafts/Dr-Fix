@@ -722,7 +722,13 @@ export default function PaymentModal({
             onPaymentSuccess({ ...payload, transactionId: reference }),
           )
           .then(
-            (path) => ({ ok: true, path: path || "" }),
+            // onPaymentSuccess may return a path or { path, transactionId }.
+            // The transaction id is created by the server, so we show that one.
+            (res) => ({
+              ok: true,
+              path: (typeof res === "string" ? res : res?.path) || "",
+              txn: typeof res === "object" ? res?.transactionId : "",
+            }),
             (e) => ({
               ok: false,
               reason:
@@ -737,6 +743,7 @@ export default function PaymentModal({
     if (!mounted.current) return;
 
     if (result.ok) {
+      if (result.txn) setTxn(result.txn);
       setPaidAt(formatDateTime(new Date()));
       setAuthCode(String(Math.floor(100000 + Math.random() * 900000)));
       setConfirmationPath(result.path);
@@ -908,7 +915,7 @@ export default function PaymentModal({
           <span className="df-pay-brand">Dr.-Fix</span>
           <div className="df-pay-head-right">
             <span className="df-pay-secure">
-              <ShieldCheck size={16} /> Secure Checkout
+              <ShieldCheck size={16} /> Secure Payment
             </span>
             {!lockedStep && (
               <button
@@ -922,6 +929,23 @@ export default function PaymentModal({
             )}
           </div>
         </header>
+
+        {/* Honest label: nothing here moves real money. Shows the test codes
+            for the step the person is on so the demo never gets stuck. */}
+        <div className="df-test-banner" role="note">
+          <strong>Test mode</strong>
+          <span>
+            {step === "otp"
+              ? `No real money is charged. Demo code: ${codes.otp}`
+              : step === "pin"
+                ? `No real money is charged. Demo PIN: ${codes.pinOk}`
+                : step === "cardOtp"
+                  ? `No real money is charged. Demo code: ${CARD_TEST.otp}`
+                  : step === "card"
+                    ? "No real money is charged. Use any valid test card number."
+                    : "No real money is charged. This is a demonstration payment."}
+          </span>
+        </div>
 
         <div className={`df-pay-body ${bodyClass}`}>
           {step === "success" && (
@@ -1638,7 +1662,7 @@ export default function PaymentModal({
                   </button>
                 </div>
                 <button className="df-linkbtn" type="button" onClick={onClose}>
-                  Return to Checkout
+                  Back to my booking
                 </button>
                 <p className="df-thanks">
                   If the problem continues, please contact our support team.
@@ -1662,7 +1686,7 @@ export default function PaymentModal({
                   type="button"
                   onClick={onClose}
                 >
-                  Return to Checkout
+                  Back to my booking
                 </button>
                 <p className="df-thanks">
                   Need help? Contact our support team.

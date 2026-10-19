@@ -5,8 +5,6 @@ import "../css/trend-chart.css";
  * TrendChart (admin/jsx/TrendChart.jsx)
  * -------------------------------------
  * Simple animated point/line graph for the admin dashboard.
- * The numbers below are MOCK data (made-up ups and downs) - it does not
- * read the database. Swap SAMPLE_DATA for a real API later if needed.
  *
  * Animation: the line draws itself left to right, the area under it fades
  * in, and the points pop in one after another. Hover (or tap) a point to
@@ -84,11 +82,11 @@ function TrendChart({ data = SAMPLE_DATA }) {
   const hovered = active !== null ? points[active] : null;
 
   return (
-    <section className="card trend-chart" aria-label="Bookings trend (sample)">
+    <section className="card trend-chart" aria-label="Bookings trend">
       <div className="trend-chart__header">
         <div>
           <h2>Bookings Trend</h2>
-          <p>Last 12 months · sample data for preview</p>
+          <p>Last 12 months</p>
         </div>
         <button
           type="button"

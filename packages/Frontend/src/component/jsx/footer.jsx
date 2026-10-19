@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Wrench } from "lucide-react";
 import "../css/footer.css";
-import facebook from "../../assets/icons/facebook.png";
-import instagram from "../../assets/icons/instagram.png";
-import x from "../../assets/icons/x.png";
-import youtube from "../../assets/icons/youtube.png";
+import { CONTACT, SOCIALS } from "./contact-info";
+
+// Badge images live in /public/badges/ (put app-store.png and google-play.png there).
+const APP_STORE_BADGE = "/badges/app-store.png";
+const GOOGLE_PLAY_BADGE = "/badges/google-play.png";
 
 function Footer({ size = "full" }) {
   const year = new Date().getFullYear();
@@ -153,7 +154,6 @@ function Footer({ size = "full" }) {
     {
       title: "Company",
       links: [
-        ["About Dr.-Fix", "/about-dr-fix"],
         ["Technician Login", "/technician/login"],
         ["Terms of Service", "/terms"],
         ["Privacy Policy", "/privacy"],
@@ -169,11 +169,11 @@ function Footer({ size = "full" }) {
     },
   ];
 
-  const socials = [
-    ["Facebook", facebook, "https://www.facebook.com/drfix.bd"],
-    ["Instagram", instagram, "https://www.instagram.com/drfix.bd"],
-    ["X", x, "https://x.com/drfix_bd"],
-    ["YouTube", youtube, "https://www.youtube.com/@DrFixBD"],
+  // The app is not published yet, so these links point to a path that has no
+  // route. The catch-all 404 (PageNotFound) page is shown when they are clicked.
+  const appLinks = [
+    ["Download on the App Store", APP_STORE_BADGE, "/download-app/ios"],
+    ["Get it on Google Play", GOOGLE_PLAY_BADGE, "/download-app/android"],
   ];
 
   return (
@@ -193,7 +193,7 @@ function Footer({ size = "full" }) {
             Your home&apos;s doctor. We diagnose. We fix. You relax.
           </p>
           <div className="site-footer__socials">
-            {socials.map(([label, icon, href]) => (
+            {SOCIALS.map(([label, icon, href]) => (
               <a
                 key={label}
                 href={href}
@@ -205,6 +205,22 @@ function Footer({ size = "full" }) {
                 <img src={icon} alt="" className="social-icon__image" />
               </a>
             ))}
+          </div>
+
+          <div className="site-footer__apps">
+            <h4>Download our app</h4>
+            <div className="site-footer__app-links">
+              {appLinks.map(([label, badge, to]) => (
+                <Link
+                  key={label}
+                  to={to}
+                  className="app-badge"
+                  aria-label={label}
+                >
+                  <img src={badge} alt={label} className="app-badge__image" />
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -223,7 +239,7 @@ function Footer({ size = "full" }) {
 
         <div className="site-footer__emergency">
           <p>Need urgent help?</p>
-          <a href="tel:0961234567" className="btn btn--outline-footer">
+          <a href={`tel:${CONTACT.phone}`} className="btn btn--outline-footer">
             📞 Call Now
           </a>
         </div>

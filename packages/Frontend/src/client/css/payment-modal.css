@@ -1742,3 +1742,31 @@
     animation: none;
   }
 }
+
+/* Test-mode banner (shown on every step of the demo gateway) */
+.df-test-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 20px;
+  background: #fff7e6;
+  border-bottom: 1px solid #ffe2a8;
+  color: #7a4b00;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.df-test-banner strong {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #ffb020;
+  color: #3d2600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.df-test-banner {
+  flex-shrink: 0;
+}

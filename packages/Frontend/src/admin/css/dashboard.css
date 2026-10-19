@@ -260,23 +260,6 @@
   font-size: 12px;
 }
 
-.admin-dashboard-note {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 16px 18px;
-  border: 1px solid var(--df-border);
-  border-radius: 14px;
-  background: #fff;
-  color: var(--df-muted);
-  font-size: 12px;
-}
-
-.admin-dashboard-note strong {
-  color: var(--df-heading);
-  font-size: 13px;
-}
-
 @media (max-width: 1000px) {
   .kpi-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -15,6 +15,7 @@ use App\Http\Controllers\TechnicianDashboardController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\TechnicianReviewController;
 
 /*
@@ -53,6 +54,7 @@ Route::middleware('jwt.auth:customer')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::get('/bookings/{id}', [BookingController::class, 'show']);
     Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel']);
+    Route::post('/bookings/{id}/pay', [BookingController::class, 'pay']);
     Route::post('/bookings/{bookingId}/review', [ReviewController::class, 'store']);
 });
 
@@ -66,6 +68,7 @@ Route::get('/public/technicians', [AdminTechnicianController::class, 'publicInde
 Route::get('/public/services', [ServiceController::class, 'publicIndex']);
 Route::get('/public/commission', [ServiceController::class, 'publicCommission']);
 Route::get('/public/availability', [ServiceController::class, 'availability']);
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
 
 /* Dummy CRUD operations for items using UsersController */
 Route::get('/items', [UsersController::class, 'index']);

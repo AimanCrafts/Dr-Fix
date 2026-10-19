@@ -273,7 +273,7 @@ function ClientDashboard() {
           <Link
             to={
               hasRecentServices
-                ? `/checkout?rebook=${recentServices[0].id}`
+                ? `/book?service=${encodeURIComponent(recentServices[0].service_name)}`
                 : "/services"
             }
             className="action-card"
@@ -455,7 +455,7 @@ function ClientDashboard() {
                     ).toLocaleDateString()}
                   </p>
                   <Link
-                    to={`/checkout?rebook=${service.id}`}
+                    to={`/book?service=${encodeURIComponent(service.service_name)}`}
                     className="btn btn--outline-sm"
                   >
                     Book Again

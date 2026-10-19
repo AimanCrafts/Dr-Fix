@@ -9,6 +9,20 @@ import "../css/technician-design-system.css";
 // pending → accepted → in_progress → completed
 const activeStatuses = ["pending", "accepted", "in_progress"];
 
+// What the technician should expect for payment on this job.
+const paymentLine = (booking) => {
+  const online = String(booking.payment_method || "").startsWith("online");
+  if (online) {
+    if (/^paid/.test(String(booking.payment_status || ""))) {
+      return "Payment: paid online";
+    }
+    return booking.status === "completed"
+      ? "Payment: waiting for the customer to pay online"
+      : "Payment: customer will pay online after the job";
+  }
+  return "Payment: collect cash from the customer";
+};
+
 function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +66,8 @@ function MyBookings() {
         </p>
 
         <p>{booking.address}</p>
+
+        {booking.status !== "cancelled" && <p>{paymentLine(booking)}</p>}
       </div>
 
       <div className="tech-booking-card__side">

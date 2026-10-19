@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Header from "../../component/jsx/header";
 import Footer from "../../component/jsx/footer";
 import "../css/about-us.css";
@@ -10,19 +11,22 @@ import moon from "../../assets/team/moon.jpg";
 const members = [
   {
     name: "Abdur Rahman Aiman",
-    id: "20230204078",
+    role: "Frontend Developer",
+    focus: "React, UI & Architecture",
     image: aiman,
     initials: "AA",
   },
   {
     name: "Raisul Islam Sifat",
-    id: "20230204097",
+    role: "QA Engineer",
+    focus: "Database & Testing",
     image: sifat,
     initials: "RIS",
   },
   {
     name: "Munawar Mahtab Moon",
-    id: "20230204105",
+    role: "Backend Developer",
+    focus: "Laravel & API",
     image: moon,
     initials: "MMM",
   },
@@ -34,14 +38,43 @@ function AboutUs() {
       <Header variant="marketing" />
       <main>
         <section className="df-info-hero">
-          <h1>About Us</h1>
-          <p>Meet the team behind the Dr.-Fix project.</p>
+          <h1>Your home&apos;s doctor.</h1>
+          <p>We diagnose. We fix. You relax.</p>
+        </section>
+
+        <section className="df-about-intro">
+          <div className="df-about-block">
+            <span>01</span>
+            <div>
+              <h2>What is Dr.-Fix?</h2>
+              <p>
+                Dr.-Fix is a home-service platform that connects homeowners
+                with technicians for everyday repair and maintenance needs.
+                Customers can explore services, request a technician, receive
+                booking updates, and follow the job from start to finish, all
+                in one place.
+              </p>
+            </div>
+          </div>
+
+          <div className="df-about-block">
+            <span>02</span>
+            <div>
+              <h2>Built for customers and technicians</h2>
+              <p>
+                Technicians get their own workspace for incoming requests,
+                jobs, schedules, earnings, and profile information, so both
+                sides of every booking stay clear and organized.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section className="df-team-section">
+          <h2 className="df-section-title">Meet the Team</h2>
           <div className="df-team-grid">
             {members.map((member) => (
-              <article className="df-team-card" key={member.id}>
+              <article className="df-team-card" key={member.name}>
                 <div className="df-team-photo">
                   <img
                     src={member.image}
@@ -54,8 +87,9 @@ function AboutUs() {
                   />
                   <span className="df-team-fallback">{member.initials}</span>
                 </div>
-                <h2>{member.name}</h2>
-                <p>ID: {member.id}</p>
+                <h3>{member.name}</h3>
+                <p className="df-team-role">{member.role}</p>
+                <p className="df-team-focus">{member.focus}</p>
               </article>
             ))}
           </div>
@@ -63,10 +97,17 @@ function AboutUs() {
 
         <section className="df-project-note">
           <p>
-            This project is developed for{" "}
-            <strong>Software Development Lab, CSE 3100.</strong>
+            Dr.-Fix is developed as an academic project for{" "}
+            <strong>Software Development Lab, CSE 3100</strong>, with a focus on
+            practical frontend, backend, authentication, booking, and
+            service-management workflows.
           </p>
           <p>Ahsanullah University of Science and Technology</p>
+        </section>
+
+        <section className="df-about-bottom">
+          <h2>See the service journey</h2>
+          <Link to="/how-it-works">How It Works</Link>
         </section>
       </main>
       <Footer />

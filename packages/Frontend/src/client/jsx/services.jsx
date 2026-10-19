@@ -106,9 +106,9 @@ function Services() {
 
   const bookLinkFor = (task, categoryId) => {
     if (!isLoggedIn) {
-      return `/login?redirect=/checkout&service=${encodeURIComponent(task.name)}&category=${encodeURIComponent(categoryId)}`;
+      return `/login?redirect=/book&service=${encodeURIComponent(task.name)}&category=${encodeURIComponent(categoryId)}`;
     }
-    return `/checkout?category=${categoryId}&service=${encodeURIComponent(task.name)}`;
+    return `/book?category=${categoryId}&service=${encodeURIComponent(task.name)}`;
   };
 
   const query = searchValue.trim().toLowerCase();

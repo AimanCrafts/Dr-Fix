@@ -183,15 +183,6 @@ function AdminDashboard() {
                 </div>
               )}
             </section>
-
-            <section className="admin-dashboard-note">
-              <strong>Dashboard data is live.</strong>
-              <span>
-                Booking totals and revenue come from the bookings table, while
-                technician counts and approval status come from provider
-                accounts.
-              </span>
-            </section>
           </>
         )}
       </main>

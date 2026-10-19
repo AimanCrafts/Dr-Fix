@@ -13,7 +13,7 @@ const steps = [
   {
     number: "02",
     title: "Tell us the details",
-    text: "Choose your preferred date and time, provide the service details, and confirm the booking.",
+    text: "Choose your address, date and time, add any notes, say whether you will pay in cash or online, and confirm the booking. Nothing is charged yet.",
   },
   {
     number: "03",
@@ -23,12 +23,12 @@ const steps = [
   {
     number: "04",
     title: "Track the service",
-    text: "Follow the booking status as the technician travels, arrives, starts the work, and completes the service.",
+    text: "Follow the booking status as the technician accepts the job, starts the work, and completes the service.",
   },
   {
     number: "05",
-    title: "Job completed",
-    text: "Once the work is completed, the booking is marked complete and you can review the service.",
+    title: "Pay and review",
+    text: "When the job is done, pay the technician in cash or pay online in the app. Then you can review the service.",
   },
 ];
 

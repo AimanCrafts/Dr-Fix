@@ -511,3 +511,19 @@
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Page title and payment note (Book Service) */
+.checkout-title {
+  margin: 0 0 18px;
+  font-family: var(--df-font-heading);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--df-heading);
+  letter-spacing: -0.02em;
+}
+
+.payment-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--df-body, #4a4a4a);
+}

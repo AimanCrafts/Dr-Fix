@@ -105,35 +105,78 @@
 
 .site-footer__socials {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 0;
 }
 
+/* No round border. Icons are separated by an orange "|" instead. */
 .social-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 600;
-  color: #b0b0b0;
+  height: 30px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   text-decoration: none;
   transition:
-    border-color 0.15s ease,
-    color 0.15s ease;
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.social-icon:first-child {
+  padding-left: 0;
+}
+
+.social-icon + .social-icon {
+  border-left: 2px solid var(--df-orange, #f15a24);
 }
 
 .social-icon:hover {
-  border-color: var(--df-orange);
-  color: var(--df-orange);
+  transform: translateY(-2px);
+  opacity: 0.85;
 }
 
+/* All four icons share exactly the same size */
 .social-icon__image {
-  width: 17px;
-  height: 17px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
+  display: block;
+}
+
+/* Download our app */
+.site-footer .site-footer__apps h4 {
+  font-family: var(--df-font-heading);
+  font-size: 15px;
+  color: #ffffff;
+  margin: 26px 0 14px;
+}
+
+.site-footer__app-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.app-badge {
+  display: inline-flex;
+  line-height: 0;
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.app-badge:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.app-badge__image {
+  height: 44px;
+  width: auto;
   display: block;
 }
 
@@ -179,8 +222,8 @@
   color: var(--df-orange) !important;
 }
 
-.btn--outline-footer {
-  border: 1px solid var(--df-orange);
+.site-footer .btn--outline-footer {
+  border: 1.5px solid var(--df-orange, #f15a24);
   color: var(--df-orange) !important;
   background: transparent;
   border-radius: var(--df-radius-pill);
@@ -188,7 +231,17 @@
   font-size: 13px;
   font-weight: 600;
   display: inline-flex;
+  align-items: center;
+  gap: 6px;
   width: fit-content;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.site-footer .btn--outline-footer:hover {
+  background: var(--df-orange, #f15a24);
+  color: #ffffff !important;
 }
 
 .site-footer__bottom {

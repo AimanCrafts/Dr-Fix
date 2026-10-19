@@ -120,7 +120,7 @@ function Header({ variant = "marketing" }) {
     if (href === "/services") {
       return [
         "/services",
-        "/checkout",
+        "/book",
         "/booking-confirmed",
         "/booking-tracking",
       ].some((route) => path === route || path.startsWith(`${route}/`));

@@ -11,8 +11,7 @@ import "../css/approvals.css";
 /**
  * Provider Approvals (admin/jsx/approvals.jsx)
  * -----------------------------------------------
- * Real data now — replaces the hardcoded PENDING_PROVIDERS mock that
- * used to live in dashboard.jsx. Wired to:
+ * Lists technician applications. Wired to:
  *   GET  /api/admin/technicians?status=...
  *   POST /api/admin/technicians/{id}/approve
  *   POST /api/admin/technicians/{id}/reject

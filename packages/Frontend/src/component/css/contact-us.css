@@ -29,69 +29,249 @@
   margin: 0;
   font-size: 16px;
 }
-.df-contact-grid {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 15px 24px 28px;
+.df-contact-layout {
+  max-width: 1100px;
+  margin: 0 auto 90px;
+  padding: 10px 24px 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 28px;
+  align-items: start;
 }
-.df-contact-card {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 24px;
+
+.df-contact-info,
+.df-contact-form-card {
   border: 1px solid var(--df-border);
   border-radius: var(--df-radius-lg);
-  text-decoration: none;
+  background: var(--df-surface);
+  padding: 30px;
+}
+
+.df-contact-info h2,
+.df-contact-form-card h2 {
+  margin: 0 0 20px;
   color: var(--df-heading);
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-}
-.df-contact-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--df-orange);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
-}
-.df-contact-card > span {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  background: var(--df-orange-tint);
-  color: var(--df-orange);
-  font-size: 21px;
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
   font-weight: 800;
 }
-.df-contact-card div {
+
+.df-contact-info ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 18px;
 }
-.df-contact-card strong {
-  font-family: var(--df-font-heading);
-  font-size: 16px;
+
+.df-contact-info li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
 }
-.df-contact-card small {
+
+.df-contact-info li > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  padding: 9px;
+  box-sizing: content-box;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--df-orange-tint);
+  color: var(--df-orange);
+}
+
+.df-contact-info li div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.df-contact-info strong {
+  color: var(--df-heading);
+  font-size: 14px;
+}
+
+.df-contact-info a,
+.df-contact-info span {
   color: var(--df-body);
-  font-size: 13px;
+  font-size: 14px;
+  text-decoration: none;
 }
-.df-contact-note {
-  max-width: 1000px;
-  margin: 0 auto 80px;
-  padding: 15px 24px 0;
-  text-align: center;
-  color: #888;
+
+.df-contact-info a:hover {
+  color: var(--df-orange);
+}
+
+.df-contact-urgent {
+  margin: 24px 0 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--df-border);
+  color: var(--df-body);
+  font-size: 13.5px;
+}
+
+.df-contact-socials {
+  display: flex;
+  align-items: center;
+}
+
+.df-contact-socials a {
+  display: inline-flex;
+  padding: 0 14px;
+  transition: transform 0.15s ease;
+}
+
+.df-contact-socials a:first-child {
+  padding-left: 0;
+}
+
+.df-contact-socials a + a {
+  border-left: 2px solid var(--df-orange);
+}
+
+.df-contact-socials a:hover {
+  transform: translateY(-2px);
+}
+
+.df-contact-socials img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+/* Form */
+.df-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.df-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.df-form-field label {
+  color: var(--df-heading);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.df-form-field input,
+.df-form-field select,
+.df-form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border: 1px solid var(--df-border);
+  border-radius: 10px;
+  background: var(--df-surface);
+  color: var(--df-heading);
+  font: inherit;
+  font-size: 14.5px;
+}
+
+.df-form-field textarea {
+  resize: vertical;
+}
+
+.df-form-field input:focus,
+.df-form-field select:focus,
+.df-form-field textarea:focus {
+  outline: none;
+  border-color: var(--df-orange);
+  box-shadow: 0 0 0 3px var(--df-orange-tint);
+}
+
+.df-form-field.has-error input,
+.df-form-field.has-error select,
+.df-form-field.has-error textarea {
+  border-color: #dc2626;
+}
+
+.df-form-field small {
+  color: #dc2626;
   font-size: 12.5px;
 }
-@media (max-width: 650px) {
-  .df-contact-grid {
+
+.df-char-count {
+  display: block;
+  margin: -10px 0 14px;
+  text-align: right;
+  color: #9a9a9a;
+  font-size: 12px;
+}
+
+.df-form-error {
+  margin: 0 0 14px;
+  color: #dc2626;
+  font-size: 13.5px;
+}
+
+.df-contact-form-card form > button,
+.df-contact-success button {
+  padding: 12px 28px;
+  border: 0;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-orange);
+  color: #fff;
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.df-contact-form-card form > button:hover,
+.df-contact-success button:hover {
+  background: var(--df-orange-hover, #e64e15);
+}
+
+.df-contact-form-card form > button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.df-contact-success {
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.df-contact-success > span {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: #e7f6ec;
+  color: #15803d;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.df-contact-success p {
+  margin: 0 0 20px;
+  color: var(--df-body);
+}
+
+@media (max-width: 860px) {
+  .df-contact-layout {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .df-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .df-contact-info,
+  .df-contact-form-card {
+    padding: 22px;
   }
 }

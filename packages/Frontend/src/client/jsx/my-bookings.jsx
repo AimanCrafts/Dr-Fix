@@ -4,6 +4,7 @@ import { CalendarDays, MapPin, Wrench } from "lucide-react";
 import Header from "../../component/jsx/header.jsx";
 import { listMyBookings } from "../api/bookings";
 import CancelBooking from "./cancel-booking.jsx";
+import { PayNowButton, needsPayment } from "./pay-booking.jsx";
 import "../css/my-bookings.css";
 
 // "pending" counts as active: the request is still live and can be cancelled.
@@ -67,7 +68,12 @@ function MyBookings() {
       </div>
 
       <h3>{booking.service_name}</h3>
-      <p className="booking-card__id">Booking #{booking.id}</p>
+      <p className="booking-card__id">
+        Booking #{booking.id}
+        {needsPayment(booking) && (
+          <span className="pay-pill pay-pill--due"> Payment due</span>
+        )}
+      </p>
 
       <div className="booking-card__details">
         <span>
@@ -90,6 +96,8 @@ function MyBookings() {
               Track Service
             </Link>
           )}
+
+          <PayNowButton booking={booking} returnTo="/my-bookings" small />
 
           {booking.status === "completed" && (
             <Link

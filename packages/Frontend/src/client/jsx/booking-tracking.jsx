@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import { getBooking, listMyBookings } from "../api/bookings";
 import CancelBooking from "./cancel-booking.jsx";
+import { PaymentPanel } from "./pay-booking.jsx";
 import "../css/confirmation.css";
 import "../css/booking-tracking.css";
 
@@ -185,6 +186,11 @@ function BookingTracking() {
                 </span>
               </div>
             </div>
+
+            <PaymentPanel
+              booking={booking}
+              returnTo={`/booking-tracking?bookingId=${booking.id}`}
+            />
 
             <div className="confirmed-actions">
               <Link to="/client_dashboard" className="btn btn--outline">

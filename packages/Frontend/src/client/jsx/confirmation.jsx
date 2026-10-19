@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { getBooking } from "../api/bookings";
 import Header from "../../component/jsx/header.jsx";
+import { PaymentPanel } from "./pay-booking.jsx";
 import "../css/confirmation.css";
 
 /**
@@ -19,9 +20,7 @@ import "../css/confirmation.css";
 function BookingConfirmed() {
   const [searchParams] = useSearchParams();
   const bookingId = searchParams.get("bookingId");
-  const paymentStatus = searchParams.get("payment");
-  const paymentMethodLabel = searchParams.get("paymentMethod");
-  const paymentTransactionId = searchParams.get("transactionId");
+  const paymentMethodParam = searchParams.get("paymentMethod");
   const serviceFallback = searchParams.get("service") || "Service";
   const dateFallback = searchParams.get("date") || "Today";
   const slotFallback = searchParams.get("slot") || "";
@@ -64,20 +63,13 @@ function BookingConfirmed() {
   const address = booking?.address || "—";
   const status = booking?.status || "pending";
 
-  // Prefer what the server saved on the booking; fall back to the checkout link
-  // only while the booking is still loading or the API doesn't return payment fields.
-  const hasServerPayment = booking && booking.payment_status !== undefined;
-  const isPaid = hasServerPayment
-    ? /^paid/.test(String(booking.payment_status))
-    : paymentStatus === "success";
-  const payProvider =
-    (hasServerPayment && booking.payment_provider) ||
-    paymentMethodLabel ||
-    "Mobile banking";
-  const payReference =
-    (hasServerPayment && booking.payment_transaction_id) ||
-    paymentTransactionId ||
-    "";
+  // Nothing is paid at booking time. Online payment happens after the job,
+  // so before the booking loads we fall back to the method chosen on the form.
+  const paymentBooking = booking || {
+    status: "pending",
+    payment_method: paymentMethodParam === "online" ? "online" : "cash",
+    payment_status: "unpaid",
+  };
 
   return (
     <div className="confirmed-page">
@@ -88,7 +80,7 @@ function BookingConfirmed() {
           ✓
         </div>
 
-        <h1>Booking Confirmed!</h1>
+        <h1>{status === "pending" ? "Request Sent!" : "Booking Confirmed!"}</h1>
         <p className="confirmed-subtext">
           {status === "accepted" || status === "in_progress"
             ? status === "in_progress"
@@ -132,27 +124,12 @@ function BookingConfirmed() {
               {booking?.technician?.name || "Finding a technician..."}
             </span>
           </div>
-          <div className="summary-divider" />
-          <div className="summary-row summary-row--top">
-            <span className="summary-row__icon">💳</span>
-            <span className="summary-row__label">Payment:</span>
-            <div className="summary-row__value summary-row__value--stack">
-              <span className="summary-pay-line">
-                {isPaid ? payProvider : "Cash on service"}
-                <span
-                  className={`summary-pill ${isPaid ? "summary-pill--paid" : "summary-pill--due"}`}
-                >
-                  {isPaid ? "Paid" : "Pay after the job"}
-                </span>
-              </span>
-              {isPaid && payReference && (
-                <span className="summary-sub">
-                  Transaction ID: {payReference}
-                </span>
-              )}
-            </div>
-          </div>
         </div>
+
+        <PaymentPanel
+          booking={paymentBooking}
+          returnTo={`/booking-tracking?bookingId=${bookingId}`}
+        />
 
         <div className="confirmed-actions">
           <Link

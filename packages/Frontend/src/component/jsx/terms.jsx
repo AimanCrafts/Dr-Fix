@@ -35,7 +35,8 @@ const SECTIONS = [
   {
     heading: "Payment",
     paragraphs: [
-      "Payment is currently cash on service: you pay the technician directly after the job is completed. If we add online payment later, these Terms will be updated before it is offered.",
+      "You choose cash or online payment when you book. Nothing is charged at booking time. For cash jobs you pay the technician directly after the job is completed. For online jobs you pay through Dr.-Fix after the technician marks the job complete.",
+      "Online payment in this project runs in a test mode: no real money is charged and no real mobile-banking or card account is used.",
     ],
   },
   {

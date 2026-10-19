@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Home from "./client/jsx/home";
 import Login from "./client/jsx/login";
@@ -8,7 +8,7 @@ import Services from "./client/jsx/services";
 import ClientDashboard from "./client/jsx/client_dashboard";
 import MyBookings from "./client/jsx/my-bookings";
 import Addresses from "./client/jsx/addresses";
-import Checkout from "./client/jsx/checkout";
+import BookService from "./client/jsx/book-service";
 import BookingConfirmed from "./client/jsx/confirmation";
 import BookingTracking from "./client/jsx/booking-tracking";
 import Profile from "./client/jsx/profile";
@@ -37,10 +37,15 @@ import PageNotFound from "./component/jsx/page-not-found";
 import AboutUs from "./component/jsx/about-us";
 import HowItWorks from "./component/jsx/how-it-works";
 import ContactUs from "./component/jsx/contact-us";
-import AboutDrFix from "./component/jsx/about-dr-fix";
 import FAQ from "./component/jsx/faq";
 import Terms from "./component/jsx/terms";
 import Privacy from "./component/jsx/privacy";
+
+// Old /checkout links keep working: send them to /book with the same query.
+function CheckoutRedirect() {
+  const { search } = useLocation();
+  return <Navigate to={`/book${search}`} replace />;
+}
 
 function App() {
   return (
@@ -55,7 +60,7 @@ function App() {
       <Route path="/services" element={<Services />} />
       <Route path="/how-it-works" element={<HowItWorks />} />
       <Route path="/about" element={<AboutUs />} />
-      <Route path="/about-dr-fix" element={<AboutDrFix />} />
+      <Route path="/about-dr-fix" element={<Navigate to="/about" replace />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/faq" element={<FAQ />} />
       <Route path="/terms" element={<Terms />} />
@@ -91,13 +96,15 @@ function App() {
       />
 
       <Route
-        path="/checkout"
+        path="/book"
         element={
           <ProtectedRoute>
-            <Checkout />
+            <BookService />
           </ProtectedRoute>
         }
       />
+
+      <Route path="/checkout" element={<CheckoutRedirect />} />
 
       <Route
         path="/booking-confirmed"

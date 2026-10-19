@@ -1,19 +1,4 @@
-/* Assumes shared tokens (--df-*) already loaded globally from the client
-   header.css. Re-declared minimally here so this component also works
-   standalone if imported on a page that hasn't loaded those tokens yet. */
-.ad-popup-backdrop {
-  --df-orange: #ff5a1f;
-  --df-orange-hover: #e64e15;
-  --df-orange-tint: #fff1eb;
-  --df-heading: #1a1a1a;
-  --df-body: #4a4a4a;
-  --df-font-heading:
-    "Space Grotesk", "Clash Display", -apple-system, sans-serif;
-  --df-font-body: "Inter", -apple-system, sans-serif;
-  --df-radius-lg: 20px;
-  --df-radius-pill: 999px;
-}
-
+/* Home page promotional popup: the whole card is one image. */
 .ad-popup-backdrop {
   position: fixed;
   inset: 0;
@@ -38,25 +23,50 @@
 .ad-popup-card {
   position: relative;
   width: 100%;
-  max-width: 420px;
-  background: #ffffff;
-  border-radius: var(--df-radius-lg);
+  /* 4:5 image: never taller than the screen, never wider than 440px */
+  max-width: min(440px, calc((100vh - 48px) * 0.8));
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-  font-family: var(--df-font-body);
+  background: #ffffff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  animation: ad-popup-pop 0.25s ease;
+}
+
+@keyframes ad-popup-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ad-popup-link {
+  display: block;
+  line-height: 0;
+}
+
+.ad-popup-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
 }
 
 .ad-popup-close {
   position: absolute;
   top: 12px;
   right: 12px;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   border: none;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
+  line-height: 1;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -65,55 +75,17 @@
 }
 
 .ad-popup-close:hover {
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
 }
 
-.ad-popup-image {
-  width: 100%;
-  aspect-ratio: 4 / 3;
+.ad-popup-close:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
-.image-placeholder {
-  border: 1.5px dashed var(--df-orange);
-  background: var(--df-orange-tint);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--df-orange);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.ad-popup-content {
-  padding: 20px 22px 24px;
-  text-align: center;
-}
-
-.ad-popup-content h3 {
-  font-family: var(--df-font-heading);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--df-heading);
-  margin: 0 0 14px;
-}
-
-.ad-popup-cta {
-  display: inline-block;
-  background: var(--df-orange);
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  text-decoration: none;
-  border-radius: var(--df-radius-pill);
-  padding: 11px 28px;
-}
-
-.ad-popup-cta:hover {
-  background: var(--df-orange-hover);
-}
-
-@media (max-width: 480px) {
+@media (prefers-reduced-motion: reduce) {
+  .ad-popup-backdrop,
   .ad-popup-card {
-    max-width: 100%;
+    animation: none;
   }
 }

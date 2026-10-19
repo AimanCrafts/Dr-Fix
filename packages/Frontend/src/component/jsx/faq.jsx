@@ -6,7 +6,7 @@ import "../css/faq.css";
 const faqs = [
   {
     q: "How do I book a service?",
-    a: "Open Services, choose the service you need, select a suitable option, provide the required booking details, and confirm your booking.",
+    a: "Open Services, choose the service you need, then pick your address, date and time on the Book Service page and confirm your booking.",
   },
   {
     q: "Can I track my technician?",
@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     q: "How does payment work?",
-    a: "The current project checkout uses Cash on Service as the available payment method.",
+    a: "You choose how to pay when you book: cash or online (bKash, Nagad, Rocket or card). Nothing is charged at booking time. After the technician completes the job, you pay the technician in cash, or use the Pay button in My Bookings or Track Service for online payment. Online payments in this project run in a test mode, so no real money moves.",
   },
   {
     q: "Can I update my profile?",

@@ -86,7 +86,7 @@
   letter-spacing: 0.04em;
 }
 
-.df-team-card h2 {
+.df-team-card h3 {
   margin: 0 0 7px;
   color: var(--df-heading);
   font-family: var(--df-font-rounded);
@@ -100,6 +100,98 @@
   margin: 0;
   color: var(--df-body);
   font-size: 14px;
+}
+
+.df-team-card .df-team-role {
+  color: var(--df-orange);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.df-team-card .df-team-focus {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.df-section-title {
+  margin: 0 0 34px;
+  text-align: center;
+  color: var(--df-heading);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* What is Dr.-Fix? blocks (merged from the old About Dr.-Fix page) */
+.df-about-intro {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 10px 24px 50px;
+}
+
+.df-about-block {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 26px;
+  padding: 30px 0;
+  border-top: 1px solid var(--df-border);
+}
+
+.df-about-block > span {
+  color: var(--df-orange);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.df-about-block h2 {
+  margin: 0 0 9px;
+  color: var(--df-heading);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.df-about-block p {
+  margin: 0;
+  max-width: 760px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.df-about-bottom {
+  max-width: 1152px;
+  margin: 0 auto 80px;
+  padding: 34px 38px;
+  border: 1px solid var(--df-border);
+  border-radius: var(--df-radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.df-about-bottom h2 {
+  margin: 0;
+  color: var(--df-heading);
+  font-family: var(--df-font-rounded);
+  font-size: var(--df-fs-section-title);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.df-about-bottom a {
+  padding: 11px 20px;
+  border-radius: var(--df-radius-pill);
+  background: var(--df-orange);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .df-project-note {
@@ -120,6 +212,20 @@
   margin-bottom: 0;
   color: var(--df-heading);
   font-weight: 700;
+}
+
+@media (max-width: 650px) {
+  .df-about-block {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .df-about-bottom {
+    margin-left: 24px;
+    margin-right: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 @media (max-width: 800px) {

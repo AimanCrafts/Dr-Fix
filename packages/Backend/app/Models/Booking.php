@@ -22,6 +22,7 @@ class Booking extends Model
         'payment_provider',
         'payment_transaction_id',
         'payment_phone',
+        'paid_at',
         'status',
         'accepted_at',
         'started_at',
@@ -35,6 +36,7 @@ class Booking extends Model
         'accepted_at' => 'datetime',
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
+        'paid_at' => 'datetime',
         'scheduled_date' => 'date:Y-m-d',
         'commission_rate' => 'float',
     ];

@@ -9,6 +9,7 @@ use App\Services\NotificationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 /**
  * BookingController (customer side)
@@ -41,11 +42,9 @@ class BookingController extends Controller
             'scheduled_date' => 'required|date_format:Y-m-d',
             'time_slot'      => 'required|string|in:' . implode(',', array_keys(self::SLOTS)),
             'instructions'   => 'nullable|string|max:250',
-            'payment_method' => 'required|string|in:cash,online_bkash,online_nagad,online_rocket',
-            'payment_status' => 'nullable|string|in:unpaid,paid_demo',
-            'payment_provider' => 'nullable|string|max:30',
-            'payment_transaction_id' => 'nullable|string|max:40|unique:bookings,payment_transaction_id',
-            'payment_phone' => 'nullable|string|max:20',
+            // Only the customer's PREFERENCE is accepted here. Payment status,
+            // provider and transaction id are decided by the server in pay().
+            'payment_method' => 'required|string|in:cash,online',
         ]);
 
         if ($validator->fails()) {
@@ -100,10 +99,7 @@ class BookingController extends Controller
             'time_slot'         => $request->time_slot,
             'instructions'      => $request->instructions,
             'payment_method'    => $request->payment_method,
-            'payment_status'   => $request->payment_status ?? 'unpaid',
-            'payment_provider' => $request->payment_provider,
-            'payment_transaction_id' => $request->payment_transaction_id,
-            'payment_phone'    => $request->payment_phone,
+            'payment_status'    => 'unpaid',
             'status'            => 'pending',
         ]);
 
@@ -147,6 +143,90 @@ class BookingController extends Controller
         }
 
         return response()->json($booking);
+    }
+
+    /**
+     * POST /api/bookings/{id}/pay
+     *
+     * Online payment is taken AFTER the work: the technician completes the
+     * job, then the customer pays from My Bookings / Track Service.
+     *
+     * There is no real money here. The browser plays the sandbox gateway
+     * (provider, OTP, PIN, card screens) and then calls this endpoint. What
+     * the server enforces is everything that must not be forged: who may pay,
+     * when, how much, and the transaction id and status that get stored.
+     */
+    public function pay(Request $request, int $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'provider' => 'required|string|in:bkash,nagad,rocket,card',
+            'phone'    => 'nullable|string|max:20',
+            'card_last4' => 'nullable|string|size:4',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors'  => $validator->errors(),
+            ], 422);
+        }
+
+        $customer = $request->attributes->get('customer');
+
+        $booking = Booking::where('customer_id', $customer->id)->find($id);
+
+        if (! $booking) {
+            return response()->json(['message' => 'Booking not found.'], 404);
+        }
+
+        // Older rows may hold online_bkash / online_nagad etc.
+        if (! str_starts_with((string) $booking->payment_method, 'online')) {
+            return response()->json([
+                'message' => 'This booking is paid in cash to the technician.',
+            ], 422);
+        }
+
+        if ($booking->status !== 'completed') {
+            return response()->json([
+                'message' => 'You can pay once the technician has completed the service.',
+            ], 422);
+        }
+
+        $names = ['bkash' => 'bKash', 'nagad' => 'Nagad', 'rocket' => 'Rocket', 'card' => 'Card'];
+        $transactionId = 'DRF' . strtoupper(Str::random(10));
+
+        // Conditional update: two quick clicks can never record two payments.
+        $affected = Booking::where('id', $id)
+            ->where('customer_id', $customer->id)
+            ->where('payment_status', 'unpaid')
+            ->update([
+                'payment_status'         => 'paid',
+                'payment_provider'       => $names[$request->provider],
+                'payment_transaction_id' => $transactionId,
+                'payment_phone'          => $request->provider === 'card' ? null : $request->phone,
+                'paid_at'                => now(),
+                'updated_at'             => now(),
+            ]);
+
+        if ($affected === 0) {
+            return response()->json([
+                'message' => 'This booking has already been paid.',
+            ], 422);
+        }
+
+        $fresh = Booking::with(['technician:id,name,phone', 'review'])->find($id);
+
+        if ($fresh->technician_id) {
+            NotificationService::push(
+                $fresh->technician_id,
+                'payment_received',
+                'Customer paid online',
+                "The customer paid for the {$fresh->service_name} job ({$fresh->date_label}).",
+                '/technician/my-bookings'
+            );
+        }
+
+        return response()->json($fresh);
     }
 
     /**

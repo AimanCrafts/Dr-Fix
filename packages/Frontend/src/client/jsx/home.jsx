@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../component/jsx/header.jsx";
 import Footer from "../../component/jsx/footer.jsx";
+import AdPopup from "../../component/jsx/ad_popup.jsx";
 import "../css/home.css";
 import api from "../api/axios";
 
@@ -554,6 +555,8 @@ function Home() {
       </section>
 
       <Footer size="full" />
+
+      <AdPopup />
     </div>
   );
 }

@@ -185,6 +185,11 @@ class TechnicianBookingController extends Controller
             ->where('status', 'in_progress')
             ->update([
                 'status' => 'completed',
+                // Cash jobs are paid to the technician on the spot. Online jobs
+                // stay "unpaid" until the customer pays in the app.
+                'payment_status' => $row->payment_method === 'cash'
+                    ? 'cash_collected'
+                    : $row->payment_status,
                 'completed_at' => now(),
                 'commission_rate' => $rate,
                 'platform_fee' => $split['fee'],

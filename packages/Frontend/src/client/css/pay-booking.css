@@ -1,0 +1,71 @@
+/* Payment panel + "Pay now" button (client/jsx/pay-booking.jsx) */
+.pay-panel {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--df-border, #e5e7eb);
+  border-radius: 14px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+
+.pay-panel--due {
+  border-color: var(--df-orange, #f15a24);
+  background: var(--df-orange-tint, #fff1eb);
+}
+
+.pay-panel__title {
+  margin: 0 0 2px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--df-heading, #1a1a1a);
+}
+
+.pay-panel__sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--df-body, #4a4a4a);
+}
+
+.pay-now-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 10px 22px;
+  background: var(--df-orange, #f15a24);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.pay-now-btn:hover {
+  background: var(--df-orange-hover, #e64e15);
+}
+
+.pay-now-btn--small {
+  padding: 8px 16px;
+  font-size: 13px;
+}
+
+.pay-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pay-pill--due {
+  background: #fff1eb;
+  color: #c2410c;
+}
+
+.pay-pill--paid {
+  background: #e7f6ec;
+  color: #15803d;
+}

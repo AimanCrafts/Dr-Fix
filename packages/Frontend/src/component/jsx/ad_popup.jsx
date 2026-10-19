@@ -1,59 +1,54 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import adImage from "../../assets/ads/home-offer.jpg";
 import "../../component/css/ad_popup.css";
 
+/**
+ * AdPopup (component/jsx/ad_popup.jsx)
+ * -------------------------------------
+ * Full-image promotional card shown on the home page. It appears every time
+ * the home page is opened. The whole card is the image (headline and button
+ * are part of the picture); the X, the Esc key or a click outside closes it,
+ * and a click on the image goes to the services page.
+ *
+ * To change the ad, replace src/assets/ads/home-offer.jpg (keep the name).
+ * Recommended size: 1080 x 1350 px (4:5), JPG or WebP, under 300 KB.
+ */
 
-
-const STORAGE_KEY = "df_ad_last_shown";
-const SHOW_DELAY_MS = 800;
-
-
-const MOCK_AD = {
-  imageAlt: "Dr.-Fix promotional offer",
-  headline: "Get 20% Off Your First Booking",
-  ctaLabel: "Book Now",
-  ctaLink: "/services",
-};
-
-function getTodayString() {
-  return new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
-}
+const SHOW_DELAY_MS = 600;
+const AD_LINK = "/services";
+const AD_ALT = "Dr.-Fix: your home's doctor. Book a fix now.";
 
 function AdPopup() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const lastShown = localStorage.getItem(STORAGE_KEY);
-    const today = getTodayString();
-
-    if (lastShown === today) {
-      return; // already shown today, don't show again
-    }
-
     const timer = setTimeout(() => setIsVisible(true), SHOW_DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible) return undefined;
 
     const handleEscape = (e) => {
-      if (e.key === "Escape") handleClose();
+      if (e.key === "Escape") setIsVisible(false);
     };
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
 
-  const handleClose = () => {
-    localStorage.setItem(STORAGE_KEY, getTodayString());
-    setIsVisible(false);
-  };
+  const handleClose = () => setIsVisible(false);
 
   if (!isVisible) return null;
 
   return (
     <div className="ad-popup-backdrop" onClick={handleClose}>
-      <div className="ad-popup-card" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="ad-popup-card"
+        role="dialog"
+        aria-label="Dr.-Fix promotion"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           className="ad-popup-close"
@@ -63,17 +58,9 @@ function AdPopup() {
           ✕
         </button>
 
-        {/* IMAGE: admin-uploaded promotional image — to be added later */}
-        <div className="ad-popup-image image-placeholder" aria-hidden="true">
-          <span>Ad image</span>
-        </div>
-
-        <div className="ad-popup-content">
-          <h3>{MOCK_AD.headline}</h3>
-          <a href={MOCK_AD.ctaLink} className="ad-popup-cta">
-            {MOCK_AD.ctaLabel}
-          </a>
-        </div>
+        <Link to={AD_LINK} onClick={handleClose} className="ad-popup-link">
+          <img src={adImage} alt={AD_ALT} className="ad-popup-image" />
+        </Link>
       </div>
     </div>
   );
