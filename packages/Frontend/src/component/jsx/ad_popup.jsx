@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import adImage from "../../assets/ads/home-offer.jpg";
+import adImage from "../../assets/ads/home-offer.png";
 import "../../component/css/ad_popup.css";
 
 /**
@@ -11,8 +11,8 @@ import "../../component/css/ad_popup.css";
  * are part of the picture); the X, the Esc key or a click outside closes it,
  * and a click on the image goes to the services page.
  *
- * To change the ad, replace src/assets/ads/home-offer.jpg (keep the name).
- * Recommended size: 1080 x 1350 px (4:5), JPG or WebP, under 300 KB.
+ * To change the ad, replace src/assets/ads/home-offer.png (keep the name).
+ * Recommended size: 1080 x 1350 px (4:5), PNG, JPG or WebP, under 300 KB.
  */
 
 const SHOW_DELAY_MS = 600;

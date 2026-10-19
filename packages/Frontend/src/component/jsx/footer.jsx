@@ -3,10 +3,8 @@ import { Link } from "react-router-dom";
 import { Wrench } from "lucide-react";
 import "../css/footer.css";
 import { CONTACT, SOCIALS } from "./contact-info";
-
-// Badge images live in /public/badges/ (put app-store.png and google-play.png there).
-const APP_STORE_BADGE = "/badges/app-store.png";
-const GOOGLE_PLAY_BADGE = "/badges/google-play.png";
+import APP_STORE_BADGE from "../../assets/badges/app-store.png";
+import GOOGLE_PLAY_BADGE from "../../assets/badges/google-play.png";
 
 function Footer({ size = "full" }) {
   const year = new Date().getFullYear();
